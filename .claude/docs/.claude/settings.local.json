@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/Dev/AgentRoundTableCLI/**)",
+      "Read(//c/Users/Lex/.claude/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

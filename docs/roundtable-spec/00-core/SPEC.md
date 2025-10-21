@@ -1,10 +1,27 @@
-# Roundtable: Multi-Model Deliberation System for Vision Specification
+# Roundtable: Multi-Model Deliberation System for Structured AI Meetings
 
 ## 1. Executive Summary
 
-Roundtable is a CLI/VS Code extension that enables collaborative vision specification creation through multi-model deliberation. Instead of iterating on a partially-built product, users create increasingly precise specifications through structured dialogue with multiple AI models that debate, synthesize, and refine ideas toward convergence.
+Roundtable is a CLI/VS Code extension that enables collaborative decision-making and planning through multi-model deliberation. Instead of single-perspective decision-making, users create increasingly precise plans and specifications through structured dialogue with multiple AI models that debate, synthesize, and refine ideas toward convergence.
+
+### Primary Use Case: Project Vision & Specification
+
+Roundtable was designed for **software development teams** creating project visions and specifications. Instead of iterating on a partially-built product, users create increasingly precise specifications through deliberation, and the specification guides autonomous agent implementation with minimal assumptions.
 
 **Core Premise:** Specification is the new source of truth. The closer a spec resembles a user's vision, the faster and cheaper implementation becomes. Multi-model deliberation reduces the cost of spec refinement.
+
+### General Use Case: Any High-Stakes Decision or Plan
+
+But Roundtable applies to **any scenario where structured, multi-perspective debate produces better outcomes:**
+
+- **Marketing Plans** - Multiple perspectives on positioning, messaging, channels
+- **Business Plans** - Strategy, unit economics, go-to-market approach
+- **Medical Diagnostics** - Multiple medical perspectives on diagnosis and treatment
+- **Risk Analysis** - Multiple expert perspectives on potential risks and mitigations
+- **Technical Architecture** - Multiple architectural perspectives on tradeoff decisions
+- **Policy Development** - Multiple stakeholder perspectives on complex policy decisions
+
+**Key Innovation:** Roundtable is not just a spec-creation tool—it's a **learning system** that compounds value across deliberations. Each session produces both immediate output (a decision/plan) and compounding output (improved expertise for future sessions).
 
 ---
 
@@ -25,12 +42,71 @@ A structured deliberation environment where:
 
 ---
 
-## 3. Core Concept: The Roundtable
+## 3. Core Principles
 
-### Purpose
+### 3.1 Token-Based Estimation (Not Human Time)
+
+**Fundamental principle:** All work is estimated and tracked in tokens, not human hours.
+
+**Why?**
+- AI agents process tokens, not hours
+- Human time estimations assume 8-hour days, sequential work, breaks
+- Token budgets enable parallel execution and real cost visibility
+- Makes Roundtable fundamentally different from traditional project management
+
+**Application:**
+- "This task: 12,000 tokens" (not "3 hours")
+- Enables multiple agents to work in parallel within token windows
+- Cost = Agent Tokens + Human Hours + Infrastructure (each tracked separately)
+- Decisions optimized for token efficiency, not arbitrary time constraints
+
+See [CLAUDE.md](.claude/CLAUDE.md) for complete token-based estimation framework.
+
+### 3.2 Learning Systems Create Compounding Value
+
+**Three interconnected learning loops:**
+
+1. **Post-Mortem System** - Each session improves expertise
+   - After deliberation completes, analyze what happened
+   - Identify valuable insights and skill improvements
+   - Update skills for next session (+1-5% effectiveness per cycle)
+   - Effect: Skills improve, decisions improve, specs improve
+
+2. **Context Compression** - Later phases build on earlier learnings
+   - Phase 1 generates 2+ hours of deliberation
+   - Compressed to 1-2 paragraphs for Phase 2
+   - Phase 2 doesn't re-debate settled questions
+   - Effect: Each phase faster and more focused than previous
+
+3. **Feedback Integration** - Implementation validates/refines decisions
+   - Phase 1 ships → real users test → feedback collected
+   - Feedback becomes input to Phase 2 planning
+   - Phase 2 benefits from what users actually do (not assumptions)
+   - Effect: Product direction informed by reality, not guesses
+
+**Result:** After 3-5 phases, decision confidence increases by 15-30%, time-to-decision decreases 40-60%.
+
+### 3.3 Parallel Execution Over Sequential
+
+**Default assumption:** Multiple agents work in parallel, not in sequence.
+
+- All panels respond to each prompt simultaneously
+- No artificial sequencing (Agent A → Agent B → Agent C)
+- Consensus emerges naturally from parallel debate
+- Token budgets allow: 3+ large tasks or 5-7 small tasks per 100K window
+
+**Implication:** Traditional PM's "critical path" thinking doesn't apply. Instead, optimize for token efficiency within parallel windows.
+
+---
+
+## 4. Core Concept: The Roundtable
+
+### 4.1 Purpose
+
 A "roundtable" is a structured conversation space where multiple AI models collaborate on spec creation through different interaction modes.
 
-### Key Insight
+### 4.2 Key Insight
+
 Different models have different:
 - Training data and knowledge cutoffs
 - Architectural strengths (reasoning, creativity, technical depth)
@@ -41,9 +117,7 @@ Leveraging this diversity during planning reduces downstream implementation rewo
 
 ---
 
-## 4. System Architecture
-
-### 4.1 Four-Layer Architecture
+### 4.3 Four-Layer Architecture
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -101,7 +175,39 @@ Leveraging this diversity during planning reduces downstream implementation rewo
         └─────────────┘
 ```
 
-### 4.2 Core Components
+### 4.4 The Deliberation Flywheel
+
+```
+Phase N Roundtable
+    ↓
+Session produces: Spec + Insights
+    ↓
+Post-Mortem Analysis
+    ↓
+Skills improve for Phase N+1
+    ├─ Architecture skill: +1-2% effectiveness
+    ├─ Product skill: +1-2% effectiveness
+    ├─ UX skill: +1-2% effectiveness
+    └─ Overall: Decisions get better
+    ↓
+Phase N Implementation
+    ↓
+Real user feedback collected
+    ↓
+Context compressed + Feedback integrated
+    ↓
+Phase N+1 Session (with compounded learning)
+    ├─ Uses better skills
+    ├─ Knows what worked/didn't
+    ├─ Builds on validated foundation
+    └─ Faster, more confident decisions
+    ↓
+Result: Each phase dramatically better than previous
+```
+
+This flywheel is why Roundtable doesn't just create specs—it creates a self-improving system.
+
+### 4.5 Core Components
 
 **Layer 0: Skills** (Expert Definitions)
 - Independent, versioned expert definitions
@@ -133,7 +239,7 @@ Leveraging this diversity during planning reduces downstream implementation rewo
 - Applies customizable consensus algorithms
 - Produces organized output artifacts
 
-### 4.3 Data Flow: Single User Input
+### 4.6 Data Flow: Single User Input
 
 ```
 USER WRITES: "Design the authentication flow"
@@ -178,9 +284,190 @@ USER WRITES: "Design the authentication flow"
 
 ---
 
-## 5. Operating Modes
+## 5. Session Management
 
-### 5.1 Relevant Order Mode (Default)
+### 5.1 Consensus Failure and Escalation
+
+**If agents cannot reach consensus** (disagreement persists after 3+ rounds):
+
+**User Options:**
+1. **Accept partial consensus** - Proceed with majority view, note the divergence
+2. **Intervene with context** - Provide additional information to resolve disagreement
+3. **Bring in additional agents** - Add specialized agents to break deadlock
+4. **Defer decision** - Mark as "Phase 2+" and move forward on settled items
+5. **Accept human override** - User makes the call, document rationale
+
+**Implementation:**
+- Constitution specifies escalation behavior (see CONSTITUTIONS.md)
+- Default: After 3 rounds of debate, moderator flags for user decision
+- User explicitly accepts outcome or intervenes
+
+### 5.2 Session Control: /stop Command
+
+**If user wants to stop deliberation mid-session:**
+
+```bash
+user: "Actually, let me think about this differently"
+/stop
+user: "New approach: what if we..."
+```
+
+**What happens:**
+- `​/stop` command halts agent processing immediately
+- Incomplete rounds are discarded
+- Context is preserved for next prompt
+- Session remains open; user can continue or start new topic
+
+**Use cases:**
+- Realize direction is wrong mid-session
+- Get new information that changes the approach
+- Refocus on core question after tangent
+
+### 5.3 Stakeholder Review and Approval
+
+**After each session: Spec Review & Diff**
+
+```
+Session Output
+    ↓
+Generate: spec.md (new) + spec-diff.md (what changed)
+    ↓
+Share with stakeholders/product owner
+    ↓
+Stakeholder reviews and approves
+    ↓
+Can proceed to implementation (if approved)
+    ↓
+OR send back to session with feedback
+```
+
+**What gets reviewed:**
+- Complete specification (requirements, architecture, decisions)
+- Change log (what's new vs previous version)
+- Unresolved questions (decisions still pending)
+- Risk flags (areas needing validation)
+
+**Approval workflow:**
+- Stakeholder can ask questions → returned to session with context
+- Stakeholder can request changes → new session with focused topic
+- Stakeholder approves → proceed to implementation
+
+### 5.4 Facilitator Role and Monitoring
+
+**The session facilitator (human or PM agent) ensures:**
+
+1. **Stay on track**
+   - Monitor conversation for topic drift
+   - Flag if discussion goes off intended objectives
+   - Gently redirect without interrupting deliberation
+
+2. **Maintain focus**
+   - Are we answering the right question?
+   - Are we at appropriate scope for this phase?
+   - Are we introducing unnecessary complexity?
+
+3. **Escalate appropriately**
+   - If consensus seems impossible, flag early
+   - If key stakeholders' concerns being ignored, escalate
+   - If technical concerns blocking progress, surface explicitly
+
+4. **Document context**
+   - Track why decisions were made
+   - Note unresolved questions for next phase
+   - Record assumptions that need validation
+
+**Implementation:**
+- Facilitator sees same chat as user
+- Can use `/pause` to reflect during session
+- Provides summary at key decision points
+- No direct control over agents (does not interrupt)
+
+---
+
+## 6. Project Management Philosophy
+
+### 6.1 Why Roundtable PM is NOT Traditional PM
+
+**Traditional PM assumes:**
+- Linear, sequential work (critical path)
+- Human hours as primary currency
+- Scope, schedule, budget as independent constraints
+- Risks managed through documentation and mitigation plans
+
+**Roundtable PM assumes:**
+- Parallel, token-bounded work
+- Agent tokens as primary currency (plus human hours and infrastructure)
+- Scope, schedule, budget are interdependent (optimize tokens first)
+- Risks handled through deliberation + learning loops
+- Early feedback validation replaces extensive documentation
+
+**Key differences:**
+
+| Aspect | Traditional PM | Roundtable PM |
+|--------|---|---|
+| **Estimation** | "3 months, 5 people, $200K" | "85,000 tokens agents + 40 human hours + $5K infra" |
+| **Risk Management** | Risk register + mitigation plans | Post-mortem learning + feedback validation |
+| **Change Control** | Formal change request process | /stop + refocus + next session |
+| **Schedule** | Gantt chart with dependencies | Phase-based with context compression |
+| **Cost Model** | Headcount × rate × duration | Agent tokens + human hours + infrastructure |
+| **Decision Making** | Stage-gate approval | Continuous deliberation with stakeholder review |
+| **Quality** | Testing plans, metrics dashboards | Learning systems + post-mortem improvements |
+
+### 6.2 Default Roundtable PM Skill
+
+The default PM skill included with Roundtable:
+
+**Does:**
+✓ Facilitate deliberation (keep on track, summarize)
+✓ Manage phase transitions (compressed context, feedback integration)
+✓ Coordinate stakeholder review
+✓ Track token budgets and costs
+✓ Run post-mortems and capture learning
+
+**Does NOT:**
+✗ Create risk registers or mitigation plans
+✗ Build Gantt charts or critical paths
+✗ Enforce stage-gate processes
+✗ Manage teams through traditional hierarchy
+✗ Use human hours as primary scheduling metric
+
+**Why this works:**
+- Roundtable produces clear specs → less assumption, fewer implementation risks
+- Post-mortem learning + feedback loops replace traditional risk management
+- Context compression + phased approach replaces detailed scheduling
+- Token budgeting is more accurate than human hour estimation
+
+### 6.3 Custom PM Skills
+
+Users can absolutely create custom PM skills:
+
+```yaml
+# Example: Enterprise PM Skill
+skills/pm/enterprise-compliance:
+  description: "PM for regulated industries"
+  includes:
+    - Risk register maintenance
+    - Compliance checkpoints
+    - Audit trail documentation
+    - SOC2/ISO requirements tracking
+
+# Example: Startup PM Skill
+skills/pm/rapid-iteration:
+  description: "PM for fast-moving startups"
+  includes:
+    - Weekly shipments
+    - Tight token budgets
+    - Market feedback priority
+    - Ruthless scope management
+```
+
+Users can mix-and-match PM skills, creating custom Constitutions that enforce whatever PM discipline they need. Roundtable is unopinionated about PM; the default is just one option.
+
+---
+
+## 7. Operating Modes
+
+### 7.1 Relevant Order Mode (Default)
 
 **What happens:**
 1. User writes prompt
@@ -213,7 +500,7 @@ USER WRITES: "Design the authentication flow"
 
 ---
 
-### 5.2 Moderator Mode
+### 7.2 Moderator Mode
 
 **What happens:**
 1. User writes prompt
@@ -250,7 +537,7 @@ Open questions for human: [list]
 
 ---
 
-### 5.3 Debate Mode
+### 7.3 Debate Mode
 
 **What happens:**
 1. User writes prompt (or asks for comparison/is uncertain)
@@ -298,9 +585,9 @@ Human decision needed on: [list]
 
 ---
 
-## 6. Spec Artifact Management
+## 8. Spec Artifact Management
 
-### 6.1 Spec Format
+### 8.1 Spec Format
 
 **Primary format:** Markdown with structured sections
 
@@ -338,7 +625,7 @@ Human decision needed on: [list]
 - Round 2: Added Gemini perspective on scalability
 ```
 
-### 6.2 Spec Evolution
+### 8.2 Spec Evolution
 
 - Spec lives in project (e.g., `spec.md`)
 - Each deliberation round updates spec
@@ -347,9 +634,9 @@ Human decision needed on: [list]
 
 ---
 
-## 7. Constitution System
+## 9. Constitution System
 
-### 7.1 What is a Constitution?
+### 9.1 What is a Constitution?
 
 A Constitution defines **governance for a roundtable project**. It specifies:
 - **Who** participates (expert panels and agents)
@@ -359,7 +646,7 @@ A Constitution defines **governance for a roundtable project**. It specifies:
 
 Constitutions are **shareable, versioned, and customizable** - enabling a marketplace of reusable governance templates.
 
-### 7.2 Constitution Structure (YAML)
+### 9.2 Constitution Structure (YAML)
 
 ```yaml
 constitution:
@@ -428,14 +715,14 @@ constitution:
       then: "halt_and_require_override"
 ```
 
-### 7.3 Pre-Prompt System
+### 9.3 Pre-Prompt System
 
 See EXPERT_PANELS.md for detailed pre-prompt structure including:
 - Domain boundaries (what this role owns)
 - Cross-domain triggers (when to escalate)
 - Consensus instructions (how to debate within panel)
 
-### 7.4 Quick-Start: Default Constitution
+### 9.4 Quick-Start: Default Constitution
 
 ```bash
 $ roundtable new my-project
@@ -455,9 +742,9 @@ Users can create projects instantly with sensible defaults, then customize later
 
 ---
 
-## 8. User Workflows
+## 10. User Workflows
 
-### 8.1 Workflow: From Vague Idea to Spec
+### 10.1 Workflow: From Vague Idea to Spec
 
 ```
 User: "I want to build something like Figma but for code"
@@ -487,7 +774,7 @@ Architecture → Event-driven with WebSocket + Yjs CRDT
 Known scalability boundary: 100 concurrent users tested
 ```
 
-### 8.2 Workflow: Testing Architectural Decision
+### 10.2 Workflow: Testing Architectural Decision
 
 ```
 User asks question that reveals spec ambiguity:
@@ -504,9 +791,9 @@ Output updates spec with discovered requirement:
 
 ---
 
-## 9. Platform Strategy: CLI-First, Then Web/Mobile
+## 11. Platform Strategy: CLI-First, Then Web/Mobile
 
-### 9.1 V1: CLI-Only
+### 11.1 V1: CLI-Only
 
 Roundtable V1 is **CLI-first and CLI-only**. This approach:
 - ✅ Reduces complexity (focus on core deliberation engine)
@@ -539,7 +826,7 @@ roundtable notes export --format markdown     # Export organized notes
 └─────────────────────────────────────────────────┘
 ```
 
-### 9.2 V2+: Web/Mobile Interfaces
+### 11.2 V2+: Web/Mobile Interfaces
 
 **V2: Web UI** (after CLI is stable)
 - Same deliberation engine (backend)
@@ -560,7 +847,7 @@ roundtable notes export --format markdown     # Export organized notes
 - Quick access to panels from editor
 - Integration with codebase context
 
-### 9.3 Why CLI-First?
+### 11.3 Why CLI-First?
 
 ```
 Data Flow Architecture:
@@ -588,7 +875,289 @@ V2+ adds interfaces as needed, reusing the same engine.
 
 ---
 
-## 10. Success Criteria
+## 12. Default Agents and Skills (V1 Development)
+
+### 12.0 Overview
+
+Roundtable V1 ships with **default agents and skills** that enable immediate use for **software development teams** (our target user base). These defaults are:
+
+1. **Ready-to-use** - Users don't need to configure agents from scratch
+2. **Customizable** - Users can replace or extend with custom skills
+3. **Software-dev focused** - Panels, roles, and expertise tuned for typical software projects
+4. **Not exclusive** - Other users (marketers, medical professionals, etc.) can create custom skills for their domains
+
+### 12.1 Default Meeting Facilitator
+
+**Component:** PM (Project Manager) Agent
+- Manages session flow and keeps deliberation on track
+- Monitors for scope drift and off-topic discussion
+- Synthesizes decision points and summaries
+- Flags consensus issues or escalation needs
+- Tracks timeline and manages stakeholder communication
+
+**Customizable via:** Constitution and PM skill configuration
+
+### 12.2 Default PM Agent
+
+**Component:** Project Management Skill (default Roundtable PM, not traditional PM)
+- Facilitates transitions between phases
+- Tracks token budgets and costs
+- Manages post-mortem processes
+- Coordinates stakeholder review
+- Handles context compression for next phases
+
+**Note:** This is token-based, learning-system PM—NOT traditional PMBOK-style PM.
+
+### 12.3 Default Expert Panels (Software Development)
+
+**V1 includes pre-configured panels for typical software projects:**
+
+```
+├─ ARCHITECTURE PANEL
+│  ├─ Systems/Infrastructure Architecture
+│  ├─ Data Architecture
+│  └─ (Agents: Claude Opus, GPT-4)
+│
+├─ UX PANEL
+│  ├─ UX Design & User Research
+│  ├─ Interaction Design
+│  └─ (Agents: Claude Sonnet, Gemini)
+│
+├─ PRODUCT PANEL
+│  ├─ Product Management
+│  ├─ Market Positioning
+│  └─ (Agents: GPT-4, Claude Opus)
+│
+├─ SECURITY PANEL
+│  ├─ Security Architecture
+│  ├─ Threat Modeling
+│  └─ (Agents: Claude Opus)
+│
+└─ ENGINEERING PANEL
+   ├─ Backend Engineering
+   ├─ Frontend Engineering
+   └─ (Agents: Claude Sonnet, GPT-4)
+```
+
+**Each panel member uses a corresponding Skill** (see below)
+
+### 12.4 Default Skills (Software Development)
+
+**V1 includes pre-built skills for:**
+
+- **architecture/systems-architect** - Full-stack architecture thinking
+- **architecture/data-architect** - Database and data architecture
+- **ux/interaction-designer** - UX/UI and user research
+- **product/product-manager** - Product strategy and roadmap
+- **security/threat-modeler** - Threat modeling and security architecture
+- **engineering/backend-engineer** - Backend systems and infrastructure
+- **engineering/frontend-engineer** - Frontend, mobile, client-side
+
+**Each skill includes:**
+- Domain expertise definition
+- Questions to ask during intake
+- Areas to probe and validate
+- Cross-domain concerns to flag
+- Guidance on consensus building
+
+### 12.5 Customization Examples
+
+**Users can create alternative setups:**
+
+```yaml
+# Marketing Plan Deliberation
+# (User creates custom skills/panels)
+
+panels:
+  marketing:
+    - market-research-analyst
+    - brand-strategist
+    - growth-marketer
+
+  business:
+    - financial-analyst
+    - business-strategist
+    - competitive-analyst
+```
+
+```yaml
+# Medical Diagnostic Deliberation
+# (User creates custom skills/panels)
+
+panels:
+  clinical:
+    - primary-care-physician
+    - specialist-cardiologist
+    - specialist-neurologist
+
+  diagnostic:
+    - pathologist
+    - radiologist-interpretive
+```
+
+**The engine is domain-agnostic.** Default software-dev panels are just one example.
+
+### 12.6 Default Constitution
+
+**V1 ships with "Standard Software Development" Constitution:**
+
+```yaml
+constitution:
+  name: "Software Development (Default)"
+
+  panels:
+    architecture: [claude-opus, gpt-4]
+    ux: [claude-sonnet, gemini]
+    product: [gpt-4, claude-opus]
+    security: [claude-opus]
+    engineering: [claude-sonnet, gpt-4]
+
+  consensus_algorithm: "democratic_majority"
+
+  escalation:
+    - if: "unresolved_after_3_rounds"
+      then: "human_review_required"
+
+    - if: "security_concern_raised"
+      then: "affected_panels_respond"
+```
+
+Users can:
+- Use as-is (immediate productivity)
+- Customize panels (add/remove agents or panels)
+- Create alternative Constitutions for different project types
+- Stack multiple Constitutions (run marketing + technical deliberation separately)
+
+---
+
+## 13. Phased Development Strategy
+
+### 13.1 Default: Single-Pass with Phase 1
+
+**Default mode for Roundtable V1:**
+- Single comprehensive roundtable session
+- Produces one phase (Phase 1) specification
+- Phase 1 includes: MVP + POC (proof of concept feature)
+- Delivered to developers for implementation
+- Users get implementation feedback → informs future phases (if wanted)
+
+**Think of it as:** One deep deliberation session → one complete spec → one implementation cycle
+
+### 13.2 When to Use Phased Development
+
+Switch to **explicit phased planning** ONLY if your project is:
+
+1. **Complex** - Has multiple distinct capabilities/domains to validate
+   - Example: "Build collaboration platform" (too broad for one phase)
+   - Better: Phase 1 "single-user foundation", Phase 2 "team features"
+
+2. **Trying to prove multiple things** - Each phase needs different validation
+   - Example: Phase 1 proves "offline-sync is viable", Phase 2 proves "team collaboration works"
+   - Each phase is a complete hypothesis test
+
+3. **Dependent features** - Later features build on earlier ones
+   - Example: Phase 2 depends on Phase 1 foundation
+   - Justifies waiting for Phase 1 feedback before designing Phase 2
+
+**Do NOT use phased if:**
+- ✗ You can describe complete vision in one session
+- ✗ Features are independent (can build in any order)
+- ✗ You want complete solution before any implementation
+
+### 13.3 Phase 1: The Only Default Phase
+
+**Key principle:** Phase 1 is the only "required" phase.
+
+```
+User Vision
+    ↓
+Phase 1 Roundtable Session (mandatory)
+    ├─ Creates spec with MVP + POC
+    ├─ MVP = minimum usable version
+    └─ POC = what we're proving/validating
+    ↓
+Phase 1 Implementation
+    ↓
+User Review → Do we need Phase 2?
+    ├─ YES: "This works, let's extend"  → Phase 2 session (with Phase 1 context)
+    ├─ NO: "This is enough"  → Done
+    └─ MAYBE: "Let's validate with users first"  → Get feedback → Inform Phase 2
+```
+
+**Phase 1 always includes:**
+- Complete spec for that scope
+- Architecture decisions validated through deliberation
+- Explicit constraints (what's NOT in Phase 1)
+- Clear success criteria
+- Handoff to developers
+
+**Phase 2+ are optional:**
+- Only created if Phase 1 + user feedback + market signal justify continuation
+- Each phase starts with compressed context from previous phases
+- Learning compounds (skills improve, decisions get better)
+
+### 13.4 Phase 1 Structure (MVP + POC)
+
+Every Phase 1 must define:
+
+**MVP (Minimum Viable Product):**
+```
+The smallest complete, shippable thing.
+Not "basic features" but "core value realized"
+
+Examples:
+- Note app: Create, edit, search notes (one user)
+- Task manager: Create, organize, complete tasks
+- Collaboration tool: View shared content (read-only first)
+```
+
+**POC (Proof of Concept):**
+```
+What technical innovation does THIS phase validate?
+What assumption are we testing?
+
+Examples:
+- Note app: "Offline-first sync works without data loss"
+- Task manager: "Real-time updates sync under 500ms"
+- Collab tool: "Conflict-free updates with CRDT"
+```
+
+**NOT in Phase 1:**
+```
+Explicit constraints on what's explicitly deferred.
+Users know these are Phase 2/3/later
+
+Examples:
+- Note app: No team features (Phase 2), no rich media (Phase 3)
+- Task manager: No permissions (Phase 2), no templates (Phase 3)
+- Collab tool: No advanced permissions (Phase 2), no SSO (Phase 3)
+```
+
+### 13.5 Context Compression Between Phases
+
+The key to phased efficiency: **Context Compression**
+
+```
+Phase 1 Roundtable (2+ hours of deliberation)
+    ↓
+Compress to essentials:
+├─ Settled architectural decisions (1-2 sentences)
+├─ Validated technical approaches (1 sentence)
+├─ Performance baselines (1 sentence)
+├─ User preferences discovered (1 sentence)
+└─ Explicit constraints confirmed (1 sentence)
+    ↓
+Phase 2 doesn't re-debate Phase 1
+Phase 2 builds on validated foundation
+Phase 2 focused on new questions (team sync, not offline sync)
+```
+
+**Without compression:** Phase 2 wastes 30+ minutes re-understanding Phase 1
+**With compression:** Phase 2 immediately productive
+
+---
+
+## 13. Success Criteria
 
 ### For Individual Deliberation Round
 - [ ] All configured panels responded
@@ -605,7 +1174,7 @@ V2+ adds interfaces as needed, reusing the same engine.
 
 ---
 
-## 11. V1 vs V2: Phased Approach to Panel Intelligence + UI
+## 14. V1 vs V2: Phased Approach to Panel Intelligence + UI
 
 ### V1 Philosophy: Natural Training Differences Without Role Bias
 
@@ -673,7 +1242,7 @@ Result:
 
 ---
 
-## 12. Scope: V1 (CLI-Only)
+## 15. Scope: V1 (CLI-Only)
 
 ### In Scope
 **Skills System (Layer 0):**
@@ -753,7 +1322,7 @@ Result:
 
 ---
 
-## 13. Non-Functional Requirements
+## 16. Non-Functional Requirements
 
 | Requirement | Target | Notes |
 |-------------|--------|-------|
@@ -765,7 +1334,7 @@ Result:
 
 ---
 
-## 14. Open Questions for Iteration
+## 17. Open Questions for Iteration
 
 1. **Ranking Algorithm:** How exactly do we rank "relevance"? Learn from feedback? Fixed heuristics?
 2. **Debate Convergence:** When does debate stop? Consensus only? Timeout? Max disagreement delta?
@@ -778,7 +1347,29 @@ Result:
 
 ---
 
-## 15. References & Research
+## 18. References & Research
+
+### Learning and Evolution Documents
+
+For deeper understanding of how Roundtable creates compounding value:
+
+**Post-Mortem System** - How skills improve
+- Location: `docs/roundtable-spec/03-spec-process/POST_MORTEM_SYSTEM.md`
+- Describes: Session analysis, skill improvements, learning capture
+
+**Context Compression** - How phases build efficiently
+- Location: `docs/roundtable-spec/03-spec-process/CONTEXT_COMPRESSION.md`
+- Describes: Carrying knowledge across phases, preventing re-debate
+
+**Feedback Integration** - How implementation informs product
+- Location: `docs/roundtable-spec/03-spec-process/FEEDBACK_INTEGRATION.md`
+- Describes: QA feedback → Phase 2 planning loop
+
+**Phased Development** - Complete phased strategy
+- Location: `docs/roundtable-spec/02-agentic-pm/PHASED_DEVELOPMENT.md`
+- Describes: Single-pass vs phased, phase planning, phase structure
+
+### Reference Research
 
 See `/docs/studies/` for foundational research:
 - `Multi_Agent_Debate_Accuracy.pdf` - MIT research on debate mechanics

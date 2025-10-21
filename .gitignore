@@ -1,0 +1,44 @@
+# Local settings and configuration
+.claude/settings.local.json
+.claude/settings.json
+.vscode/settings.json
+
+# IDE and editor files
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Node modules and package manager
+node_modules/
+.npm
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build and distribution
+dist/
+build/
+*.log
+.next/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak

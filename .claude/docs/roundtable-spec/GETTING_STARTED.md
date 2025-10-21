@@ -8,7 +8,7 @@ Welcome! This guide helps you navigate the Roundtable documentation based on wha
 
 ### Step 1: Understand the Vision (15 minutes)
 
-**Document:** [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md)
+**Document:** [00-core/VISION_AND_PHILOSOPHY.md](00-core/VISION_AND_PHILOSOPHY.md)
 
 **What you'll learn:**
 - Why Roundtable exists
@@ -21,14 +21,15 @@ Welcome! This guide helps you navigate the Roundtable documentation based on wha
 ### Step 2: See It In Action (20 minutes)
 
 **Start here - complete walkthrough:**
-- **[USE_CASES_CLI_SESSION.md](USE_CASES_CLI_SESSION.md)** - Real session: myFive dating app vision meeting
+- **[05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md)** - Real session: myFive dating app vision meeting
   - See: Meeting Facilitator detects meeting type → brings in PM → panels form → debates happen → Phase 1 package created
   - Best way to understand the full flow in 20 minutes
+  - **Demonstrates:** Parallel round-based debate, token-based budgeting, spec emergence
 
 **Then choose role-specific examples:**
-- **For Founders:** [USE_CASES_BASIC_FLAT_MODEL.md](USE_CASES_BASIC_FLAT_MODEL.md) - UC-1 "Startup Founder"
-- **For Architects:** [USE_CASES_EXPERT_PANELS.md](USE_CASES_EXPERT_PANELS.md) - UC-P1 "Financial Services Security"
-- **For Product Teams:** [USE_CASES_CONSTITUTIONS.md](USE_CASES_CONSTITUTIONS.md) - UC-C1 "Startup MVP"
+- **For Founders:** [05-use-cases/BASIC_FLAT_MODEL.md](05-use-cases/BASIC_FLAT_MODEL.md) - UC-1 "Startup Founder"
+- **For Architects:** [05-use-cases/EXPERT_PANELS.md](05-use-cases/EXPERT_PANELS.md) - UC-P1 "Financial Services Security"
+- **For Product Teams:** [05-use-cases/CONSTITUTIONS.md](05-use-cases/CONSTITUTIONS.md) - UC-C1 "Startup MVP"
 
 **Key takeaway:** See how vague ideas become concrete development packages through structured panel deliberation.
 
@@ -36,15 +37,15 @@ Welcome! This guide helps you navigate the Roundtable documentation based on wha
 
 **Documents (pick based on your role):**
 
-- **How specs emerge:** [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md)
+- **How specs emerge:** [03-spec-process/ITERATIVE_SPEC_EMERGENCE.md](03-spec-process/ITERATIVE_SPEC_EMERGENCE.md)
   - How panels deliberate and decisions emerge
   - Why this is better than pre-writing specs
 
-- **How the facilitator works:** [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md)
+- **How the PM orchestrates:** [01-agents/PROJECT_MANAGER_AGENT.md](01-agents/PROJECT_MANAGER_AGENT.md)
   - The Project Manager's role in orchestrating sessions
   - How context is managed and conflicts resolved
 
-- **Your level of involvement:** [USER_INTERACTION_CONTROL.md](USER_INTERACTION_CONTROL.md)
+- **Your level of involvement:** [00-core/USER_INTERACTION_CONTROL.md](00-core/USER_INTERACTION_CONTROL.md)
   - Choose how hands-on you want to be
   - From fully automated to co-creation
 
@@ -52,7 +53,7 @@ Welcome! This guide helps you navigate the Roundtable documentation based on wha
 
 ### Step 4: Run Your First Session (30-60 minutes)
 
-**Document:** [SPEC.md](SPEC.md) - Section 8 "User Workflows"
+**Document:** [00-core/SPEC.md](00-core/SPEC.md) - Section 8 "User Workflows"
 
 Follow the workflow for your use case:
 - New idea: "From Vague Idea to Spec"
@@ -65,57 +66,73 @@ Follow the workflow for your use case:
 ### The Four-Layer Architecture
 
 ```
-Layer 0: SKILLS
+Layer 0: SKILLS (01-agents/SKILLS.md)
 │        Reusable expertise definitions
-│        → See: [SKILLS.md](SKILLS.md)
 │
-Layer 1: CONSTITUTION
+Layer 1: CONSTITUTION (04-governance/CONSTITUTIONS.md)
 │        Governance frameworks that reference skills
-│        → See: [CONSTITUTIONS.md](CONSTITUTIONS.md)
 │
-Layer 2: EXPERT PANELS
+Layer 2: EXPERT PANELS (00-core/EXPERT_PANELS.md)
 │        Multi-agent domain teams using skills
-│        → See: [EXPERT_PANELS.md](EXPERT_PANELS.md)
 │
-Layer 3: DELIBERATION ENGINE
+Layer 3: DELIBERATION ENGINE (00-core/SPEC.md)
 │        Orchestrates panels and manages consensus
-│        → See: [SPEC.md](SPEC.md) - Sections 4-5
 ```
 
 ### The Complete Session Flow
 
 ```
 1. INTAKE PHASE
+   Meeting Facilitator detects meeting type
    Project Manager understands your vision
-   → See: [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md) - Phase 1
+   → See: 01-agents/PROJECT_MANAGER_AGENT.md
 
-2. SPEC EMERGENCE PHASE
+2. PANEL FORMATION
+   Panels selected based on vision type
+   Agents assigned to panels
+   → See: 00-core/EXPERT_PANELS.md
+
+3. ROUND-BASED DEBATE
+   Round 1: All agents speak in parallel
+   Facilitator synthesizes groups concerns
+   User responds
+   Round 2+: Agents address each other naturally
+   → See: 00-core/CONSENSUS_ALGORITHMS.md
+
+4. SPEC EMERGENCE
    Panels deliberate and spec grows organically
-   → See: [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md)
+   → See: 03-spec-process/ITERATIVE_SPEC_EMERGENCE.md
 
-3. CONVERGENCE PHASE
+5. CONVERGENCE
    Conflicts resolved, decisions finalized
-   → See: [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) - Phase 3
+   Consensus algorithms apply
+   → See: 00-core/CONSENSUS_ALGORITHMS.md
 
-4. POST-MORTEM PHASE
+6. POST-MORTEM
    Learning captured, skills improved for future
-   → See: [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md)
+   → See: 03-spec-process/POST_MORTEM_SYSTEM.md
 ```
 
-### The Learning Loop
+### Token-Based Project Management
+
+**Critical: All estimates use TOKENS, never human time**
 
 ```
-Each Session Creates:
-  ├─ Immediate Output: Complete Spec
-  └─ Compounding Output: Skill Improvements
+Token Budget = Computational Work by AI Agents
+Human Hours = Separate estimate for planning/QA oversight
+Infrastructure = Cloud services, databases, APIs
 
-Skills Improve Over Time:
-  Session 1 → Post-Mortem → Skills v1.1 →
-  Session 2 (better) → Post-Mortem → Skills v1.2 →
-  Session 3 (even better) → ...
+Example: MVP Project
+  48,000 tokens @ $0.01/token = $480
+  15 hours @ $50/hour         = $750
+  AWS infrastructure          = $2,000
+  ────────────────────────────────
+  TOTAL:                      = $3,230
 
-→ See: [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md)
+vs. Traditional Dev Team: $50K+
 ```
+
+→ See: [02-agentic-pm/AGENTIC_EXECUTION_PLAN.md](02-agentic-pm/AGENTIC_EXECUTION_PLAN.md#3-cost-model-tokens--human-hours--infrastructure)
 
 ---
 
@@ -124,14 +141,15 @@ Skills Improve Over Time:
 ### I'm a Founder/Product Person
 
 **Read in order:**
-1. [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md) - Why this matters
-2. [USER_INTERACTION_CONTROL.md](USER_INTERACTION_CONTROL.md) - Choose your level
-3. [USE_CASES_BASIC_FLAT_MODEL.md](USE_CASES_BASIC_FLAT_MODEL.md) - See it in action
-4. [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) - How decisions emerge
+1. [00-core/VISION_AND_PHILOSOPHY.md](00-core/VISION_AND_PHILOSOPHY.md) - Why this matters
+2. [00-core/USER_INTERACTION_CONTROL.md](00-core/USER_INTERACTION_CONTROL.md) - Choose your level
+3. [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md) - See it in action (complete example)
+4. [03-spec-process/ITERATIVE_SPEC_EMERGENCE.md](03-spec-process/ITERATIVE_SPEC_EMERGENCE.md) - How decisions emerge
 
 **Key documents:**
-- [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md) - Understand facilitation
-- [CONSTITUTIONS.md](CONSTITUTIONS.md) - Pre-agree on governance
+- [01-agents/PROJECT_MANAGER_AGENT.md](01-agents/PROJECT_MANAGER_AGENT.md) - Understand facilitation
+- [04-governance/CONSTITUTIONS.md](04-governance/CONSTITUTIONS.md) - Pre-agree on governance
+- [02-agentic-pm/AGENTIC_EXECUTION_PLAN.md](02-agentic-pm/AGENTIC_EXECUTION_PLAN.md) - Token-based budgeting
 
 **Time commitment:** 1-2 hours to fully understand
 
@@ -140,352 +158,145 @@ Skills Improve Over Time:
 ### I'm a Technical Architect
 
 **Read in order:**
-1. [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md) - Philosophy
-2. [EXPERT_PANELS.md](EXPERT_PANELS.md) - How panels work
-3. [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) - Spec emergence
-4. [USER_INTERACTION_CONTROL.md](USER_INTERACTION_CONTROL.md) - Co-creation mode
+1. [00-core/VISION_AND_PHILOSOPHY.md](00-core/VISION_AND_PHILOSOPHY.md) - Philosophy
+2. [00-core/EXPERT_PANELS.md](00-core/EXPERT_PANELS.md) - How panels work
+3. [05-use-cases/EXPERT_PANELS.md](05-use-cases/EXPERT_PANELS.md) - Real example
+4. [03-spec-process/ITERATIVE_SPEC_EMERGENCE.md](03-spec-process/ITERATIVE_SPEC_EMERGENCE.md) - Spec emergence
+5. [00-core/USER_INTERACTION_CONTROL.md](00-core/USER_INTERACTION_CONTROL.md) - Co-creation mode
 
 **Key documents:**
-- [SKILLS.md](SKILLS.md) - Architecture skill definitions
-- [CONSTITUTIONS.md](CONSTITUTIONS.md) - Governance
-- [USE_CASES_EXPERT_PANELS.md](USE_CASES_EXPERT_PANELS.md) - See architecture decisions
+- [01-agents/SKILLS.md](01-agents/SKILLS.md) - Architecture skill definitions
+- [04-governance/CONSTITUTIONS.md](04-governance/CONSTITUTIONS.md) - Governance frameworks
+- [00-core/CONSENSUS_ALGORITHMS.md](00-core/CONSENSUS_ALGORITHMS.md) - Decision-making logic
 
-**Time commitment:** 2-3 hours for deep understanding
+**Deep dive:**
+- [02-agentic-pm/AGENTIC_PROJECT_MANAGEMENT.md](02-agentic-pm/AGENTIC_PROJECT_MANAGEMENT.md) - Full PM framework
 
----
-
-### I'm Implementing Roundtable (Developer/Engineer)
-
-**Read in order:**
-1. [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md) - Context
-2. [SPEC.md](SPEC.md) - Complete system spec
-3. [EXPERT_PANELS.md](EXPERT_PANELS.md) - Panel management
-4. [CONSTITUTIONS.md](CONSTITUTIONS.md) - Constitution loading
-5. [SKILLS.md](SKILLS.md) - Skill loading and application
-6. [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md) - Learning loop
-
-**Key documents:**
-- [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md) - Facilitator design
-- [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) - Session flow
-- [CONSENSUS_ALGORITHMS.md](CONSENSUS_ALGORITHMS.md) - Algorithm options
-
-**Time commitment:** 4-6 hours for implementation readiness
+**Time commitment:** 2-3 hours for complete understanding
 
 ---
 
-### I'm Contributing Skills to the Marketplace
+### I'm Building Roundtable (Implementation)
 
-**Read in order:**
-1. [SKILLS.md](SKILLS.md) - Skill system overview
-2. [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md) - Context briefing
-3. [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md) - Skill improvement loop
-4. [USE_CASES_SKILLS.md](USE_CASES_SKILLS.md) - Skills in action
+**Start with understanding:**
+1. [00-core/SPEC.md](00-core/SPEC.md) - Complete system specification
+2. [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md) - End-to-end flow example
+3. [00-core/EXPERT_PANELS.md](00-core/EXPERT_PANELS.md) - Panel architecture
 
-**Key documents:**
-- [CONSTITUTIONS.md](CONSTITUTIONS.md) - How skills are composed
-- [EXPERT_PANELS.md](EXPERT_PANELS.md) - How panels use skills
+**Then architecture & integration:**
+- [01-agents/DEVELOPER_AGENT_INTEGRATION.md](01-agents/DEVELOPER_AGENT_INTEGRATION.md) - How to integrate external agents
+- [01-agents/PROJECT_MANAGER_AGENT.md](01-agents/PROJECT_MANAGER_AGENT.md) - PM orchestration logic
+- [00-core/CONSENSUS_ALGORITHMS.md](00-core/CONSENSUS_ALGORITHMS.md) - Decision algorithms
 
-**Time commitment:** 2-3 hours
+**For learning & improvement:**
+- [03-spec-process/POST_MORTEM_SYSTEM.md](03-spec-process/POST_MORTEM_SYSTEM.md) - Skill evolution
+- [03-spec-process/CONTEXT_COMPRESSION.md](03-spec-process/CONTEXT_COMPRESSION.md) - Token efficiency
 
----
-
-## 🗺️ Topic-Based Navigation
-
-### Understanding Core Concepts
-
-**What is Roundtable?**
-→ [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md) + [SPEC.md](SPEC.md) Section 3
-
-**How do AI models collaborate?**
-→ [EXPERT_PANELS.md](EXPERT_PANELS.md) + [SPEC.md](SPEC.md) Section 5
-
-**How do decisions get made?**
-→ [CONSENSUS_ALGORITHMS.md](CONSENSUS_ALGORITHMS.md) + [CONSTITUTIONS.md](CONSTITUTIONS.md)
-
-**How does the system learn?**
-→ [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md)
+**Implementation roadmap:** See IMPLEMENTATION_ROADMAP.md (at project root)
 
 ---
 
-### Practical Workflows
-
-**I have a vague idea, how do I turn it into a spec?**
-→ [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) + [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md)
-
-**I need to involve my team - how do we set that up?**
-→ [USER_INTERACTION_CONTROL.md](USER_INTERACTION_CONTROL.md) + [CONSTITUTIONS.md](CONSTITUTIONS.md)
-
-**How do I choose which experts to involve?**
-→ [EXPERT_PANELS.md](EXPERT_PANELS.md) + [SKILLS.md](SKILLS.md)
-
-**I want my team to see how the AI experts think**
-→ [USE_CASES_EXPERT_PANELS.md](USE_CASES_EXPERT_PANELS.md)
-
----
-
-### Advanced Topics
-
-**How do I customize governance for my org?**
-→ [CONSTITUTIONS.md](CONSTITUTIONS.md) Section 8 (Custom Constitutions)
-
-**How do I create or improve a skill?**
-→ [SKILLS.md](SKILLS.md) + [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md)
-
-**I want to understand the facilitation process deeply**
-→ [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md)
-
-**What are the architectural tradeoffs?**
-→ [SPEC.md](SPEC.md) Section 4 + [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) Example Session
-
----
-
-### Project Management for Agentic Systems
-
-**How do I plan and execute agentic projects?**
-→ [AGENTIC_PROJECT_MANAGEMENT.md](AGENTIC_PROJECT_MANAGEMENT.md) - Core framework for agent-driven development
-
-**How do I structure phases and allocate token budgets?**
-→ [AGENTIC_EXECUTION_PLAN.md](AGENTIC_EXECUTION_PLAN.md) - Practical guide to execution planning
-
-**How do I measure quality in agentic systems?**
-→ [AGENTIC_QUALITY_VALIDATION.md](AGENTIC_QUALITY_VALIDATION.md) - Core metric: Vision Adherence vs. Cost
-
-**How do I capture learning from agentic phases?**
-→ [AGENTIC_LEARNING_CAPTURE.md](AGENTIC_LEARNING_CAPTURE.md) - Systematic knowledge preservation and reuse
-
----
-
-## 📖 Complete Documentation Map
-
-### Conceptual Documents (Philosophy & Design)
-- [VISION_AND_PHILOSOPHY.md](VISION_AND_PHILOSOPHY.md) - Why Roundtable exists
-- [SPEC.md](SPEC.md) - Complete system specification
-
-### How It Works (Mechanics)
-- [ITERATIVE_SPEC_EMERGENCE.md](ITERATIVE_SPEC_EMERGENCE.md) - How specs grow
-- [PROJECT_MANAGER_AGENT.md](PROJECT_MANAGER_AGENT.md) - Facilitation role
-- [POST_MORTEM_SYSTEM.md](POST_MORTEM_SYSTEM.md) - Learning loop
-
-### User Control & Customization
-- [USER_INTERACTION_CONTROL.md](USER_INTERACTION_CONTROL.md) - Your involvement level
-- [CONSTITUTIONS.md](CONSTITUTIONS.md) - Governance frameworks
-- [CONSENSUS_ALGORITHMS.md](CONSENSUS_ALGORITHMS.md) - Decision algorithms
-
-### System Architecture
-- [EXPERT_PANELS.md](EXPERT_PANELS.md) - Multi-agent domain teams
-- [SKILLS.md](SKILLS.md) - Reusable expertise as artifacts
-
-### Use Cases (Real-World Examples)
-- [USE_CASES_INDEX.md](USE_CASES_INDEX.md) - Navigation guide for all use cases
-- [USE_CASES_CLI_SESSION.md](USE_CASES_CLI_SESSION.md) - **START HERE**: Complete end-to-end session walkthrough (myFive dating app)
-- [USE_CASES_BASIC_FLAT_MODEL.md](USE_CASES_BASIC_FLAT_MODEL.md) - Foundation scenarios
-- [USE_CASES_EXPERT_PANELS.md](USE_CASES_EXPERT_PANELS.md) - Multi-agent examples
-- [USE_CASES_CONSTITUTIONS.md](USE_CASES_CONSTITUTIONS.md) - Governance examples
-- [USE_CASES_CONSENSUS_ALGORITHMS.md](USE_CASES_CONSENSUS_ALGORITHMS.md) - Algorithm examples
-- [USE_CASES_SKILLS.md](USE_CASES_SKILLS.md) - Skills system examples
-
-### Project Management for Agentic Systems
-- [AGENTIC_PROJECT_MANAGEMENT.md](AGENTIC_PROJECT_MANAGEMENT.md) - Core PM framework for AI agents
-- [AGENTIC_EXECUTION_PLAN.md](AGENTIC_EXECUTION_PLAN.md) - Planning and structuring agentic phases
-- [AGENTIC_QUALITY_VALIDATION.md](AGENTIC_QUALITY_VALIDATION.md) - Quality metrics for agentic systems
-- [AGENTIC_LEARNING_CAPTURE.md](AGENTIC_LEARNING_CAPTURE.md) - Systematic learning preservation
-
----
-
-## ⏱️ Time Commitment by Goal
-
-### "I want to understand Roundtable in one hour"
-1. VISION_AND_PHILOSOPHY.md (15 min)
-2. USE_CASES_CLI_SESSION.md (20 min) - **FASTEST WAY**: See the whole system in action
-3. ITERATIVE_SPEC_EMERGENCE.md (25 min)
-
-**Outcome:** Understand what Roundtable does, how sessions work, what Phase 1 output looks like
-
----
-
-### "I want to run my first session"
-1. VISION_AND_PHILOSOPHY.md (15 min)
-2. USE_CASES_CLI_SESSION.md (20 min) - See what a real session looks like end-to-end
-3. USER_INTERACTION_CONTROL.md (10 min)
-4. Run your session (30-60 min) - Start with similar vision to myFive example
-
-**Outcome:** Successfully create a spec through deliberation, understand what output to expect
-
----
-
-### "I want to master Roundtable"
-1. All conceptual documents (1 hour)
-2. All mechanics documents (1.5 hours)
-3. All architecture documents (1 hour)
-4. Review use cases relevant to your role (1 hour)
-5. Practice sessions (ongoing)
-
-**Outcome:** Deep understanding of system, ready to customize and extend
-
----
-
-### "I'm implementing Roundtable"
-1. Core reading (4 hours) - see "Implementing Roundtable" section above
-2. Architecture deep-dive (2 hours) - SPEC.md Sections 4-5
-3. Review implementation examples (1 hour) - USE_CASES_*
-4. Implementation planning (2+ hours)
-
-**Outcome:** Ready to implement
-
----
-
-## 🎓 Learning Paths by Persona
-
-### Path 1: Founder (No Technical Background)
+## 📁 Folder Structure
 
 ```
-Day 1:
-  • Morning: VISION_AND_PHILOSOPHY (15 min)
-  • Morning: USER_INTERACTION_CONTROL (10 min)
-  • Afternoon: Run your first session (60 min)
-  • Evening: ITERATIVE_SPEC_EMERGENCE (30 min)
+00-core/                 Core Roundtable concepts
+├── SPEC.md             Main specification
+├── VISION_AND_PHILOSOPHY.md
+├── EXPERT_PANELS.md
+├── CONSENSUS_ALGORITHMS.md
+└── USER_INTERACTION_CONTROL.md
 
-Day 2:
-  • Morning: EXPERT_PANELS (20 min)
-  • Morning: PROJECT_MANAGER_AGENT (20 min)
-  • Afternoon: Run second session with new understanding (60 min)
-  • Evening: POST_MORTEM_SYSTEM (20 min)
+01-agents/              Agent definitions
+├── PROJECT_MANAGER_AGENT.md
+├── DEVELOPER_AGENT_INTEGRATION.md
+└── SKILLS.md
 
-Day 3:
-  • Pick two use cases relevant to your project
-  • Run refined sessions based on learning
+02-agentic-pm/          Agentic Project Management Framework
+├── AGENTIC_PROJECT_MANAGEMENT.md
+├── AGENTIC_EXECUTION_PLAN.md (with token-based cost model)
+├── AGENTIC_QUALITY_VALIDATION.md
+├── AGENTIC_LEARNING_CAPTURE.md
+└── PHASED_DEVELOPMENT.md
+
+03-spec-process/        How specs emerge & evolve
+├── ITERATIVE_SPEC_EMERGENCE.md
+├── CONTEXT_COMPRESSION.md
+├── FEEDBACK_INTEGRATION.md
+└── POST_MORTEM_SYSTEM.md
+
+04-governance/          Governance & compliance
+├── CONSTITUTIONS.md
+└── PROJECT_CHARTER_AND_INITIATION.md
+
+05-use-cases/           Real examples & walkthroughs
+├── INDEX.md            (Use case overview)
+├── CLI_SESSION.md      (Complete myFive dating app example - START HERE)
+├── BASIC_FLAT_MODEL.md
+├── CONSENSUS_ALGORITHMS.md
+├── CONSTITUTIONS.md
+├── EXPERT_PANELS.md
+└── SKILLS.md
+
+06-reference/           Analysis & historical docs
+├── PMP_ANALYSIS.md
+└── PMP_RECOMMENDATIONS_SUMMARY.md
 ```
 
 ---
 
-### Path 2: Technical Founder / Architect
+## ⚡ Quick Links
 
-```
-Day 1:
-  • Morning: VISION_AND_PHILOSOPHY (15 min)
-  • Morning: SPEC.md Sections 1-5 (45 min)
-  • Afternoon: EXPERT_PANELS (30 min)
-  • Afternoon: ITERATIVE_SPEC_EMERGENCE (30 min)
-
-Day 2:
-  • Morning: SKILLS (30 min)
-  • Morning: CONSTITUTIONS (30 min)
-  • Afternoon: USER_INTERACTION_CONTROL (20 min)
-  • Afternoon: PROJECT_MANAGER_AGENT (30 min)
-
-Day 3:
-  • Full session at Co-Creation level (90 min)
-  • POST_MORTEM_SYSTEM (30 min)
-  • Plan skill customizations for next session
-```
+| I want to... | Read this |
+|---|---|
+| Understand what Roundtable is | [00-core/VISION_AND_PHILOSOPHY.md](00-core/VISION_AND_PHILOSOPHY.md) |
+| See a complete example | [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md) |
+| Learn token-based budgeting | [02-agentic-pm/AGENTIC_EXECUTION_PLAN.md#3-cost-model](02-agentic-pm/AGENTIC_EXECUTION_PLAN.md) |
+| Understand panel debate flow | [00-core/SPEC.md](00-core/SPEC.md) (Section 3-4) |
+| Build my own Roundtable | [IMPLEMENTATION_ROADMAP.md](../IMPLEMENTATION_ROADMAP.md) |
+| Define governance for my project | [04-governance/CONSTITUTIONS.md](04-governance/CONSTITUTIONS.md) |
+| Create custom skills | [01-agents/SKILLS.md](01-agents/SKILLS.md) |
+| Understand consensus algorithms | [00-core/CONSENSUS_ALGORITHMS.md](00-core/CONSENSUS_ALGORITHMS.md) |
+| Learn about post-mortems | [03-spec-process/POST_MORTEM_SYSTEM.md](03-spec-process/POST_MORTEM_SYSTEM.md) |
 
 ---
 
-### Path 3: Team Lead (Multiple Stakeholders)
+## 🎓 Learning Paths
 
-```
-Day 1:
-  • VISION_AND_PHILOSOPHY (15 min)
-  • ITERATIVE_SPEC_EMERGENCE (30 min)
-  • CONSTITUTIONS (30 min)
+### Fast Track (1 hour)
+1. [00-core/VISION_AND_PHILOSOPHY.md](00-core/VISION_AND_PHILOSOPHY.md) - 15 min
+2. [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md) - 30 min
+3. [00-core/SPEC.md](00-core/SPEC.md) (Sections 1-3) - 15 min
 
-Day 2:
-  • Run team alignment session at Checkpoint level (90 min)
-  • Review EXPERT_PANELS (20 min)
-  • USER_INTERACTION_CONTROL (20 min)
+### Standard (2-3 hours)
+- Fast Track +
+- [00-core/EXPERT_PANELS.md](00-core/EXPERT_PANELS.md)
+- [00-core/CONSENSUS_ALGORITHMS.md](00-core/CONSENSUS_ALGORITHMS.md)
+- [02-agentic-pm/AGENTIC_EXECUTION_PLAN.md](02-agentic-pm/AGENTIC_EXECUTION_PLAN.md)
 
-Day 3:
-  • Run full team deliberation session
-  • POST_MORTEM_SYSTEM (30 min)
-```
+### Comprehensive (4+ hours)
+- Standard + all documents in reading order by role above
 
 ---
 
-## 🔗 Document Relationships
+## 🤔 FAQ
 
-```
-VISION_AND_PHILOSOPHY
-    └─ Why? How? The philosophy
+**Q: Where do I start?**
+A: Read [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md) first. It shows the complete flow end-to-end.
 
-PROJECT_MANAGER_AGENT ─── ITERATIVE_SPEC_EMERGENCE
-    └─ Who facilitates?        └─ How does spec grow?
+**Q: What's different about this vs traditional PM?**
+A: Token-based budgeting (no human time), parallel agent work, and organic spec emergence through structured debate.
 
-USER_INTERACTION_CONTROL
-    └─ What's my involvement level?
+**Q: Can I customize the panels?**
+A: Yes - see [04-governance/CONSTITUTIONS.md](04-governance/CONSTITUTIONS.md) and [01-agents/SKILLS.md](01-agents/SKILLS.md).
 
-CONSTITUTIONS ─── SKILLS ─── EXPERT_PANELS
-    └─ Governance      └─ Expertise      └─ Teams
-
-POST_MORTEM_SYSTEM ─── SKILLS (feedback loop)
-    └─ Learning               └─ Improvement
-
-PHASED_DEVELOPMENT ─── CONTEXT_COMPRESSION
-    └─ Phase structure         └─ Context efficiency
-
-SPEC.md (complete system architecture)
-    └─ Technical details of all above
-
-USE_CASES_* (see all concepts in action)
-    └─ Real-world examples
-
-AGENTIC PROJECT MANAGEMENT FRAMEWORK (FOR EXECUTION):
-    ├─ AGENTIC_PROJECT_MANAGEMENT (Framework & principles)
-    ├─ AGENTIC_EXECUTION_PLAN (Planning & token budgeting)
-    ├─ AGENTIC_QUALITY_VALIDATION (Measuring vision adherence)
-    └─ AGENTIC_LEARNING_CAPTURE (Preserving learning)
-```
-
----
-
-## ✅ Checklist: Before Your First Session
-
-- [ ] Read VISION_AND_PHILOSOPHY.md
-- [ ] Choose your USER_INTERACTION_CONTROL level
-- [ ] Read USE_CASES_BASIC_FLAT_MODEL.md - find one like your project
-- [ ] Review ITERATIVE_SPEC_EMERGENCE.md - understand the flow
-- [ ] Optional: Read EXPERT_PANELS.md if you want domain detail
-- [ ] Optional: Read PROJECT_MANAGER_AGENT.md for facilitation understanding
-- [ ] Ready to start? Open CLI and run `roundtable init`
-
----
-
-## ❓ FAQ
-
-**Q: Which document should I read first?**
-A: VISION_AND_PHILOSOPHY.md always. It explains why Roundtable exists.
-
-**Q: I'm busy, what's the minimum I need to read?**
-A: VISION_AND_PHILOSOPHY (15 min) + one use case (15 min). Then jump in.
-
-**Q: I want to implement this, where do I start?**
-A: SPEC.md (complete spec) + PROJECT_MANAGER_AGENT.md (facilitation).
-
-**Q: I want to customize governance for my team.**
-A: CONSTITUTIONS.md Section 8 (Custom Constitutions).
-
-**Q: How do skills improve over time?**
-A: POST_MORTEM_SYSTEM.md - explains the learning loop.
-
-**Q: I don't have time to read all this.**
-A: Start with VISION_AND_PHILOSOPHY.md (15 min), then dive in. Learn by doing.
+**Q: How do I measure success?**
+A: Vision Adherence Score - see [02-agentic-pm/AGENTIC_QUALITY_VALIDATION.md](02-agentic-pm/AGENTIC_QUALITY_VALIDATION.md).
 
 ---
 
 ## 📞 Need Help?
 
-- **Conceptual question:** Check VISION_AND_PHILOSOPHY.md or relevant use case
-- **Practical question:** Check USER_INTERACTION_CONTROL.md or project workflow in SPEC.md
-- **Technical question:** Check SPEC.md or PROJECT_MANAGER_AGENT.md for system design
-- **Use case question:** Check USE_CASES_INDEX.md for similar scenario
-
----
-
-## 🚀 Next Steps
-
-1. **Choose a path above** based on your role
-2. **Start reading** with recommended documents
-3. **Run your first session** - learning by doing is most effective
-4. **Review POST_MORTEM_SYSTEM** after your session to plan improvements
-5. **Iterate** - each session teaches you more
-
-Welcome to Roundtable. Let's build something great.
+- **Architecture questions:** See [00-core/SPEC.md](00-core/SPEC.md)
+- **Implementation questions:** See [IMPLEMENTATION_ROADMAP.md](../IMPLEMENTATION_ROADMAP.md)
+- **Real example:** See [05-use-cases/CLI_SESSION.md](05-use-cases/CLI_SESSION.md)
+- **Historical context:** See [06-reference/](06-reference/)

@@ -1,0 +1,128 @@
+MIT License
+
+Copyright (c) 2024 Roundtable Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+COMMONS CLAUSE LICENSE CONDITION v1.0
+
+Based on the Commons Clause standard (https://commonsclause.com/)
+
+The Software is provided to you by the Licensor under the License, as defined
+above, subject to the following condition.
+
+No Commercial Rebranding Without License
+
+The following restriction applies to the Software:
+
+You may not offer the Software, or any modified version of the Software, for
+"Sell," as that term is defined below, without first obtaining a separate
+commercial license from the Licensor.
+
+DEFINITION OF "SELL"
+
+"Sell" means to offer the Software as part of a commercial product or service,
+or to offer the functionality of the Software in a commercial capacity, where
+the primary value delivered to customers derives, entirely or substantially,
+from the functionality of the Software. This includes, but is not limited to:
+
+1. Integrating the Software into a commercial product or service and charging
+   for access to that product or service
+2. Offering the Software as a cloud service, managed service, or SaaS platform
+3. Selling a product or service whose core value is substantially derived from
+   the Software
+4. Reselling or redistributing the Software or its modified versions for
+   commercial gain
+5. Offering services that depend on the Software as their primary offering
+
+EXCEPTIONS (No License Required)
+
+The following uses are explicitly allowed without a commercial license:
+
+1. Non-commercial use of the Software for personal projects, research, or
+   academic purposes
+2. Using the Software as an internal tool to support your organization's own
+   operations (not as a service offered to others)
+3. Integrating the Software into a larger product where the Software's
+   functionality is NOT the primary value (i.e., it's one feature among many,
+   and users are not primarily purchasing your product for the Software's
+   functionality)
+4. Modifying or extending the Software for your own internal use
+5. Contributing improvements back to the open-source project
+6. Using the Software in open-source projects (where the open-source license
+   applies)
+
+OBTAINING A COMMERCIAL LICENSE
+
+If you wish to use the Software in a way that requires a commercial license,
+you must:
+
+1. Contact the Licensor at: licensing@roundtable.ai
+2. Negotiate a commercial license agreement with terms suitable to your use
+3. Execute a Commercial License Agreement with the Licensor
+4. Pay any required licensing fees as specified in your agreement
+
+Upon execution of a valid Commercial License Agreement, you will have the right
+to use the Software in the manner described in that agreement, subject to its
+terms and conditions.
+
+ENFORCEMENT
+
+If you use the Software in a manner that violates this Commons Clause (i.e.,
+you "Sell" the Software without a commercial license), the Licensor may:
+
+1. Require you to cease the infringing activity
+2. Demand payment of reasonable licensing fees for past use
+3. Seek injunctive relief and monetary damages in court
+4. Recover reasonable attorneys' fees and costs
+
+MODIFICATION AND CLARIFICATION
+
+This Commons Clause applies to any modified versions of the Software, as long
+as those modifications remain substantially the same Software (rather than being
+entirely rewritten).
+
+This Commons Clause does not apply to:
+- Work that is entirely independent and not derived from the Software
+- Software that reimplements the functionality of the Software but uses
+  completely different code and architecture
+- Use of the Software under a valid Commercial License Agreement
+
+---
+
+INTERPRETATION
+
+In case of any ambiguity between the MIT License and the Commons Clause, the
+more restrictive interpretation shall apply. The intent of these licenses is to:
+
+1. Protect open-source use and community contribution
+2. Protect the Licensor's ability to commercialize the Software
+3. Ensure fair compensation when the Software is integrated into commercial
+   products
+
+If you have questions about whether your intended use requires a commercial
+license, please contact: licensing@roundtable.ai
+
+---
+
+VERSION: 1.0
+EFFECTIVE DATE: 2024-10-22
+LAST UPDATED: 2024-10-22

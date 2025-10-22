@@ -1,0 +1,46 @@
+# Mobile Application Panel
+
+id: mobile-app
+name: Mobile Application Panel
+description: Panel for mobile app development, covering architecture, user experience, and product strategy
+version: 1.0.0
+
+skillIds:
+  - architecture
+  - ux
+  - product
+
+keywords:
+  - mobile
+  - ios
+  - android
+  - app
+  - native
+  - react-native
+  - flutter
+  - swift
+  - kotlin
+  - objective-c
+  - java
+  - xamarin
+  - cordova
+  - ionic
+  - responsive
+  - touch
+  - gesture
+  - offline
+  - push
+  - notification
+  - location
+  - camera
+  - sensors
+
+tags:
+  - mobile
+  - application
+  - ios
+  - android
+
+agentCount: 3
+
+author: Roundtable Team

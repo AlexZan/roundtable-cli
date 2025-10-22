@@ -1,0 +1,47 @@
+# Data Platform Panel
+
+id: data-platform
+name: Data Platform Panel
+description: Specialized panel for data engineering, analytics, and data infrastructure projects
+version: 1.0.0
+
+skillIds:
+  - architecture
+  - data-engineering
+  - security
+
+keywords:
+  - data
+  - analytics
+  - etl
+  - pipeline
+  - warehouse
+  - lake
+  - bigdata
+  - spark
+  - hadoop
+  - kafka
+  - airflow
+  - dbt
+  - snowflake
+  - redshift
+  - bigquery
+  - databricks
+  - streaming
+  - batch
+  - reporting
+  - dashboard
+  - bi
+  - business intelligence
+  - ml
+  - machine learning
+  - model
+
+tags:
+  - data
+  - analytics
+  - infrastructure
+
+agentCount: 3
+
+author: Roundtable Team

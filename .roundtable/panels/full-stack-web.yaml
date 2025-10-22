@@ -1,0 +1,45 @@
+# Full Stack Web Development Panel
+
+id: full-stack-web
+name: Full Stack Web Development Panel
+description: Comprehensive panel for full-stack web applications, covering architecture, UX, security, and product strategy
+version: 1.0.0
+
+skillIds:
+  - architecture
+  - ux
+  - security
+  - product
+
+keywords:
+  - web
+  - webapp
+  - website
+  - frontend
+  - backend
+  - full-stack
+  - fullstack
+  - react
+  - vue
+  - angular
+  - node
+  - express
+  - django
+  - rails
+  - api
+  - rest
+  - graphql
+  - spa
+  - pwa
+  - responsive
+  - bootstrap
+  - tailwind
+
+tags:
+  - web
+  - full-stack
+  - application
+
+agentCount: 4
+
+author: Roundtable Team

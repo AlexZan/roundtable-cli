@@ -124,6 +124,181 @@ skill:
 - ✅ Different agents can use same skill
 - ✅ Skills can be updated, old versions still available
 
+### 2.2.1 Modality Capabilities (V1.2+)
+
+Skills can now declare which input modalities they can process, enabling multimodal analysis.
+
+**Example: UX Design Expert with Vision Capabilities**
+
+```yaml
+# .roundtable/skills/ux/ux-design-visual-analysis.yml
+
+skill:
+  name: "UX Design Expert"
+  id: "ux-design-visual-analysis"
+  version: "2.0.0"
+  domain: "design"
+
+  description: |
+    Expert in UI/UX design with visual analysis capabilities.
+    Can analyze mockups, wireframes, and UI screenshots directly.
+
+  # NEW: Modality declaration
+  modalities:
+    text: required    # Always needs text context
+    image: required   # This skill REQUIRES images for best analysis
+    audio: optional   # Can process user interviews if provided
+    document: optional
+
+  # NEW: Capabilities by modality
+  capabilities_by_modality:
+    image:
+      - name: "Visual hierarchy analysis"
+        description: "Analyze layout, spacing, visual flow using CRAP principles"
+      - name: "Accessibility compliance (WCAG)"
+        description: "Check contrast ratios, text sizes, touch targets"
+      - name: "Information density measurement"
+        description: "Calculate items per screen area, optimize density"
+      - name: "Side-by-side mockup comparison"
+        description: "Compare multiple design options objectively"
+
+    audio:
+      - name: "User interview synthesis"
+        description: "Extract themes and pain points from recorded interviews"
+      - name: "Emotional cue detection"
+        description: "Identify frustration, satisfaction from tone"
+
+    text:
+      - name: "Requirements analysis"
+        description: "Standard text-based UX requirements review"
+
+  system_prompt: |
+    You are a UX expert with visual analysis capabilities.
+
+    When analyzing IMAGES:
+    - Assess visual hierarchy, whitespace, contrast using design principles
+    - Identify WCAG compliance issues (contrast ratios, text sizes, touch targets)
+    - Compare alternatives side-by-side with objective metrics
+    - Reference specific visual elements in your critique
+
+    When analyzing AUDIO (user interviews):
+    - Identify recurring themes and pain points
+    - Note emotional cues (frustration, satisfaction, excitement)
+    - Synthesize actionable insights from user feedback
+
+    When analyzing TEXT:
+    - Review UX requirements for completeness
+    - Suggest user research approaches
+    - Identify usability considerations
+
+    Always provide:
+    - Objective measurements when possible (contrast: 4.8:1, density: 1.2 items/100px²)
+    - Specific references to visual elements or interview quotes
+    - Evidence-based recommendations
+```
+
+**Model Routing Based on Modalities:**
+
+When user provides images, the system automatically routes to vision-capable models:
+
+```yaml
+panel:
+  name: "UX Design"
+  skills:
+    - "ux/ux-design-visual-analysis@2.0"
+
+  # Automatic model routing based on input modalities
+  agents:
+    - model: "gpt-4-vision"
+      when: ["image_input_present"]
+
+    - model: "claude-3-sonnet"
+      when: ["image_input_present"]
+
+    - model: "gpt-4"  # fallback
+      when: ["text_only"]
+```
+
+**Example: Architecture Expert with Diagram Analysis**
+
+```yaml
+# .roundtable/skills/architecture/systems-architect-visual.yml
+
+skill:
+  name: "Systems Architect"
+  id: "systems-architect-visual"
+  version: "2.0.0"
+  domain: "architecture"
+
+  modalities:
+    text: required
+    image: preferred  # Works better with diagrams but not required
+    document: optional
+
+  capabilities_by_modality:
+    image:
+      - name: "System diagram analysis"
+        description: "Analyze architecture diagrams for bottlenecks, SPOFs"
+      - name: "Data flow validation"
+        description: "Trace data flows, identify missing components"
+      - name: "Network topology review"
+        description: "Assess network segmentation, security boundaries"
+
+  system_prompt: |
+    You are a systems architect with diagram analysis capabilities.
+
+    When analyzing SYSTEM DIAGRAMS:
+    - Identify all components (web tier, data tier, caching, queuing)
+    - Trace data flows and identify bottlenecks
+    - Spot single points of failure (SPOFs)
+    - Check for missing patterns (no read replicas, no message broker)
+    - Assess scalability and capacity
+
+    Provide specific references: "Single database at center (SPOF)"
+    vs vague "database concerns"
+```
+
+**Graceful Degradation:**
+
+If a skill requires a modality not present in user input:
+
+```yaml
+degradation_strategy:
+  ux_panel_requires_image_but_none_provided:
+    option_1:
+      action: "request_modality"
+      message: "UX analysis works best with mockup images. Can you provide visual designs?"
+
+    option_2:
+      action: "text_fallback"
+      message: "⚠️ Limited UX analysis (no images provided). Analysis based on description only."
+
+    option_3:
+      action: "skip_panel"
+      message: "Skipping visual UX analysis. Add images to enable full UX review."
+```
+
+**Token Cost Implications:**
+
+```yaml
+token_costs_by_modality:
+  text: ~1 token/word (baseline)
+  image: ~2,500 tokens/image (expensive but accurate)
+  audio: ~500 tokens/minute (moderate)
+  document: ~1.5x text (moderate)
+
+example_session:
+  input: "Which dashboard design should we use?" + 3 wireframes
+  token_breakdown:
+    text: 10 tokens
+    images: 7,500 tokens (3 × 2,500)
+    deliberation: 3,000 tokens
+  total: 10,510 tokens
+  roi: "10x more accurate than text description"
+```
+
+**For complete details:** See [MULTIMODAL_INPUT_HANDLING.md](MULTIMODAL_INPUT_HANDLING.md)
+
 ### 2.3 What This Means in Practice
 
 **Old (Pre-Assigned Roles):**

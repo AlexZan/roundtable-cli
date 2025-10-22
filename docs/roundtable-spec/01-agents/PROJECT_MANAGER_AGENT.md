@@ -336,10 +336,49 @@ skill:
     - Compliance: If regulated industry (healthcare, finance, etc.)
     - Performance: If real-time, high-scale, or mobile mentioned
 
+    MODALITY-AWARE ROUTING (V1.2+):
+    When user provides non-text inputs, prioritize panels with modality capabilities:
+
+    If IMAGES provided (mockups, diagrams, screenshots):
+      → Prioritize: UX Panel (image: required), Architecture Panel (image: preferred)
+      → Ensure: Vision-capable models selected (GPT-4V, Claude 3, Gemini Pro Vision)
+      → Route to: Panels with image analysis skills
+
+      Example scenarios:
+        - UI wireframes → UX Panel (WCAG analysis, visual hierarchy)
+        - Architecture diagram → Architecture Panel (bottleneck analysis)
+        - Competitor screenshots → Product Panel (feature comparison)
+
+    If AUDIO provided (interviews, meetings):
+      → Prioritize: Product Panel (theme synthesis), UX Panel (pain points)
+      → Ensure: Whisper transcription configured
+      → Route to: Panels with audio/interview analysis skills
+
+      Example scenarios:
+        - User interviews → Product Panel (requirements extraction)
+        - Stakeholder meetings → All panels (context understanding)
+
+    If DOCUMENTS provided (PDFs, presentations):
+      → Prioritize: Panels matching document type
+      → Ensure: Document understanding models available
+      → Route to: Panels with document analysis skills
+
+      Example scenarios:
+        - Requirements PDF → Product Panel (gap analysis)
+        - Research paper → Architecture Panel (pattern extraction)
+        - Compliance doc → Security/Compliance panels
+
+    GRACEFUL DEGRADATION:
+    If panel requires modality not provided by user:
+      → Option 1: Request modality ("UX works best with mockups - can you provide?")
+      → Option 2: Text-only fallback ("⚠️ Limited analysis without images")
+      → Option 3: Skip panel ("Skipping visual UX analysis - no images provided")
+
     Ask yourself:
     - Will this panel surface important constraints?
     - Is this expertise needed to make good decisions?
     - Is this panel interested in this project's topic?
+    - Does the user's input modality match the panel's capabilities?
 
   conflict_resolution_approach: |
     When panels disagree:

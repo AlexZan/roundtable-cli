@@ -366,6 +366,270 @@ consensus_algorithm:
 
 ---
 
+### 3.6 Evidence-Based Debate (V1.1+) ⭐ RECOMMENDED
+
+**Use case:** Projects where decision accuracy is critical, learning from past decisions matters
+
+**Philosophy:** Claims backed by evidence, quantitative convergence tracking, continuous learning
+
+**Research foundation:** Based on "Improving Factuality and Reasoning in Language Models through Multiagent Debate" (Du et al., 2023) - demonstrated 8-15% accuracy improvement.
+
+```yaml
+consensus_algorithm:
+  name: "evidence_based_debate"
+  version: "2.0"
+  research_basis: "Du et al. (2023) - Multiagent Debate"
+
+  evidence_framework:
+    enabled: true
+    evidence_types:
+      DOCUMENTED:
+        weight: 0.90
+        description: "Official docs, RFCs, standards"
+      EMPIRICAL:
+        weight: 0.85
+        description: "Measurements, benchmarks, data"
+      PRECEDENT:
+        weight: 0.70
+        description: "Case studies, similar projects"
+      LOGICAL:
+        weight: 0.60
+        description: "First-principles reasoning"
+      PREFERENTIAL:
+        weight: 0.40
+        description: "Subjective judgments"
+      SPECULATIVE:
+        weight: 0.20
+        description: "Hypotheses without backing"
+
+  within_panel:
+    rule: "evidence_weighted_consensus"
+    logic: |
+      if all agents agree WITH strong evidence (DOCUMENTED or EMPIRICAL):
+        → Consensus (confidence: VERY HIGH, 0.90+)
+
+      else if N-1 agents agree with strong evidence AND 1 dissenter has weak evidence:
+        → Consensus with documented dissent (confidence: HIGH, 0.75-0.89)
+
+      else if evidence contradictory (DOCUMENTED vs DOCUMENTED):
+        → Run structured debate for 3+ rounds
+        → Apply convergence metrics
+        if semantic_similarity >= 0.80:
+          → Consensus reached (confidence: MEDIUM-HIGH, 0.70-0.84)
+        else if position_shift < 0.05 for 2 rounds:
+          → Escalate to human (diminishing returns)
+
+      else if only weak evidence (PREFERENTIAL, SPECULATIVE):
+        → Flag for better evidence gathering
+        → Escalate if no strong evidence available
+
+  convergence_metrics:
+    enabled: true
+
+    semantic_similarity:
+      threshold_consensus: 0.80
+      calculation: "cosine_similarity of response embeddings"
+      display: "Real-time progress bar"
+
+    position_shift:
+      threshold_diminishing_returns: 0.05
+      calculation: "1.0 - cosine_similarity(prev_round, current_round)"
+      display: "Per-agent and average shift"
+
+    evidence_convergence:
+      threshold_strong: 0.60
+      calculation: "common_citations / total_unique_citations"
+      display: "Citation overlap percentage"
+
+  cross_domain:
+    rule: "evidence_strength_arbitration"
+    logic: |
+      if panel_A has DOCUMENTED evidence AND panel_B has PREFERENTIAL:
+        → Panel_A position weighted higher (0.9 vs 0.4)
+
+      else if both panels have equal-strength evidence (e.g., both EMPIRICAL):
+        → Run debate rounds
+        → Check for evidence convergence
+        if agents citing same sources (convergence >= 0.60):
+          → Strong consensus
+        else:
+          → Collaborative resolution or escalation
+
+      else if panel_A has PRECEDENT AND panel_B has LOGICAL:
+        → Debate to determine which reasoning stronger for THIS context
+        → May escalate if both valid but contradictory
+
+  project_level:
+    rule: "evidence_based_consensus_with_learning"
+    logic: |
+      if semantic_similarity >= 0.80 AND evidence_convergence >= 0.60:
+        → Consensus (confidence: HIGH)
+        → Log for post-mortem learning
+
+      else if semantic_similarity >= 0.80 AND evidence_convergence < 0.60:
+        → Consensus with diverse evidence paths (confidence: MEDIUM)
+        → Note: Agents reached same conclusion via different reasoning
+        → Log for post-mortem to understand which evidence path more accurate
+
+      else if position_shift < 0.05 for 2 rounds AND semantic_similarity < 0.80:
+        → Escalate to human (diminishing returns)
+        → Provide: all evidence, all positions, convergence metrics
+        → Log debate quality for future improvement
+
+      else:
+        → Continue debate (making progress)
+
+  post_mortem_integration:
+    enabled: true
+
+    track_during_debate:
+      - evidence_types_used
+      - citations_per_agent
+      - position_shifts_per_round
+      - convergence_trajectory
+      - final_decision_confidence
+
+    track_during_implementation:
+      - decision_accuracy (did consensus match reality?)
+      - surprises (requirements missed during debate)
+      - timeline_impact (debate thoroughness vs speed)
+
+    learn_after_completion:
+      - evidence_type_accuracy: "Which types predicted correct decisions?"
+      - agent_calibration: "Which agents/panels most accurate by domain?"
+      - question_effectiveness: "Which PM questions surfaced critical info?"
+      - skill_gaps: "What expertise was missing from panels?"
+
+    update_system:
+      - evidence_weights: "Adjust based on accuracy correlation"
+      - agent_domain_weights: "Calibrate agent reliability by topic"
+      - required_questions: "Add questions that prevent past mistakes"
+      - skill_recommendations: "Suggest skills to fill gaps"
+
+  escalation:
+    - trigger: "evidence_contradictory_high_stakes"
+      condition: "DOCUMENTED evidence conflicts AND high impact decision"
+      action: "immediate_human_review"
+      timeout: "0_rounds"
+
+    - trigger: "diminishing_returns"
+      condition: "position_shift < 0.05 for 2 consecutive rounds"
+      action: "escalate_with_full_context"
+      timeout: "immediate"
+      context_provided:
+        - all_positions
+        - all_evidence
+        - convergence_metrics
+        - why_debate_stalled
+
+    - trigger: "weak_evidence_only"
+      condition: "all evidence PREFERENTIAL or SPECULATIVE"
+      action: "request_stronger_evidence_or_human_judgment"
+      timeout: "1_round"
+
+    - trigger: "premature_consensus"
+      condition: "semantic_similarity > 0.85 AND round_number <= 2"
+      action: "devil_advocate_check"
+      note: "Ensure not groupthink, challenge consensus"
+
+  token_budget_awareness:
+    overhead_per_round: "+150 tokens/agent (evidence tagging)"
+    convergence_metrics: "+200 tokens/round"
+    post_mortem_logging: "+500 tokens/debate"
+
+    total_overhead: "~54% more tokens than standard debate"
+    roi_justification: |
+      Cost: +1,950 tokens for 3-round debate
+      Benefit: 8-15% accuracy improvement
+      Savings: Avoided rework (10-100x token cost)
+      Net: 3-10x positive ROI
+
+  display_format:
+    show_evidence_tags: true
+    show_convergence_metrics: true
+    show_confidence_scores: true
+    show_learning_updates: true
+
+  compatibility:
+    backward_compatible: true
+    note: "Can be used with any Constitution, any skill set"
+    upgrade_path: "Gradually enable features (evidence → metrics → learning)"
+```
+
+**Example in action:**
+
+```
+Topic: Should we use PostgreSQL or MongoDB?
+
+[Round 1]
+
+Claude (Data Panel):
+  Position: "PostgreSQL for transactional consistency"
+  Evidence: [DOCUMENTED] PostgreSQL ACID compliance (official docs)
+            [EMPIRICAL] Our data has relational structure (schema analysis)
+  Confidence: HIGH (0.88)
+
+GPT-4 (Data Panel):
+  Position: "MongoDB for flexible schema"
+  Evidence: [PREFERENTIAL] NoSQL feels more modern
+            [LOGICAL] Less upfront schema design needed
+  Confidence: LOW (0.45)
+
+Metrics:
+  Semantic Similarity: 0.35 (low - positions differ)
+  Evidence Convergence: 0.0 (no common citations)
+
+[Round 2 - After Critique]
+
+Claude: (unchanged - high confidence, strong evidence)
+
+GPT-4: (updated position)
+  Position: "PostgreSQL is more appropriate for this use case"
+  Evidence: [DOCUMENTED] ACID requirements in spec (v2.1, section 4)
+            [EMPIRICAL] Data analysis confirms relational model
+            [LOGICAL] Previous PREFERENTIAL evidence was weak
+  Confidence: MEDIUM-HIGH (0.78)
+
+  Note: "I concede - Claude's DOCUMENTED + EMPIRICAL evidence
+         outweighs my PREFERENTIAL reasoning. PostgreSQL correct choice."
+
+Metrics:
+  Semantic Similarity: 0.86 (high - consensus)
+  Position Shift: GPT-4 shifted 0.62 (major update)
+  Evidence Convergence: 0.67 (both citing same data analysis)
+
+CONSENSUS REACHED: PostgreSQL
+Confidence: HIGH (0.86)
+Rounds: 2 (efficient)
+
+Logged for post-mortem:
+  - EMPIRICAL evidence (data analysis) was decisive
+  - GPT-4 updated position when presented stronger evidence
+  - Evidence-based approach prevented MongoDB mistake
+```
+
+**Post-mortem learning (later):**
+```
+Decision: PostgreSQL ✓ CORRECT
+Implementation: Transactional consistency critical, choice validated
+
+Evidence Performance:
+  EMPIRICAL (data analysis): 100% accurate - decisive
+  DOCUMENTED (ACID specs): 100% accurate - validated
+  PREFERENTIAL (NoSQL feelings): Correctly overridden by stronger evidence
+
+Agent Performance:
+  Claude (Data Panel): Strong evidence gathering, correct initial position
+  GPT-4 (Data Panel): Good evidence updating, appropriate concession
+
+System Update:
+  ✓ EMPIRICAL evidence weight validated at 0.85 for data decisions
+  ✓ GPT-4 calibration: strong at evidence-based updating
+  ✓ No changes needed - system working as designed
+```
+
+---
+
 ## 4. Custom Algorithms
 
 Users can define custom algorithms for their specific needs. Here are patterns for building them:

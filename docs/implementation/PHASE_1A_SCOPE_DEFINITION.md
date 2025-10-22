@@ -49,7 +49,7 @@
 - **Status:** ✅ Implemented (minimal version)
 
 #### 3. Claude API Integration
-- **What:** Send requests to Claude 3.5 Sonnet
+- **What:** Send requests to Claude 4.5 Haiku
 - **Features:**
   - ClaudeClient class
   - Token tracking

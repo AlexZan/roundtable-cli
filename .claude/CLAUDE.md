@@ -655,7 +655,7 @@ AGENT RESPONSE:
 "I propose Phase 1A Validation Prototype:
 
 SCOPE:
-  - 2 agents (Architecture, Product) with Claude 3.5 Sonnet
+  - 2 agents (Architecture, Product) with Claude 4.5 Haiku
   - 2-round parallel debate
   - CLI with Inquirer
   - JSON session storage

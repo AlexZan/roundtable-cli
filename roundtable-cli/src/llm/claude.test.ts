@@ -43,7 +43,7 @@ describe('ClaudeClient - Error Handling', () => {
         maxTokens: 100
       };
 
-      await expect(client.sendRequest(request, 'claude-3-5-sonnet-20241022'))
+      await expect(client.sendRequest(request, 'claude-4-5-haiku-20241119'))
         .rejects
         .toThrow(/💳 No API credits available/);
 
@@ -61,7 +61,7 @@ describe('ClaudeClient - Error Handling', () => {
         maxTokens: 100
       };
 
-      await expect(client.sendRequest(request, 'claude-3-5-sonnet-20241022'))
+      await expect(client.sendRequest(request, 'claude-4-5-haiku-20241119'))
         .rejects
         .toThrow(/🔑 Invalid API key/);
     });
@@ -78,7 +78,7 @@ describe('ClaudeClient - Error Handling', () => {
         maxTokens: 100
       };
 
-      await expect(client.sendRequest(request, 'claude-3-5-sonnet-20241022'))
+      await expect(client.sendRequest(request, 'claude-4-5-haiku-20241119'))
         .rejects
         .toThrow(/⏱️  Rate limit exceeded/);
     });
@@ -95,7 +95,7 @@ describe('ClaudeClient - Error Handling', () => {
         maxTokens: 100
       };
 
-      await expect(client.sendRequest(request, 'claude-3-5-sonnet-20241022'))
+      await expect(client.sendRequest(request, 'claude-4-5-haiku-20241119'))
         .rejects
         .toThrow(/🌐 Network error/);
     });
@@ -111,7 +111,7 @@ describe('ClaudeClient - Error Handling', () => {
         maxTokens: 100
       };
 
-      await expect(client.sendRequest(request, 'claude-3-5-sonnet-20241022'))
+      await expect(client.sendRequest(request, 'claude-4-5-haiku-20241119'))
         .rejects
         .toThrow(/❌ API request failed/);
     });

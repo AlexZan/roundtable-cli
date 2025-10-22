@@ -29,13 +29,13 @@ describe('DebateEngine', () => {
       {
         id: 'agent-arch',
         name: 'Architecture Expert',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-4-5-haiku-20241119',
         systemPrompt: 'You are an architecture expert'
       },
       {
         id: 'agent-product',
         name: 'Product Expert',
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-4-5-haiku-20241119',
         systemPrompt: 'You are a product expert'
       }
     ]

@@ -242,9 +242,9 @@ $ npm run dev list
 - **Why:** Multi-platform compatibility (CLI → Web → VSCode → Mobile)
 - **Trade-off:** Slightly slower than compiled languages, but better ecosystem
 
-### Claude 3.5 Sonnet
-- **Why:** Good balance of quality and speed for prototype
-- **Trade-off:** Only one LLM in prototype (multi-LLM deferred to Phase 2)
+### Claude 4.5 Haiku
+- **Why:** Fast, cost-efficient model for MVP validation (saves tokens vs Sonnet)
+- **Trade-off:** Only one LLM in prototype (multi-LLM deferred to Phase 1C)
 
 ### JSON File Storage
 - **Why:** Simple, no database needed for prototype

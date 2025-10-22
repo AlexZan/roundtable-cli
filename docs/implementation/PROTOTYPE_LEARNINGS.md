@@ -115,7 +115,7 @@ Round 2 - Product: [How did they respond to Architecture's view?]
 **Status:** ✅ Validated / ⚠️ Concerns / ❌ Rethink needed
 **Reasoning:** [Fill in after testing]
 
-### Decision 2: Claude 3.5 Sonnet
+### Decision 2: Claude 4.5 Haiku
 **Status:** ✅ Validated / ⚠️ Concerns / ❌ Rethink needed
 **Reasoning:** [Fill in after testing]
 

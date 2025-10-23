@@ -1,0 +1,52 @@
+# Mobile Application Panel with Model Diversity
+# Phase 1C Extended: Multi-model panel debate
+
+id: mobile-app-diverse
+name: Mobile Application Panel (Multi-Model)
+description: Panel for mobile app development with diverse model perspectives per skill
+version: 1.0.0
+
+skillIds:
+  - architecture
+  - ux
+  - product
+
+keywords:
+  - mobile
+  - ios
+  - android
+  - app
+  - native
+  - react-native
+  - flutter
+  - swift
+  - kotlin
+
+tags:
+  - mobile
+  - application
+  - multi-model
+
+# Phase 1C Extended: Model Diversity Configuration
+modelDiversity:
+  enabled: true
+  modelsPerSkill: 2
+  strategy: explicit
+
+  # Explicit model assignments per skill
+  skillModelMap:
+    architecture:
+      - claude-sonnet-4-20250514   # Systems thinking, depth
+      - gpt-4-turbo                # Complex reasoning, practical implementation
+
+    ux:
+      - claude-haiku-4-5-20251001  # Cost-effective, fast feedback
+      - claude-sonnet-4-20250514   # Deeper UX analysis
+
+    product:
+      - gpt-4-turbo                # Business reasoning, strategy
+      - claude-haiku-4-5-20251001  # Fast product iteration feedback
+
+agentCount: 6  # 2 models × 3 skills = 6 agents
+
+author: Roundtable Team

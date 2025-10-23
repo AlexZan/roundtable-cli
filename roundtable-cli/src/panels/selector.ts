@@ -133,11 +133,93 @@ export function validatePanel(panel: any): PanelValidationResult {
       errors.push(`Field 'agentCount' must be a number`);
     } else if (panel.agentCount < 1) {
       errors.push(`Field 'agentCount' must be at least 1`);
-    } else if (panel.agentCount !== panel.skillIds.length) {
+    } else if (!panel.modelDiversity && panel.agentCount !== panel.skillIds.length) {
       warnings.push(
         `agentCount (${panel.agentCount}) differs from skillIds length (${panel.skillIds.length}). ` +
           `This may cause unexpected behavior.`
       );
+    }
+  }
+
+  // Validate modelDiversity if present (Phase 1C Extended)
+  if (panel.modelDiversity !== undefined) {
+    const diversity = panel.modelDiversity;
+
+    // Check that enabled is a boolean
+    if (typeof diversity.enabled !== 'boolean') {
+      errors.push(`modelDiversity.enabled must be a boolean`);
+    }
+
+    // If enabled, validate configuration
+    if (diversity.enabled) {
+      // Validate modelsPerSkill
+      if (diversity.modelsPerSkill !== undefined) {
+        if (typeof diversity.modelsPerSkill !== 'number') {
+          errors.push(`modelDiversity.modelsPerSkill must be a number`);
+        } else if (diversity.modelsPerSkill < 2) {
+          errors.push(`modelDiversity.modelsPerSkill must be at least 2`);
+        } else if (diversity.modelsPerSkill > 4) {
+          warnings.push(
+            `modelDiversity.modelsPerSkill is ${diversity.modelsPerSkill}. ` +
+            `More than 3 models per skill may increase costs significantly.`
+          );
+        }
+      }
+
+      // Validate strategy
+      if (diversity.strategy !== undefined) {
+        if (!['auto-diverse', 'explicit'].includes(diversity.strategy)) {
+          errors.push(
+            `modelDiversity.strategy must be 'auto-diverse' or 'explicit', got '${diversity.strategy}'`
+          );
+        }
+
+        // If explicit strategy, skillModelMap is required
+        if (diversity.strategy === 'explicit' && !diversity.skillModelMap) {
+          errors.push(
+            `modelDiversity.strategy is 'explicit' but skillModelMap is missing`
+          );
+        }
+      }
+
+      // Validate skillModelMap if present
+      if (diversity.skillModelMap !== undefined) {
+        if (typeof diversity.skillModelMap !== 'object') {
+          errors.push(`modelDiversity.skillModelMap must be an object`);
+        } else {
+          // Check that all skillIds have model mappings
+          for (const skillId of panel.skillIds) {
+            const models = diversity.skillModelMap[skillId];
+            if (!models) {
+              warnings.push(
+                `modelDiversity.skillModelMap missing entry for skill '${skillId}'`
+              );
+            } else if (!Array.isArray(models)) {
+              errors.push(
+                `modelDiversity.skillModelMap['${skillId}'] must be an array`
+              );
+            } else if (models.length < 2) {
+              warnings.push(
+                `modelDiversity.skillModelMap['${skillId}'] has only ${models.length} model(s). ` +
+                `Consider using at least 2 models for diversity.`
+              );
+            }
+          }
+        }
+      }
+
+      // Validate agentCount with model diversity
+      if (panel.agentCount !== undefined && diversity.skillModelMap) {
+        const expectedAgentCount = Object.values(diversity.skillModelMap)
+          .reduce((sum, models: any) => sum + (Array.isArray(models) ? models.length : 0), 0);
+
+        if (panel.agentCount !== expectedAgentCount) {
+          warnings.push(
+            `With modelDiversity enabled, agentCount (${panel.agentCount}) should equal ` +
+            `total models across all skills (${expectedAgentCount})`
+          );
+        }
+      }
     }
   }
 

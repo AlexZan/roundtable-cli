@@ -6,6 +6,31 @@
  */
 
 /**
+ * Configuration for multi-model panel diversity
+ * Phase 1C Extended: Enables 2-3 diverse models per skill for richer deliberation
+ */
+export interface ModelDiversityConfig {
+  /** Whether model diversity is enabled for this panel */
+  enabled: boolean;
+
+  /** Number of models per skill (default: 2) */
+  modelsPerSkill?: number;
+
+  /**
+   * Strategy for model selection:
+   * - 'auto-diverse': System automatically picks diverse models based on capabilities
+   * - 'explicit': Use skillModelMap to explicitly assign models per skill
+   */
+  strategy?: 'auto-diverse' | 'explicit';
+
+  /**
+   * Explicit model assignments per skill (when strategy is 'explicit')
+   * Example: { architecture: ['claude-sonnet-4-5', 'gpt-4-turbo'], ux: ['claude-haiku', 'gemini-pro'] }
+   */
+  skillModelMap?: Record<string, string[]>;
+}
+
+/**
  * A panel represents a group of skills that work together
  * to provide comprehensive expertise for a specific domain or project type.
  */
@@ -36,6 +61,9 @@ export interface Panel {
 
   /** Optional: Author/maintainer information */
   author?: string;
+
+  /** Optional: Model diversity configuration (Phase 1C Extended) */
+  modelDiversity?: ModelDiversityConfig;
 }
 
 /**
@@ -52,6 +80,7 @@ export interface PanelMetadata {
   agentCount?: number;
   tags?: string[];
   author?: string;
+  modelDiversity?: ModelDiversityConfig;
 }
 
 /**

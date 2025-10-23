@@ -12,7 +12,7 @@ import { DebateEngine } from './debate/engine.js';
 import { SessionManager } from './session.js';
 import { getApiKey } from './config.js';
 import { detectPanel } from './panels/selector.js';
-import { createAgentsFromSkills } from './agents/factory.js';
+import { createAgentsFromPanel, createAgentsFromSkills } from './agents/factory.js';
 import type { AgentConfig } from './types.js';
 
 const program = new Command();
@@ -79,10 +79,9 @@ program
       console.log(`   Matched keywords: ${detectionResult.matchedKeywords.join(', ')}`);
       console.log(`   Confidence: ${(detectionResult.confidence * 100).toFixed(0)}%\n`);
 
-      // Create agents from panel's skills
-      // Using model registry to select models (defaults to claude-haiku-4-5 for cost-effectiveness)
-      agentConfigs = await createAgentsFromSkills(
-        detectionResult.panel.skillIds,
+      // Create agents from panel (Phase 1C Extended: supports multi-model diversity)
+      agentConfigs = await createAgentsFromPanel(
+        detectionResult.panel,
         { skillsDir: '../.roundtable/skills' }
       );
 
@@ -93,13 +92,39 @@ program
         }
       });
 
-      console.log(`👥 Expert Panel (${agentConfigs.length} experts):`);
-      for (const agent of agentConfigs) {
-        const skillDomain = agent.metadata?.skillDomain || 'general';
-        const modelName = agent.model;
-        console.log(`   • ${agent.name} (${skillDomain}) - ${modelName}`);
+      // Display agent panel
+      if (detectionResult.panel.modelDiversity?.enabled) {
+        // Multi-model panel: Group agents by skill
+        console.log(`👥 Expert Panel (${agentConfigs.length} agents from ${detectionResult.panel.skillIds.length} skills):\n`);
+
+        const agentsBySkill = new Map<string, typeof agentConfigs>();
+        for (const agent of agentConfigs) {
+          const skillId = agent.metadata?.skillId || 'unknown';
+          if (!agentsBySkill.has(skillId)) {
+            agentsBySkill.set(skillId, []);
+          }
+          agentsBySkill.get(skillId)!.push(agent);
+        }
+
+        for (const [skillId, agents] of agentsBySkill) {
+          const skillDomain = agents[0]?.metadata?.skillDomain || 'general';
+          console.log(`   ${skillDomain} (${agents.length} agents):`);
+          for (const agent of agents) {
+            const modelName = agent.model;
+            console.log(`     • ${agent.name} - ${modelName}`);
+          }
+          console.log('');
+        }
+      } else {
+        // Single-model panel: Display flat list
+        console.log(`👥 Expert Panel (${agentConfigs.length} experts):`);
+        for (const agent of agentConfigs) {
+          const skillDomain = agent.metadata?.skillDomain || 'general';
+          const modelName = agent.model;
+          console.log(`   • ${agent.name} (${skillDomain}) - ${modelName}`);
+        }
+        console.log('');
       }
-      console.log('');
 
     } else {
       // No panel detected - use fallback

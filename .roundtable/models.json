@@ -1,0 +1,158 @@
+{
+  "defaultModel": "claude-haiku-4-5-20251001",
+  "models": [
+    {
+      "id": "claude-opus-4-20250514",
+      "provider": "anthropic",
+      "name": "Claude Opus 4",
+      "capabilities": {
+        "reasoning": 10,
+        "creativity": 9,
+        "speed": 7,
+        "contextWindow": 200000
+      },
+      "cost": {
+        "input": 15,
+        "output": 75
+      },
+      "available": true,
+      "notes": "Most capable Claude model for complex reasoning tasks"
+    },
+    {
+      "id": "claude-sonnet-4-20250514",
+      "provider": "anthropic",
+      "name": "Claude Sonnet 4",
+      "capabilities": {
+        "reasoning": 9,
+        "creativity": 8,
+        "speed": 8,
+        "contextWindow": 200000
+      },
+      "cost": {
+        "input": 3,
+        "output": 15
+      },
+      "available": true,
+      "notes": "Balanced performance and cost - great for most tasks"
+    },
+    {
+      "id": "claude-haiku-4-5-20251001",
+      "provider": "anthropic",
+      "name": "Claude Haiku 4.5",
+      "capabilities": {
+        "reasoning": 8,
+        "creativity": 7,
+        "speed": 10,
+        "contextWindow": 200000
+      },
+      "cost": {
+        "input": 1,
+        "output": 5
+      },
+      "available": true,
+      "notes": "Fastest and most cost-effective Claude model"
+    },
+    {
+      "id": "gpt-4-turbo",
+      "provider": "openai",
+      "name": "GPT-4 Turbo",
+      "capabilities": {
+        "reasoning": 9,
+        "creativity": 8,
+        "speed": 7,
+        "contextWindow": 128000
+      },
+      "cost": {
+        "input": 10,
+        "output": 30
+      },
+      "available": true,
+      "notes": "Latest GPT-4 with improved performance and speed"
+    },
+    {
+      "id": "gpt-4",
+      "provider": "openai",
+      "name": "GPT-4",
+      "capabilities": {
+        "reasoning": 9,
+        "creativity": 8,
+        "speed": 6,
+        "contextWindow": 8192
+      },
+      "cost": {
+        "input": 30,
+        "output": 60
+      },
+      "available": true,
+      "notes": "Original GPT-4 - very capable but slower and more expensive"
+    },
+    {
+      "id": "gpt-3.5-turbo",
+      "provider": "openai",
+      "name": "GPT-3.5 Turbo",
+      "capabilities": {
+        "reasoning": 7,
+        "creativity": 7,
+        "speed": 9,
+        "contextWindow": 16384
+      },
+      "cost": {
+        "input": 0.5,
+        "output": 1.5
+      },
+      "available": true,
+      "notes": "Fast and cost-effective OpenAI model"
+    },
+    {
+      "id": "gemini-2.0-flash-exp",
+      "provider": "google",
+      "name": "Gemini 2.0 Flash",
+      "capabilities": {
+        "reasoning": 8,
+        "creativity": 8,
+        "speed": 9,
+        "contextWindow": 32000
+      },
+      "cost": {
+        "input": 0.1,
+        "output": 0.3
+      },
+      "available": true,
+      "notes": "Fast and extremely cost-effective Gemini model"
+    },
+    {
+      "id": "gemini-1.5-pro",
+      "provider": "google",
+      "name": "Gemini 1.5 Pro",
+      "capabilities": {
+        "reasoning": 9,
+        "creativity": 8,
+        "speed": 7,
+        "contextWindow": 2000000
+      },
+      "cost": {
+        "input": 3.5,
+        "output": 10.5
+      },
+      "available": true,
+      "notes": "Massive context window (2M tokens) - great for complex tasks with lots of context"
+    },
+    {
+      "id": "grok-beta",
+      "provider": "xai",
+      "name": "Grok Beta",
+      "capabilities": {
+        "reasoning": 8,
+        "creativity": 9,
+        "speed": 7,
+        "contextWindow": 32000
+      },
+      "cost": {
+        "input": 5,
+        "output": 15
+      },
+      "available": true,
+      "notes": "xAI's Grok model with unique perspective and personality"
+    }
+  ]
+}

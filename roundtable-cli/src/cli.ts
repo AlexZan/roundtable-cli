@@ -80,10 +80,9 @@ program
       console.log(`   Confidence: ${(detectionResult.confidence * 100).toFixed(0)}%\n`);
 
       // Create agents from panel's skills
-      // Using Haiku 4.5 for cost-effective testing ($1/$5 per MTok vs Sonnet's $3/$15)
+      // Using model registry to select models (defaults to claude-haiku-4-5 for cost-effectiveness)
       agentConfigs = await createAgentsFromSkills(
         detectionResult.panel.skillIds,
-        'claude-haiku-4-5-20251001',
         { skillsDir: '../.roundtable/skills' }
       );
 
@@ -97,7 +96,8 @@ program
       console.log(`👥 Expert Panel (${agentConfigs.length} experts):`);
       for (const agent of agentConfigs) {
         const skillDomain = agent.metadata?.skillDomain || 'general';
-        console.log(`   • ${agent.name} (${skillDomain})`);
+        const modelName = agent.model;
+        console.log(`   • ${agent.name} (${skillDomain}) - ${modelName}`);
       }
       console.log('');
 
@@ -107,7 +107,6 @@ program
 
       agentConfigs = await createAgentsFromSkills(
         ['architecture', 'product'],
-        'claude-haiku-4-5-20251001',
         { skillsDir: '../.roundtable/skills' }
       );
     }

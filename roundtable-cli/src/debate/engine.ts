@@ -1,12 +1,13 @@
 /**
  * Basic debate engine - Phase 1 prototype
+ * Phase 1C: Updated to support multiple LLM providers
  *
  * Implements simple 2-round debate:
  * - Round 1: All agents respond to user prompt simultaneously
  * - Round 2: All agents see Round 1 responses and can update positions
  */
 
-import { ClaudeClient } from '../llm/claude.js';
+import { getModelRegistry } from '../llm/registry.js';
 import type {
   DebateConfig,
   Session,
@@ -17,11 +18,9 @@ import type {
 
 export class DebateEngine {
   private config: DebateConfig;
-  private llmClient: ClaudeClient;
 
   constructor(config: DebateConfig) {
     this.config = config;
-    this.llmClient = new ClaudeClient();
   }
 
   async runDebate(userPrompt: string): Promise<Session> {
@@ -74,6 +73,7 @@ export class DebateEngine {
     };
 
     // Execute all agents in parallel
+    const registry = getModelRegistry();
     const responsePromises = this.config.agentConfigs.map(async (agentConfig) => {
       const request: LLMRequest = {
         prompt: userPrompt,
@@ -82,7 +82,13 @@ export class DebateEngine {
         maxTokens: 1024
       };
 
-      const llmResponse = await this.llmClient.sendRequest(request, agentConfig.model);
+      // Get the appropriate provider for this agent's model
+      const provider = registry.getProviderForModel(agentConfig.model);
+      if (!provider) {
+        throw new Error(`No provider found for model: ${agentConfig.model}`);
+      }
+
+      const llmResponse = await provider.sendRequest(request, agentConfig.model);
 
       const agentResponse: AgentResponse = {
         agentId: agentConfig.id,

@@ -11,6 +11,8 @@ import inquirer from 'inquirer';
 import { DebateEngine } from './debate/engine.js';
 import { SessionManager } from './session.js';
 import { getApiKey } from './config.js';
+import { detectPanel } from './panels/selector.js';
+import { createAgentsFromSkills } from './agents/factory.js';
 import type { AgentConfig } from './types.js';
 
 const program = new Command();
@@ -55,39 +57,62 @@ program
       return;
     }
 
-    // Configure agents for prototype (2 simple agents)
-    // Using Haiku 4.5 for cost-effective testing ($1/$5 per MTok vs Sonnet's $3/$15)
-    const agentConfigs: AgentConfig[] = [
-      {
-        id: 'agent-1',
-        name: 'Architecture Expert',
-        model: 'claude-haiku-4-5-20251001',
-        systemPrompt: `You are an architecture expert participating in a deliberation about a software project.
+    // Detect panel from user prompt
+    console.log('\n🔍 Analyzing your request...\n');
 
-Analyze the project from an architecture perspective:
-- Consider scalability, maintainability, and technical constraints
-- Identify potential technical challenges
-- Suggest architectural patterns that fit the requirements
+    const detectionResult = await detectPanel(
+      { prompt: answers.prompt },
+      { panelsDir: '../.roundtable/panels' }
+    );
 
-Keep your response focused and concise (2-3 paragraphs).`
-      },
-      {
-        id: 'agent-2',
-        name: 'Product Expert',
-        model: 'claude-haiku-4-5-20251001',
-        systemPrompt: `You are a product expert participating in a deliberation about a software project.
+    let agentConfigs: AgentConfig[];
+    let panelInfo: { id?: string; name?: string } = {};
 
-Analyze the project from a product perspective:
-- Consider user needs and market fit
-- Identify core features vs nice-to-haves
-- Suggest a phased rollout approach
+    if (detectionResult.panel) {
+      // Panel detected
+      panelInfo = {
+        id: detectionResult.panel.id,
+        name: detectionResult.panel.name
+      };
 
-Keep your response focused and concise (2-3 paragraphs).`
+      console.log(`✅ Detected: ${detectionResult.panel.name}`);
+      console.log(`   Matched keywords: ${detectionResult.matchedKeywords.join(', ')}`);
+      console.log(`   Confidence: ${(detectionResult.confidence * 100).toFixed(0)}%\n`);
+
+      // Create agents from panel's skills
+      // Using Haiku 4.5 for cost-effective testing ($1/$5 per MTok vs Sonnet's $3/$15)
+      agentConfigs = await createAgentsFromSkills(
+        detectionResult.panel.skillIds,
+        'claude-haiku-4-5-20251001',
+        { skillsDir: '../.roundtable/skills' }
+      );
+
+      // Add panel ID to agent metadata
+      agentConfigs.forEach(agent => {
+        if (agent.metadata) {
+          agent.metadata.panelId = detectionResult.panel!.id;
+        }
+      });
+
+      console.log(`👥 Expert Panel (${agentConfigs.length} experts):`);
+      for (const agent of agentConfigs) {
+        const skillDomain = agent.metadata?.skillDomain || 'general';
+        console.log(`   • ${agent.name} (${skillDomain})`);
       }
-    ];
+      console.log('');
 
-    console.log('\n🤖 Initializing deliberation with 2 agents...\n');
-    console.log(`   📋 Your prompt: "${answers.prompt}"\n`);
+    } else {
+      // No panel detected - use fallback
+      console.log(`⚠️  No panel matched. Using default experts.\n`);
+
+      agentConfigs = await createAgentsFromSkills(
+        ['architecture', 'product'],
+        'claude-haiku-4-5-20251001',
+        { skillsDir: '../.roundtable/skills' }
+      );
+    }
+
+    console.log(`📋 Your prompt: "${answers.prompt}"\n`);
 
     // Create debate engine and session manager
     const debateEngine = new DebateEngine({
@@ -101,6 +126,12 @@ Keep your response focused and concise (2-3 paragraphs).`
       // Run the debate
       console.log('⚙️  Running Round 1...\n');
       const session = await debateEngine.runDebate(answers.prompt);
+
+      // Add panel metadata to session
+      if (panelInfo.id) {
+        session.metadata.panelId = panelInfo.id;
+        session.metadata.panelName = panelInfo.name;
+      }
 
       // Display results
       console.log('\n📊 Deliberation Complete!\n');

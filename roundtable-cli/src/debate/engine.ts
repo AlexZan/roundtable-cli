@@ -92,7 +92,11 @@ export class DebateEngine {
         context: {
           sawOtherResponses: context !== null,
           otherResponseIds: context ? round.responses.map(r => r.agentId) : undefined
-        }
+        },
+        metadata: agentConfig.metadata ? {
+          skillId: agentConfig.metadata.skillId,
+          skillDomain: agentConfig.metadata.skillDomain
+        } : undefined
       };
 
       return agentResponse;

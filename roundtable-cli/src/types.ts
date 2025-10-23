@@ -15,6 +15,8 @@ export interface SessionMetadata {
   duration: number; // milliseconds
   agentCount: number;
   roundCount: number;
+  panelId?: string; // Panel used (if applicable)
+  panelName?: string; // Human-readable panel name
 }
 
 export interface Round {
@@ -29,6 +31,10 @@ export interface AgentResponse {
   content: string;
   tokensUsed: number;
   context: ResponseContext;
+  metadata?: {
+    skillId?: string;
+    skillDomain?: string;
+  };
 }
 
 export interface ResponseContext {
@@ -46,6 +52,12 @@ export interface AgentConfig {
   name: string;
   model: string; // e.g., "claude-3-sonnet"
   systemPrompt: string;
+  metadata?: {
+    skillId?: string;
+    skillVersion?: string;
+    skillDomain?: string;
+    panelId?: string;
+  };
 }
 
 export interface LLMRequest {

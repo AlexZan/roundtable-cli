@@ -120,6 +120,141 @@ User: "Wait, I didn't test it yet. Where did the issue go?"
 
 ---
 
+## GitHub as Source of Truth (CRITICAL)
+
+**MANDATORY:** Always check GitHub state before suggesting structural changes to the project.
+
+### The Mistake (October 2024)
+
+**What Happened:**
+- Earlier in session: Created Issues #4-#8 with phase structure (1C, 1D, 2, 3, 4)
+- Session got summarized due to context limits
+- Summary said "user asked to setup GitHub with phases" but didn't include specific details
+- Later in session: User asked "what's next after Phase 1B?"
+- Agent suggested "create Issue #15 for Phase 1C" without checking GitHub first
+- User caught it: "We already have a 1C, why are we adding a new one?"
+- Agent then checked GitHub and found existing phases
+
+**Root Cause:**
+Agent relied on conversation memory instead of checking the source of truth (GitHub).
+
+### Mandatory Workflow: Always Check First
+
+**Before suggesting structural changes, ALWAYS run:**
+
+```bash
+# Check existing issues and phases
+gh issue list --limit 50 --json number,title,milestone,labels
+
+# Check project structure
+gh project list --owner @me
+gh project item-list [PROJECT_NUMBER] --owner @me
+
+# Check current phase/milestone status
+gh issue view [ISSUE_NUMBER]
+```
+
+**When to check GitHub first:**
+- Suggesting to create new issues
+- Proposing new phases or milestones
+- Recommending architectural changes tracked in issues
+- After conversation summaries (context was lost, GitHub wasn't)
+- When user asks "what's next?" (GitHub knows the roadmap)
+- Before proposing duplicate work
+
+### GitHub State vs Conversation Memory
+
+| Source | Reliable For | Not Reliable For |
+|--------|--------------|------------------|
+| **GitHub** | ✅ Current project structure<br>✅ Existing issues/phases<br>✅ Open/closed status<br>✅ Assigned milestones<br>✅ Project roadmap | ❌ Recent uncommitted changes<br>❌ User preferences not documented<br>❌ Conversation context |
+| **Conversation Memory** | ✅ User preferences<br>✅ Recent discussion<br>✅ Uncommitted work | ❌ Project structure<br>❌ What issues exist<br>❌ After summaries<br>❌ Long sessions |
+
+**Key Principle:** Conversation memory is temporary. GitHub is permanent. When in doubt, check GitHub.
+
+### Examples - Correct vs Incorrect
+
+#### ❌ INCORRECT (Relying on Memory)
+
+```
+User: "What's next after Phase 1B?"
+
+Agent: "Let's create Issue #15 for Phase 1C: Multi-Panel Architecture.
+I'll set up the phase structure..."
+
+[Agent didn't check GitHub first]
+[Creates duplicate phase that already exists]
+[User catches the mistake]
+```
+
+#### ✅ CORRECT (Checking GitHub First)
+
+```
+User: "What's next after Phase 1B?"
+
+Agent: [Runs: gh issue list to see existing phases]
+Agent: [Sees: 1C = Multiple LLMs, 1D = PM Agent, etc.]
+
+Agent: "Here are the existing phases after 1B:
+- Phase 1C: Multiple LLM Support (Issue #4)
+- Phase 1D: PM Agent & Spec Generation (Issue #5)
+- Phase 2: Enhanced Debate (Issue #6)
+
+Phase 1C (Multiple LLMs) is next. Should we start on that?"
+```
+
+### When This Is Critical
+
+🚨 **After conversation summaries:** Summary loses details, GitHub doesn't
+🚨 **Long sessions:** Memory gets fuzzy, GitHub stays accurate
+🚨 **Suggesting new issues:** Prevent duplicates
+🚨 **Proposing phases:** Don't recreate existing structure
+🚨 **Architectural suggestions:** Check if already planned/implemented
+
+### Red Flags - Check GitHub Now
+
+🚩 "Let's create Issue #X for..."
+🚩 "I'll set up Phase Y..."
+🚩 "We should add milestone Z..."
+🚩 "Next we need to..."
+🚩 User asks "what's next?" after break
+
+✅ Before any of the above, run: `gh issue list` or `gh project item-list`
+
+### Generic Template for GitHub Checks
+
+**Before suggesting any structural change:**
+
+1. **Check issues:** `gh issue list --json number,title,labels,milestone`
+2. **Check milestones:** What phases/milestones exist?
+3. **Check project board:** What's in progress vs. planned?
+4. **Verify assumption:** Does what I'm about to suggest already exist?
+5. **Only then suggest:** If it doesn't exist, now I can propose it
+
+### Why This Matters
+
+**Cost of not checking:**
+- Creates duplicate issues/phases
+- Confuses project structure
+- Wastes time fixing duplicates
+- Loses user trust ("did you even check?")
+
+**ROI of checking:**
+- Accurate suggestions
+- No duplicates
+- Shows thoroughness
+- Maintains trust
+- Takes 10 seconds to run `gh issue list`
+
+### Key Takeaway
+
+**Conversation memory is ephemeral. GitHub is the source of truth.**
+
+**Before suggesting structural changes: CHECK GITHUB FIRST.**
+
+After summaries, after breaks, after long sessions - always verify state with GitHub before proposing changes to project structure.
+
+---
+
 ## Work Summary (MANDATORY)
 
 **MANDATORY:** At the end of every task or session, provide a clear point-form summary of what was done.
@@ -311,27 +446,30 @@ User Acceptance Testing is about **end-to-end user experience against the spec**
 Test the panel auto-detection feature works as specified:
 
 ### Test 1: Web App Detection
-- [ ] Run: `npm run dev`
-- [ ] Enter prompt: "Build a web application with React frontend and Node backend"
-- [ ] Expected: CLI shows "Detected panel: Full Stack Web Development"
-- [ ] Expected: Shows 4 experts: Architecture, UX, Security, Product
-- [ ] Expected: Debate includes perspectives from all 4 experts
+- [ ] Testing panel auto-detection for web app projects
+  - Run: `npm run dev`
+  - Enter prompt: "Build a web application with React frontend and Node backend"
+  - Expected: CLI shows "Detected panel: Full Stack Web Development"
+  - Expected: Shows 4 experts: Architecture, UX, Security, Product
+  - Expected: Debate includes perspectives from all 4 experts
 
 ### Test 2: Data Project Detection
-- [ ] Run: `npm run dev`
-- [ ] Enter prompt: "Design a data pipeline with Spark and Kafka"
-- [ ] Expected: CLI shows "Detected panel: Data Platform"
-- [ ] Expected: Shows 3 experts: Architecture, Data Engineering, Security
+- [ ] Testing panel auto-detection for data projects
+  - Run: `npm run dev`
+  - Enter prompt: "Design a data pipeline with Spark and Kafka"
+  - Expected: CLI shows "Detected panel: Data Platform"
+  - Expected: Shows 3 experts: Architecture, Data Engineering, Security
 
 ### Test 3: Manual Panel Override
-- [ ] Run: `npm run dev`
-- [ ] When prompted, manually select "Mobile App" panel
-- [ ] Enter any prompt
-- [ ] Expected: Uses Mobile App panel regardless of prompt content
-- [ ] Expected: Shows 3 experts: Architecture, UX, Product
+- [ ] Testing manual panel selection overrides auto-detection
+  - Run: `npm run dev`
+  - When prompted, manually select "Mobile App" panel
+  - Enter any prompt
+  - Expected: Uses Mobile App panel regardless of prompt content
+  - Expected: Shows 3 experts: Architecture, UX, Product
 ```
 
-**Why Correct:** Tests actual user workflows and experience. User can see if the feature works as promised in the spec.
+**Why Correct:** Tests actual user workflows and experience. User can see if the feature works as promised in the spec. **Important:** One checkbox per test scenario - when the user completes all steps in a scenario, they check that one box. No individual checkboxes for each step.
 
 ### Guidelines for Writing UAT
 
@@ -361,15 +499,19 @@ Test the panel auto-detection feature works as specified:
 **What this tests:** [Brief description of user experience being validated]
 
 #### Test Scenario 1: [Descriptive Name]
-- [ ] Run: [Command user executes]
-- [ ] Action: [What user does]
-- [ ] Expected: [What user should see/experience]
+- [ ] [Brief test scenario description]
+  - Run: [Command user executes]
+  - Action: [What user does]
+  - Expected: [What user should see/experience]
 
 #### Test Scenario 2: [Descriptive Name]
-- [ ] Run: [Command user executes]
-- [ ] Action: [What user does]
-- [ ] Expected: [What user should see/experience]
+- [ ] [Brief test scenario description]
+  - Run: [Command user executes]
+  - Action: [What user does]
+  - Expected: [What user should see/experience]
 ```
+
+**Important:** One checkbox per test scenario. All steps within a scenario are sub-bullets. User checks ONE box when they complete ALL steps in that scenario.
 
 ### Real Example - Phase 1B Panel System
 
@@ -380,20 +522,49 @@ Test the panel auto-detection feature works as specified:
 ### Test: Panel Selection Workflow
 
 #### Scenario 1: Auto-Detection Works
-- [ ] Start CLI: `npm run dev`
-- [ ] Enter: "Build a React web app"
-- [ ] Expected: See "Auto-detected: Full Stack Web Development Panel"
-- [ ] Expected: See list of 4 experts that will participate
-- [ ] Expected: Debate proceeds with all 4 experts contributing
+- [ ] Auto-detect and debate with panel based on prompt keywords
+  - Start CLI: `npm run dev`
+  - Enter: "Build a React web app"
+  - Expected: See "Auto-detected: Full Stack Web Development Panel"
+  - Expected: See list of 4 experts that will participate
+  - Expected: Debate proceeds with all 4 experts contributing
 
 #### Scenario 2: Manual Selection Works
-- [ ] Start CLI: `npm run dev`
-- [ ] Choose manual panel selection when prompted
-- [ ] Select "Data Platform" from menu
-- [ ] Enter: "Build anything" (irrelevant prompt)
-- [ ] Expected: Uses Data Platform panel (3 experts)
-- [ ] Expected: Architecture, Data Engineering, Security experts respond
+- [ ] Manual selection overrides auto-detection
+  - Start CLI: `npm run dev`
+  - Choose manual panel selection when prompted
+  - Select "Data Platform" from menu
+  - Enter: "Build anything" (irrelevant prompt)
+  - Expected: Uses Data Platform panel (3 experts)
+  - Expected: Architecture, Data Engineering, Security experts respond
 ```
+
+### Checkbox Structure for UAT
+
+**CRITICAL:** Use this structure for UAT checklists:
+
+```
+- [ ] Test scenario name (ONE checkbox per scenario)
+  - Step 1 details (no checkbox)
+  - Step 2 details (no checkbox)
+  - Expected result (no checkbox)
+```
+
+**NOT like this:**
+```
+- [ ] Step 1
+- [ ] Step 2
+- [ ] Step 3
+- [ ] Expected result
+```
+
+**Why:**
+- User completes all steps in a scenario, then checks ONE box
+- Cleaner visual representation in GitHub issues
+- Makes it clear when an entire test scenario is done
+- Prevents false completion signals (some steps done, others not)
+
+**User marks a test complete when:** All steps within that scenario are done and all expectations are met.
 
 ### Key Principle
 
@@ -570,7 +741,7 @@ If the user agrees:
 **Convention Status:** Active and in effect
 **Applies To:** All Roundtable development work going forward
 **Updated:** 2025-10-23
-**Version:** 2.5 (Added "when to break up work" - only at user validation checkpoints)
+**Version:** 2.6 (Added "GitHub as Source of Truth" - always check GitHub before suggesting structural changes)
 
 ---
 

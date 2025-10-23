@@ -272,3 +272,185 @@ User (product owner) makes the final decision:
 Detect conflicts early, present options clearly, execute user's decision.
 
 ---
+
+## Lesson: Not Moving "Requested" Issues to "In Progress" Before Starting Work
+
+**Date:** 2024-10-23
+**Project:** Roundtable CLI (AlexZan/roundtable-cli)
+**Reference:** Issues #16-20 implementation
+
+**What happened:**
+User created 5 issues in "Requested" state and asked agent to "work on all in one go". Agent immediately started implementing without moving any issues to "In Progress" on the project board first. Agent only realized the mistake after user pointed it out post-implementation.
+
+**Why it was wrong:**
+- User can't see at a glance what agent is actively working on
+- Project board doesn't reflect actual work state
+- "Requested" state means "ready to work on" not "currently being worked on"
+- Creates confusion about whether work has started or is still planned
+- User loses visibility into active development
+
+**Rule created:**
+[CLAUDE.md: Working with "Requested" State Issues](CLAUDE.md#working-with-requested-state-issues)
+
+**How to prevent:**
+When user asks to work on issues in "Requested" state:
+
+1. **FIRST:** Move ALL issues to "In Progress"
+   - This happens BEFORE writing any code
+   - Use `gh project item-edit` to update status
+   - Confirm visually on project board
+
+2. **THEN:** Implement all features
+
+3. **AFTER:** Move to "User Testing" when implementation complete
+
+**Correct workflow:**
+```
+User: "Work on issues #16-20 in Requested state"
+
+Agent: "Moving issues #16-20 to In Progress..."
+  → Runs gh commands to update status
+  → Confirms: "✓ All 5 issues now In Progress"
+
+Agent: "Now implementing..."
+  → Writes code, makes changes
+
+Agent: "Implementation complete. Moving to User Testing..."
+  → Updates status again
+  → Adds UAT criteria
+```
+
+**Incorrect workflow (what happened):**
+```
+User: "Work on issues #16-20 in Requested state"
+
+Agent: "Starting implementation..."
+  → Immediately starts coding
+  → Issues remain in "Requested" state
+  → User can't see work is in progress
+
+Agent: "Done! Here's the summary..."
+  → Issues still in wrong state
+  → User: "You should have moved them to In Progress first!"
+```
+
+**Key insight:**
+Project board state updates are NOT just bookkeeping - they are **real-time communication** with the user about what you're actively working on.
+
+---
+
+## Lesson: Ignoring External Data Sources in Issue Description
+
+**Date:** 2024-10-23
+**Project:** Roundtable CLI (AlexZan/roundtable-cli)
+**Reference:** Issue #22 - Update available models
+
+**What happened:**
+User created Issue #22: "we need to create an updated list of models... use something like https://artificialanalysis.ai/ to get the latest top models"
+
+Agent's response:
+1. Read the issue
+2. Immediately implemented using training data (outdated models from Jan 2025)
+3. Did NOT fetch the website mentioned in the issue
+4. User had to correct: "No, these are still the old models, what is going on? that website i linked gives the latest models... why are you so behind??"
+5. Agent THEN fetched the website and found the correct current models
+6. Had to re-implement with correct data
+
+**Why it was wrong:**
+- **Issue explicitly provided data source** - User said "use https://artificialanalysis.ai/"
+- **Training data is outdated** - AI training cuts off at a point in time, real world continues
+- **Wasted user's time** - User had to review wrong implementation, explain mistake, wait for fix
+- **Wasted tokens** - Implemented twice: once wrong, once right (~5,000 extra tokens)
+- **Broke user trust** - Shows agent doesn't follow instructions carefully
+- **Ignored explicit instruction** - The URL wasn't a suggestion, it was a requirement
+
+**Rule created:**
+[CLAUDE.md: External Data Sources (MANDATORY)](CLAUDE.md#external-data-sources-mandatory)
+
+**How to prevent:**
+
+**BEFORE implementing ANY issue, check for external data sources:**
+
+1. **Read issue completely and carefully**
+   - Look for URLs
+   - Look for phrases: "use [X] to get [Y]", "check [source]", "refer to [docs]"
+   - Any external reference is a DATA SOURCE, not a suggestion
+
+2. **Fetch ALL external sources FIRST**
+   ```bash
+   WebFetch(url: "https://artificialanalysis.ai/", prompt: "Get latest models")
+   ```
+
+3. **Validate the data**
+   - Make sure fetch succeeded
+   - Confirm data is current
+   - If fetch fails, ASK USER for help
+
+4. **THEN implement**
+   - Use fetched data, NOT training data
+   - Add comment in code: "// Source: https://..."
+
+**Correct workflow:**
+```
+User: "Use artificialanalysis.ai to get latest models"
+
+Agent: "Let me fetch that website first..."
+  → Uses WebFetch to get current models
+  → Validates data is current
+  → "Found 10 latest models: Claude Sonnet 4.5, GPT-5 Codex..."
+
+Agent: "Now implementing..."
+  → Uses fetched data
+  → Implementation correct first time
+
+User: "Perfect!"
+```
+
+**Incorrect workflow (what happened):**
+```
+User: "Use artificialanalysis.ai to get latest models"
+
+Agent: "Implementing..."
+  → Ignores website
+  → Uses training data (outdated)
+  → Implements with old models
+
+User: "These are old models! Check the website I linked!"
+
+Agent: "Oh, let me fetch that..."
+  → NOW fetches website
+  → Re-implements with correct data
+
+User: *annoyed* - wasted time
+```
+
+**Why training data fails:**
+- Models change constantly (new releases every few months)
+- APIs change versions
+- Documentation gets updated
+- Best practices evolve
+- External sources are ALWAYS more current than training
+
+**Token cost comparison:**
+- Fetch first approach: ~1,000 tokens (fetch + implement)
+- Implement then fix: ~6,000 tokens (wrong implementation + user correction + fetch + re-implement)
+- **ROI: 6x token savings by doing it right first time**
+
+**Key insight:**
+When user provides an external source (URL, documentation, API reference), they are telling you:
+"Don't guess. Don't use your training. Get the CURRENT data from HERE."
+
+External sources are sources of truth:
+- GitHub issues = truth for planned work
+- External websites = truth for current data
+- Documentation = truth for APIs/specs
+- User's explicit instruction = truth for how to proceed
+
+**Agent must:**
+- ✅ Fetch external sources BEFORE implementing
+- ✅ Use current data, not training data
+- ✅ Follow user's explicit instructions
+- ❌ Never assume training data is current
+- ❌ Never skip external sources user provides
+
+---

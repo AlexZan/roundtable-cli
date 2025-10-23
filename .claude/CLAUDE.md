@@ -233,18 +233,165 @@ Before implementing a new feature:
 
 ---
 
+## External Data Sources (MANDATORY)
+
+**CRITICAL:** When an issue references external sources, you MUST fetch them BEFORE implementing.
+
+### The Problem
+
+**What happened (Issue #22):**
+- Issue said: "use https://artificialanalysis.ai/ to get the latest top models"
+- Agent ignored this and used training data (outdated)
+- User had to correct the agent after implementation
+- Wasted time implementing with wrong data
+
+**Why it was wrong:**
+- External sources are THE source of truth, not training data
+- Training data becomes outdated immediately
+- User explicitly provided the correct data source
+- Agent's assumptions were incorrect
+
+### Mandatory Process
+
+**BEFORE implementing ANY feature that requires external data:**
+
+1. **Identify data sources in the issue**
+   - Look for URLs, API references, documentation links
+   - Look for phrases like "use X to get Y", "check Z", "refer to W"
+
+2. **Fetch ALL external sources FIRST**
+   ```bash
+   # Examples:
+   WebFetch(url: "https://artificialanalysis.ai/", prompt: "Get latest models")
+   WebFetch(url: "https://docs.provider.com/api", prompt: "Get API format")
+   ```
+
+3. **Validate fetched data**
+   - Confirm you have current information
+   - Don't proceed if fetch fails - ask user for help
+
+4. **THEN implement**
+   - Use fetched data, not training data
+   - Reference the source in code comments
+
+### When This Applies
+
+**Always fetch external data when issue mentions:**
+- ✅ "Use [website] to get [data]"
+- ✅ "Check [documentation] for [info]"
+- ✅ "Refer to [source] for [specs]"
+- ✅ "Get latest [X] from [Y]"
+- ✅ Any URL in the issue description
+- ✅ "According to [external source]"
+
+**Examples:**
+
+```
+✅ CORRECT:
+Issue: "Use artificialanalysis.ai to get latest models"
+Agent: *First fetches artificialanalysis.ai*
+Agent: *Then implements with fetched data*
+
+❌ INCORRECT:
+Issue: "Use artificialanalysis.ai to get latest models"
+Agent: *Immediately implements with training data*
+Agent: *Gets corrected by user*
+```
+
+### Checklist Before Implementation
+
+```
+☐ Read issue completely
+☐ Identify all external data sources mentioned
+☐ Fetch ALL external sources using WebFetch
+☐ Validate fetched data is current
+☐ THEN start implementation
+☐ Reference external source in code comments
+```
+
+### Why This Matters
+
+- **Training data is outdated** - Models change constantly
+- **User provided correct source** - They know better than your training
+- **Prevents rework** - Doing it right the first time saves tokens
+- **User trust** - Following instructions shows competence
+
+**Token Efficiency:**
+- Fetching first: ~500 tokens
+- Fixing after wrong implementation: ~5,000-10,000 tokens
+- **ROI: 10x-20x token savings**
+
+### Related to Feature Conflict Detection
+
+This is similar to checking GitHub before implementing features. External sources are sources of truth:
+- GitHub issues = source of truth for planned work
+- External websites = source of truth for current data
+- Documentation = source of truth for APIs/specs
+
+**Never rely on training data when external source is provided.**
+
+**See also:** [LESSONS_LEARNED.md: Ignoring External Data Sources in Issue Description](LESSONS_LEARNED.md#lesson-ignoring-external-data-sources-in-issue-description)
+
+---
+
 ## GitHub Project Board Management
 
 **MANDATORY:** Keep issue status and project board status in sync at all times.
 
-**Issue Lifecycle:**
-- Start work → Move to "In Progress"
-- Implementation done → Move to "User Testing"
-- User approves → Close issue + Move to "Done"
+**Full Issue Lifecycle:**
+- **Requested** → Issues in this state are ready to be worked on
+- **Start work** → Move ALL issues to "In Progress" BEFORE starting implementation
+- **Implementation done** → Move to "User Testing"
+- **User approves** → Close issue + Move to "Done"
+
+### Working with "Requested" State Issues
+
+**CRITICAL:** When user asks you to work on issues in "Requested" state:
+
+1. **BEFORE writing any code:**
+   ```bash
+   # Move ALL issues to "In Progress" first
+   gh project item-edit --project-id <project-id> --id <item-id> --field-id <status-field> --text "In Progress"
+   ```
+
+2. **Then implement all issues together**
+
+3. **After implementation:**
+   - Move to "User Testing"
+   - Add UAT criteria to each issue
+   - Ask user to test
+
+**Why this matters:**
+- User can see at a glance what you're actively working on
+- Project board accurately reflects current work state
+- Avoids confusion about which issues are "planned" vs "in progress"
 
 **When user says:** "looks good", "approved", "let's move on", "go ahead" → **Immediately** close and mark Done.
 
-**See also:** [LESSONS_LEARNED.md: Not Updating Project Board Status During Implementation](LESSONS_LEARNED.md#lesson-not-updating-project-board-status-during-implementation)
+### Workflow Checklist (Every Issue)
+
+**MANDATORY:** Before starting work on ANY issue, follow this checklist:
+
+```
+☐ Read issue completely
+☐ Identify external data sources (URLs, docs, etc.)
+☐ Move issue to "In Progress" BEFORE writing code
+☐ Fetch all external data sources (if applicable)
+☐ Implement the feature
+☐ Move to "User Testing" AFTER implementation complete
+☐ Add UAT criteria to issue
+```
+
+**Common mistakes:**
+- ❌ Starting implementation without moving to "In Progress"
+- ❌ Forgetting to move to "User Testing" after done
+- ❌ Skipping external data sources mentioned in issue
+- ❌ Using training data instead of fetching current data
+
+**See also:**
+- [LESSONS_LEARNED.md: Not Updating Project Board Status During Implementation](LESSONS_LEARNED.md#lesson-not-updating-project-board-status-during-implementation)
+- [LESSONS_LEARNED.md: Not Moving "Requested" Issues to "In Progress" Before Starting Work](LESSONS_LEARNED.md#lesson-not-moving-requested-issues-to-in-progress-before-starting-work)
+- [LESSONS_LEARNED.md: Ignoring External Data Sources in Issue Description](LESSONS_LEARNED.md#lesson-ignoring-external-data-sources-in-issue-description)
 
 ---
 

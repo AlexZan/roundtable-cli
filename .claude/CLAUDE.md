@@ -275,6 +275,37 @@ Agent didn't close the issue or update project board status when user approved a
 
 ### Mandatory Workflow: Issue Lifecycle Management
 
+**When starting work on an issue, you MUST:**
+
+1. **Move to "In Progress" on project board:**
+   ```bash
+   gh project item-edit --project-id [PROJECT_ID] \
+     --id [ITEM_ID] \
+     --field-id [STATUS_FIELD_ID] \
+     --single-select-option-id [IN_PROGRESS_OPTION_ID]
+   ```
+
+2. **Do this immediately** when you:
+   - Start implementing the issue
+   - Make the first code change
+   - Begin writing the first file
+   - Take the issue out of "Todo" state
+
+**When completing implementation (before user testing), you MUST:**
+
+1. **Move to "User Testing" on project board:**
+   ```bash
+   gh project item-edit --project-id [PROJECT_ID] \
+     --id [ITEM_ID] \
+     --field-id [STATUS_FIELD_ID] \
+     --single-select-option-id [USER_TESTING_OPTION_ID]
+   ```
+
+2. **Do this when:**
+   - Code is committed and pushed
+   - UAT criteria added to issue
+   - Ready for user to test
+
 **When user approves an issue, you MUST:**
 
 1. **Close the issue:**
@@ -284,7 +315,6 @@ Agent didn't close the issue or update project board status when user approved a
 
 2. **Move to "Done" on project board:**
    ```bash
-   # Get project and item IDs (you should already have these)
    gh project item-edit --project-id [PROJECT_ID] \
      --id [ITEM_ID] \
      --field-id [STATUS_FIELD_ID] \
@@ -303,42 +333,42 @@ Agent didn't close the issue or update project board status when user approved a
 
 ```
 ┌─────────────┐
-│   Created   │ (Issue created, in "Todo" or "In Progress")
+│    Todo     │ (Issue created, not started)
 └──────┬──────┘
        │
-       ▼
+       ▼  ⚠️ START WORK - Move to "In Progress"
 ┌─────────────────┐
-│ Implementation  │ (Code written, tests pass, committed)
+│  In Progress   │ (Actively coding, implementing)
 └──────┬──────────┘
        │
-       ▼
+       ▼  ⚠️ IMPLEMENTATION DONE - Move to "User Testing"
 ┌──────────────────┐
-│  User Testing   │ ⚠️ Move to "User Testing" column
-└──────┬───────────┘     Update project board status
+│  User Testing   │ (Committed, pushed, UAT added, waiting for user)
+└──────┬───────────┘
        │
        ▼
 ┌──────────────────┐
 │ User Approval   │ User says "looks good" / "approved" / "go ahead"
 └──────┬───────────┘
        │
-       ▼  ⚠️ CRITICAL MOMENT
+       ▼  ⚠️ USER APPROVED - Close issue + Move to "Done"
 ┌──────────────────┐
-│ Close & Mark    │ 1. gh issue close [NUM]
-│     Done        │ 2. Move to "Done" on project board
+│      Done       │ (Issue closed, work complete)
 └─────────────────┘
 ```
 
 ### When to Move Issue Status
 
-| User Signal | Action Required |
-|-------------|-----------------|
-| "Looks good" | Close issue + Move to Done |
-| "Approved" | Close issue + Move to Done |
-| "Let's move on" | Close issue + Move to Done |
-| "Go ahead with [next]" | Close issue + Move to Done |
-| "I'm fine with this" | Close issue + Move to Done |
-| "Continue to [next phase]" | Close issue + Move to Done |
-| Starts testing next phase | Previous issue should be Done |
+| Event | Action Required | Command |
+|-------|-----------------|---------|
+| Start working on issue | Move to "In Progress" | `gh project item-edit ... --single-select-option-id [IN_PROGRESS_ID]` |
+| Implementation complete | Move to "User Testing" | `gh project item-edit ... --single-select-option-id [USER_TESTING_ID]` |
+| User says "Looks good" | Close + Move to Done | `gh issue close [NUM]` + `gh project item-edit ... --single-select-option-id [DONE_ID]` |
+| User says "Approved" | Close + Move to Done | Same as above |
+| User says "Let's move on" | Close + Move to Done | Same as above |
+| User says "Go ahead with [next]" | Close + Move to Done | Same as above |
+| User says "I'm fine with this" | Close + Move to Done | Same as above |
+| Starts testing next phase | Previous issue should be Done | Check and close previous if needed |
 
 ### Project Board Column Meanings
 
@@ -369,19 +399,39 @@ Agent didn't close the issue or update project board status when user approved a
 
 ### Examples - Correct Workflow
 
-#### ✅ CORRECT (Phase 1B Approval)
+#### ✅ CORRECT (Starting Work on Issue)
 
 ```
-User: "i'm fine with this, let's move on to Phase 1C"
+User: "Let's start on Phase 1C"
 
 Agent: [Immediately runs:]
-1. gh issue close 14 -c "Phase 1B approved. Moving to Phase 1C."
-2. gh project item-edit ... --single-select-option-id [DONE_ID]
-3. [Confirms to user:] "✅ Issue #14 closed and moved to Done"
-4. [Then proceeds with Phase 1C]
+1. gh project item-edit ... --single-select-option-id [IN_PROGRESS_ID]
+2. [Confirms to user:] "✅ Issue #4 moved to 'In Progress', starting implementation"
+3. [Begins writing code]
 ```
 
-#### ❌ INCORRECT (What Actually Happened)
+#### ✅ CORRECT (Implementation Complete, Ready for Testing)
+
+```
+Agent: [Code committed and pushed]
+1. gh project item-edit ... --single-select-option-id [USER_TESTING_ID]
+2. [Updates issue with UAT criteria]
+3. [Notifies user:] "✅ Phase 1C implementation complete. Issue #4 moved to 'User Testing'. Ready for UAT."
+```
+
+#### ✅ CORRECT (User Approval)
+
+```
+User: "i'm fine with this, let's move on to Phase 1D"
+
+Agent: [Immediately runs:]
+1. gh issue close 4 -c "Phase 1C approved. Moving to Phase 1D."
+2. gh project item-edit ... --single-select-option-id [DONE_ID]
+3. [Confirms to user:] "✅ Issue #4 closed and moved to Done"
+4. [Then proceeds with Phase 1D]
+```
+
+#### ❌ INCORRECT (What Happened with Phase 1B)
 
 ```
 User: "i'm fine with this, let's move on to Phase 1C"
@@ -392,6 +442,18 @@ Agent: [Does NOT move #14 to Done]
 
 [Later...]
 User: "1B is still in user testing but i said it was fine to move on"
+```
+
+#### ❌ INCORRECT (Not Moving to "In Progress")
+
+```
+User: "Let's start on Phase 1C"
+
+Agent: [Starts writing code immediately]
+Agent: [Does NOT move issue to "In Progress"]
+
+[Issue stays in "Todo" while work is happening]
+User: "Why is the issue still in Todo?"
 ```
 
 ### When User Is Still Testing

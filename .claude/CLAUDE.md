@@ -338,11 +338,24 @@ This is similar to checking GitHub before implementing features. External source
 
 **MANDATORY:** Keep issue status and project board status in sync at all times.
 
+### GitHub Automation (Enabled)
+
+**GitHub Project workflows handle automatic state transitions:**
+- ✅ **Closing an issue** → Auto-moves to "Done"
+- ✅ **Reopening an issue** → Auto-moves to "In Progress"
+
+**Agent's responsibility:**
+- ❌ Do NOT manually move issues to "Done" when closing (GitHub does this)
+- ❌ Do NOT manually move issues when reopening (GitHub does this)
+- ✅ DO manually move issues from "Requested" → "In Progress" when starting work
+- ✅ DO manually move issues from "In Progress" → "User Testing" after implementation
+
 **Full Issue Lifecycle:**
-- **Requested** → Issues in this state are ready to be worked on
-- **Start work** → Move ALL issues to "In Progress" BEFORE starting implementation
-- **Implementation done** → Move to "User Testing"
-- **User approves** → Close issue + Move to "Done"
+- **Requested** → Issues ready to be worked on
+- **Start work** → Agent manually moves to "In Progress" BEFORE coding
+- **Implementation done** → Agent manually moves to "User Testing"
+- **User approves** → Agent closes issue (auto-moves to "Done")
+- **Need to fix** → Agent reopens issue (auto-moves to "In Progress")
 
 ### Working with "Requested" State Issues
 
@@ -357,7 +370,7 @@ This is similar to checking GitHub before implementing features. External source
 2. **Then implement all issues together**
 
 3. **After implementation:**
-   - Move to "User Testing"
+   - Move to "User Testing" (manually)
    - Add UAT criteria to each issue
    - Ask user to test
 
@@ -366,7 +379,7 @@ This is similar to checking GitHub before implementing features. External source
 - Project board accurately reflects current work state
 - Avoids confusion about which issues are "planned" vs "in progress"
 
-**When user says:** "looks good", "approved", "let's move on", "go ahead" → **Immediately** close and mark Done.
+**When user says:** "looks good", "approved", "let's move on", "go ahead" → **Close issue** (GitHub auto-moves to "Done").
 
 ### Workflow Checklist (Every Issue)
 

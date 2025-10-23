@@ -13,6 +13,48 @@ This document establishes conventions for Claude (and other AI agents) **develop
 
 ---
 
+## Lessons Learned (MANDATORY)
+
+Whenever a mistake is made or a lesson is learned during development, it **MUST** be documented in [LESSONS_LEARNED.md](LESSONS_LEARNED.md).
+
+**When to add an entry:**
+- You make a mistake in development
+- A rule is broken and you learn why it matters
+- A new pattern emerges that should be documented
+- User feedback reveals a gap in conventions
+
+**How to add an entry:**
+
+1. **Create new lesson heading** in LESSONS_LEARNED.md:
+```markdown
+## Lesson: [Brief description of what was learned]
+```
+
+2. **Document required fields:**
+   - **Date:** When the lesson was learned (YYYY-MM-DD format)
+   - **Project:** What project (e.g., "Roundtable CLI (AlexZan/roundtable-cli)")
+   - **Reference:** Git commits, issue numbers, or session context
+   - **What happened:** Describe the mistake or scenario
+   - **Why it was wrong:** Explain the impact and problem
+   - **Rule created:** Link to the corresponding rule in CLAUDE.md using markdown: `[CLAUDE.md: Section Name](CLAUDE.md#section-anchor)`
+   - **How to prevent:** Concrete steps to avoid this mistake in future
+
+3. **Update CLAUDE.md** to backlink to the new lesson:
+   - Find the relevant rule section in CLAUDE.md
+   - Add at the bottom: `**See also:** [LESSONS_LEARNED.md: Lesson Name](LESSONS_LEARNED.md#lesson-anchor)`
+
+4. **Use markdown anchors** for all links:
+   - Headings auto-generate anchors (lowercase, hyphens instead of spaces)
+   - Example: `## Lesson: Breaking Up Work` → `#lesson-breaking-up-work`
+
+**Why this matters:**
+- Agents learn from mistakes instead of repeating them
+- Rules stay connected to their origin story
+- Document can be shared across projects to teach other agents
+- Bidirectional navigation keeps context and rules together
+
+---
+
 ## Commit Review Policy
 
 **MANDATORY:** Never commit changes until the user has reviewed and explicitly approved them.
@@ -28,473 +70,56 @@ This applies to **ALL commits**, regardless of size, complexity, or perceived sa
 
 **Why:** The user needs visibility and control over what goes into their codebase.
 
+**See also:** [LESSONS_LEARNED.md: Premature Commits Without User Review](LESSONS_LEARNED.md#lesson-premature-commits-without-user-review)
+
 ---
 
-## GitHub Issue Workflow (CRITICAL)
+## GitHub Issue Workflow
 
 **MANDATORY:** Never close GitHub issues until the user has tested and explicitly approved the implementation.
 
-### The Mistake (October 2024)
+**For EVERY issue:**
+1. Implement and test
+2. Add UAT criteria to issue
+3. Ask user to test
+4. **WAIT for explicit approval** (e.g., "looks good", "approved", "let's move on")
+5. Only then commit, push, and close
 
-**What Happened:**
-- Agent implemented Issues #9 and #10
-- All automated tests passed (52 tests)
-- Agent immediately committed AND closed the issues
-- User couldn't find the issues (they were closed)
-- User never got to test or approve before closure
-
-**Root Cause:**
-Agent assumed "tests passing" = "ready to close issue". Wrong. Only USER approval means ready to close.
-
-### Mandatory Workflow for GitHub Issues
-
-**For EVERY issue, follow this sequence exactly:**
-
-1. **Implementation Phase**
-   - Implement the feature
-   - Write automated tests
-   - Run tests, ensure they pass
-   - Stage changes with `git add`
-
-2. **User Testing Phase** ⚠️ STOP HERE
-   - Add "User Acceptance Testing" comment to the issue with test criteria
-   - Ask user to test the implementation
-   - **DO NOT commit yet**
-   - **DO NOT close the issue yet**
-   - **WAIT for explicit user approval**
-
-3. **Approval Phase** (Only after user says "approved" or "looks good")
-   - Commit the changes with `git commit`
-   - Push to GitHub with `git push`
-   - Close the issue with `gh issue close`
-   - Add comment documenting completion
-
-### Red Flags - When to STOP and Wait
-
-🚩 "All tests are passing" → Does NOT mean close the issue
-🚩 "Implementation complete" → Does NOT mean close the issue
-🚩 "No errors found" → Does NOT mean close the issue
-
-✅ "User has tested and approved" → NOW you can close the issue
-
-### Why This Matters
-
-**Cost of closing too early:**
-- User loses visibility (closed issues hidden by default)
-- User can't provide feedback during testing
-- Creates impression of rushing without user involvement
-- Breaks trust in the development process
-
-**ROI of waiting:**
-- User maintains control over their project
-- Catches issues automated tests miss
-- Ensures features actually work as user expects
-- Builds trust through collaborative process
-
-### Example - Correct Workflow
-
-```
-Agent: "Issue #11 implementation complete. I've added user acceptance
-testing criteria to the issue. Here's what to test:
-
-1. Run: npm test -- src/agents/factory.test.ts
-2. Verify: Agent factory creates agents from skills
-3. Test: N-agent debate works with 3-5 agents
-
-Please test and let me know if I should commit and close the issue."
-
-User: "Tested it, looks good!"
-
-Agent: [NOW commits, pushes, and closes issue]
-```
-
-### Example - Incorrect Workflow (DO NOT DO THIS)
-
-```
-Agent: "Issue #11 complete! All tests passing."
-[Agent immediately commits]
-[Agent immediately closes issue]
-
-User: "Wait, I didn't test it yet. Where did the issue go?"
-```
+**See also:** [LESSONS_LEARNED.md: Closing Issues Before User Testing Complete](LESSONS_LEARNED.md#lesson-closing-issues-before-user-testing-complete)
 
 ---
 
-## GitHub as Source of Truth (CRITICAL)
+## GitHub as Source of Truth
 
-**MANDATORY:** Always check GitHub state before suggesting structural changes to the project.
+**MANDATORY:** Always check GitHub state before suggesting structural changes (new issues, phases, milestones).
 
-### The Mistake (October 2024)
-
-**What Happened:**
-- Earlier in session: Created Issues #4-#8 with phase structure (1C, 1D, 2, 3, 4)
-- Session got summarized due to context limits
-- Summary said "user asked to setup GitHub with phases" but didn't include specific details
-- Later in session: User asked "what's next after Phase 1B?"
-- Agent suggested "create Issue #15 for Phase 1C" without checking GitHub first
-- User caught it: "We already have a 1C, why are we adding a new one?"
-- Agent then checked GitHub and found existing phases
-
-**Root Cause:**
-Agent relied on conversation memory instead of checking the source of truth (GitHub).
-
-### Mandatory Workflow: Always Check First
-
-**Before suggesting structural changes, ALWAYS run:**
-
+**Before suggesting ANY structural change, run:**
 ```bash
-# Check existing issues and phases
 gh issue list --limit 50 --json number,title,milestone,labels
-
-# Check project structure
-gh project list --owner @me
-gh project item-list [PROJECT_NUMBER] --owner @me
-
-# Check current phase/milestone status
-gh issue view [ISSUE_NUMBER]
 ```
 
-**When to check GitHub first:**
-- Suggesting to create new issues
-- Proposing new phases or milestones
-- Recommending architectural changes tracked in issues
-- After conversation summaries (context was lost, GitHub wasn't)
-- When user asks "what's next?" (GitHub knows the roadmap)
-- Before proposing duplicate work
+**When to check:**
+- After conversation summaries (context lost, GitHub hasn't)
+- When user asks "what's next?"
+- Before creating new issues/phases
+- Before proposing architectural changes
 
-### GitHub State vs Conversation Memory
-
-| Source | Reliable For | Not Reliable For |
-|--------|--------------|------------------|
-| **GitHub** | ✅ Current project structure<br>✅ Existing issues/phases<br>✅ Open/closed status<br>✅ Assigned milestones<br>✅ Project roadmap | ❌ Recent uncommitted changes<br>❌ User preferences not documented<br>❌ Conversation context |
-| **Conversation Memory** | ✅ User preferences<br>✅ Recent discussion<br>✅ Uncommitted work | ❌ Project structure<br>❌ What issues exist<br>❌ After summaries<br>❌ Long sessions |
-
-**Key Principle:** Conversation memory is temporary. GitHub is permanent. When in doubt, check GitHub.
-
-### Examples - Correct vs Incorrect
-
-#### ❌ INCORRECT (Relying on Memory)
-
-```
-User: "What's next after Phase 1B?"
-
-Agent: "Let's create Issue #15 for Phase 1C: Multi-Panel Architecture.
-I'll set up the phase structure..."
-
-[Agent didn't check GitHub first]
-[Creates duplicate phase that already exists]
-[User catches the mistake]
-```
-
-#### ✅ CORRECT (Checking GitHub First)
-
-```
-User: "What's next after Phase 1B?"
-
-Agent: [Runs: gh issue list to see existing phases]
-Agent: [Sees: 1C = Multiple LLMs, 1D = PM Agent, etc.]
-
-Agent: "Here are the existing phases after 1B:
-- Phase 1C: Multiple LLM Support (Issue #4)
-- Phase 1D: PM Agent & Spec Generation (Issue #5)
-- Phase 2: Enhanced Debate (Issue #6)
-
-Phase 1C (Multiple LLMs) is next. Should we start on that?"
-```
-
-### When This Is Critical
-
-🚨 **After conversation summaries:** Summary loses details, GitHub doesn't
-🚨 **Long sessions:** Memory gets fuzzy, GitHub stays accurate
-🚨 **Suggesting new issues:** Prevent duplicates
-🚨 **Proposing phases:** Don't recreate existing structure
-🚨 **Architectural suggestions:** Check if already planned/implemented
-
-### Red Flags - Check GitHub Now
-
-🚩 "Let's create Issue #X for..."
-🚩 "I'll set up Phase Y..."
-🚩 "We should add milestone Z..."
-🚩 "Next we need to..."
-🚩 User asks "what's next?" after break
-
-✅ Before any of the above, run: `gh issue list` or `gh project item-list`
-
-### Generic Template for GitHub Checks
-
-**Before suggesting any structural change:**
-
-1. **Check issues:** `gh issue list --json number,title,labels,milestone`
-2. **Check milestones:** What phases/milestones exist?
-3. **Check project board:** What's in progress vs. planned?
-4. **Verify assumption:** Does what I'm about to suggest already exist?
-5. **Only then suggest:** If it doesn't exist, now I can propose it
-
-### Why This Matters
-
-**Cost of not checking:**
-- Creates duplicate issues/phases
-- Confuses project structure
-- Wastes time fixing duplicates
-- Loses user trust ("did you even check?")
-
-**ROI of checking:**
-- Accurate suggestions
-- No duplicates
-- Shows thoroughness
-- Maintains trust
-- Takes 10 seconds to run `gh issue list`
-
-### Key Takeaway
-
-**Conversation memory is ephemeral. GitHub is the source of truth.**
-
-**Before suggesting structural changes: CHECK GITHUB FIRST.**
-
-After summaries, after breaks, after long sessions - always verify state with GitHub before proposing changes to project structure.
+**See also:** [LESSONS_LEARNED.md: Suggesting Duplicate Issues/Phases Without Checking GitHub First](LESSONS_LEARNED.md#lesson-suggesting-duplicate-issuesphases-without-checking-github-first)
 
 ---
 
-## GitHub Project Board Management (CRITICAL)
+## GitHub Project Board Management
 
-**MANDATORY:** Keep GitHub issue status and project board status in sync at all times.
+**MANDATORY:** Keep issue status and project board status in sync at all times.
 
-### The Mistake (October 2024)
+**Issue Lifecycle:**
+- Start work → Move to "In Progress"
+- Implementation done → Move to "User Testing"
+- User approves → Close issue + Move to "Done"
 
-**What Happened:**
-- Phase 1B (Issue #14) completed implementation
-- User tested and approved: "okay we need something in CLAUDE.md..."
-- User said "go ahead" to proceed with Phase 1C
-- Agent implemented Phase 1C
-- **Issue #14 was never closed or moved to "Done"**
-- Issue #14 stayed in "User Testing" even though approved
-- User noticed: "1B is still in user testing but i said it was fine to move on"
+**When user says:** "looks good", "approved", "let's move on", "go ahead" → **Immediately** close and mark Done.
 
-**Root Cause:**
-Agent didn't close the issue or update project board status when user approved and moved on.
-
-### Mandatory Workflow: Issue Lifecycle Management
-
-**When starting work on an issue, you MUST:**
-
-1. **Move to "In Progress" on project board:**
-   ```bash
-   gh project item-edit --project-id [PROJECT_ID] \
-     --id [ITEM_ID] \
-     --field-id [STATUS_FIELD_ID] \
-     --single-select-option-id [IN_PROGRESS_OPTION_ID]
-   ```
-
-2. **Do this immediately** when you:
-   - Start implementing the issue
-   - Make the first code change
-   - Begin writing the first file
-   - Take the issue out of "Todo" state
-
-**When completing implementation (before user testing), you MUST:**
-
-1. **Move to "User Testing" on project board:**
-   ```bash
-   gh project item-edit --project-id [PROJECT_ID] \
-     --id [ITEM_ID] \
-     --field-id [STATUS_FIELD_ID] \
-     --single-select-option-id [USER_TESTING_OPTION_ID]
-   ```
-
-2. **Do this when:**
-   - Code is committed and pushed
-   - UAT criteria added to issue
-   - Ready for user to test
-
-**When user approves an issue, you MUST:**
-
-1. **Close the issue:**
-   ```bash
-   gh issue close [NUMBER] -c "User testing complete. Approved by user."
-   ```
-
-2. **Move to "Done" on project board:**
-   ```bash
-   gh project item-edit --project-id [PROJECT_ID] \
-     --id [ITEM_ID] \
-     --field-id [STATUS_FIELD_ID] \
-     --single-select-option-id [DONE_OPTION_ID]
-   ```
-
-3. **Do both actions immediately** when user says:
-   - "Looks good"
-   - "Approved"
-   - "Let's move on"
-   - "Go ahead with [next phase]"
-   - "I'm fine with this"
-   - Any indication they've accepted the work
-
-### Issue Status Lifecycle
-
-```
-┌─────────────┐
-│    Todo     │ (Issue created, not started)
-└──────┬──────┘
-       │
-       ▼  ⚠️ START WORK - Move to "In Progress"
-┌─────────────────┐
-│  In Progress   │ (Actively coding, implementing)
-└──────┬──────────┘
-       │
-       ▼  ⚠️ IMPLEMENTATION DONE - Move to "User Testing"
-┌──────────────────┐
-│  User Testing   │ (Committed, pushed, UAT added, waiting for user)
-└──────┬───────────┘
-       │
-       ▼
-┌──────────────────┐
-│ User Approval   │ User says "looks good" / "approved" / "go ahead"
-└──────┬───────────┘
-       │
-       ▼  ⚠️ USER APPROVED - Close issue + Move to "Done"
-┌──────────────────┐
-│      Done       │ (Issue closed, work complete)
-└─────────────────┘
-```
-
-### When to Move Issue Status
-
-| Event | Action Required | Command |
-|-------|-----------------|---------|
-| Start working on issue | Move to "In Progress" | `gh project item-edit ... --single-select-option-id [IN_PROGRESS_ID]` |
-| Implementation complete | Move to "User Testing" | `gh project item-edit ... --single-select-option-id [USER_TESTING_ID]` |
-| User says "Looks good" | Close + Move to Done | `gh issue close [NUM]` + `gh project item-edit ... --single-select-option-id [DONE_ID]` |
-| User says "Approved" | Close + Move to Done | Same as above |
-| User says "Let's move on" | Close + Move to Done | Same as above |
-| User says "Go ahead with [next]" | Close + Move to Done | Same as above |
-| User says "I'm fine with this" | Close + Move to Done | Same as above |
-| Starts testing next phase | Previous issue should be Done | Check and close previous if needed |
-
-### Project Board Column Meanings
-
-**Todo:**
-- Issue created, not started yet
-- Waiting for dependencies
-
-**In Progress:**
-- Actively being implemented
-- Code is being written
-
-**User Testing:**
-- Implementation committed
-- UAT criteria added to issue
-- Waiting for user to test
-
-**Done:**
-- User has approved
-- Issue is closed
-- Work is complete
-
-### Red Flags - Project Board Out of Sync
-
-🚩 Issue is closed but still in "User Testing" or "In Progress"
-🚩 User approved work but issue not closed
-🚩 User said "move on" but previous issue not marked Done
-🚩 Working on Phase N+1 but Phase N issue not in "Done"
-
-### Examples - Correct Workflow
-
-#### ✅ CORRECT (Starting Work on Issue)
-
-```
-User: "Let's start on Phase 1C"
-
-Agent: [Immediately runs:]
-1. gh project item-edit ... --single-select-option-id [IN_PROGRESS_ID]
-2. [Confirms to user:] "✅ Issue #4 moved to 'In Progress', starting implementation"
-3. [Begins writing code]
-```
-
-#### ✅ CORRECT (Implementation Complete, Ready for Testing)
-
-```
-Agent: [Code committed and pushed]
-1. gh project item-edit ... --single-select-option-id [USER_TESTING_ID]
-2. [Updates issue with UAT criteria]
-3. [Notifies user:] "✅ Phase 1C implementation complete. Issue #4 moved to 'User Testing'. Ready for UAT."
-```
-
-#### ✅ CORRECT (User Approval)
-
-```
-User: "i'm fine with this, let's move on to Phase 1D"
-
-Agent: [Immediately runs:]
-1. gh issue close 4 -c "Phase 1C approved. Moving to Phase 1D."
-2. gh project item-edit ... --single-select-option-id [DONE_ID]
-3. [Confirms to user:] "✅ Issue #4 closed and moved to Done"
-4. [Then proceeds with Phase 1D]
-```
-
-#### ❌ INCORRECT (What Happened with Phase 1B)
-
-```
-User: "i'm fine with this, let's move on to Phase 1C"
-
-Agent: [Immediately starts Phase 1C]
-Agent: [Does NOT close issue #14]
-Agent: [Does NOT move #14 to Done]
-
-[Later...]
-User: "1B is still in user testing but i said it was fine to move on"
-```
-
-#### ❌ INCORRECT (Not Moving to "In Progress")
-
-```
-User: "Let's start on Phase 1C"
-
-Agent: [Starts writing code immediately]
-Agent: [Does NOT move issue to "In Progress"]
-
-[Issue stays in "Todo" while work is happening]
-User: "Why is the issue still in Todo?"
-```
-
-### When User Is Still Testing
-
-If user is actively testing and hasn't approved yet:
-- Keep issue OPEN
-- Keep issue in "User Testing" status
-- Do NOT move to Done
-- Wait for explicit approval
-
-But once they approve:
-- **Immediately** close and move to Done
-- Don't wait until later
-- Don't forget when moving to next phase
-
-### Quick Reference Commands
-
-```bash
-# Close issue
-gh issue close [NUMBER] -c "User approved. Testing complete."
-
-# Move to Done (you'll need project/item/field IDs)
-gh project item-edit --project-id [PROJ_ID] \
-  --id [ITEM_ID] \
-  --field-id [STATUS_FIELD_ID] \
-  --single-select-option-id [DONE_OPTION_ID]
-
-# Verify status
-gh project item-list [PROJECT_NUM] --owner @me --format json | \
-  grep -A 5 "\"number\":[NUMBER]"
-```
-
-### Key Principle
-
-**Project board status MUST match issue lifecycle:**
-- Open issue → Todo/In Progress/User Testing
-- User approves → Close issue AND move to Done
-- Never have closed issues in non-Done columns
-- Never have approved work in non-Done columns
-
-**When in doubt:** If user says "move on" or "go ahead", close the current issue and mark it Done before proceeding.
+**See also:** [LESSONS_LEARNED.md: Not Updating Project Board Status During Implementation](LESSONS_LEARNED.md#lesson-not-updating-project-board-status-during-implementation)
 
 ---
 
@@ -817,140 +442,21 @@ Test the panel auto-detection feature works as specified:
 
 ---
 
-## When to Break Up Work (And When NOT To)
+## When to Break Up Work
 
-**CRITICAL:** Only break up work when there are user validation checkpoints that could change direction.
+**Only break up work if there are user validation checkpoints at each breakpoint.**
 
-### The Mistake (Phase 1B - October 2024)
-
-**What Happened:**
-- Phase 1B broken into 5 issues: #9, #10, #11, #12, #13
-- Issues #9, #10, #11 were all infrastructure (no user-facing features)
-- Only #12 had user-testable features
-- User couldn't validate direction until #12 was complete
-- **Result:** Pointless breakup - no checkpoint where user could course-correct
-
-**Root Cause:**
-Agent broke up work without considering whether user could validate progress at each step.
-
-### Key Principle: Validation Checkpoints
-
-**Only break up work when:**
-- User can test/validate something at each breakpoint
-- Feedback at checkpoint could change what comes next
+**Break up when:**
+- User can test/validate at each step
+- User feedback could change what comes next
 - Each piece delivers testable value
-- User has opportunity to say "stop" or "change direction"
 
-**Do NOT break up work when:**
-- All pieces are infrastructure with no user-facing features until the end
-- User can't provide feedback until everything is integrated
-- Breaking up just creates tracking overhead without validation opportunities
-- The pieces don't make sense independently
+**Don't break up when:**
+- All pieces are infrastructure with no user-facing features until end
+- User can't test until everything is integrated
+- You're just creating tracking overhead
 
-### Examples - Correct vs Incorrect Breakup
-
-#### ❌ INCORRECT (Phase 1B Actual)
-
-```
-Issue #9: Skills Library (infrastructure - no UAT)
-Issue #10: Panel System (infrastructure - no UAT)
-Issue #11: Multi-Agent Engine (infrastructure - no UAT)
-Issue #12: CLI Integration (FIRST user-testable feature!)
-Issue #13: Documentation
-```
-
-**Why Wrong:** User can't validate anything until #12. No checkpoint to say "this isn't the right direction" before spending tokens on #10, #11.
-
-**Better Approach:** Single issue "Phase 1B: Panel System Implementation" - do all infrastructure + CLI integration together, show user working feature, get approval.
-
-#### ✅ CORRECT (Hypothetical)
-
-```
-Issue #1: Basic Panel Auto-Detection (minimal implementation)
-  - User tests: Does auto-detection work? Is the UX right?
-  - Checkpoint: User says "yes continue" or "no, change approach"
-
-Issue #2: Expand to N-Agent Support (builds on #1)
-  - User tests: Do multi-agent debates work well?
-  - Checkpoint: User validates before building more
-
-Issue #3: Documentation (final polish)
-  - User tests: Are docs clear?
-```
-
-**Why Correct:** User can validate and course-correct at each step. Each issue delivers testable value.
-
-### Decision Framework
-
-**Before creating multiple issues, ask:**
-
-1. **Can user test this piece independently?**
-   - Yes → Good candidate for separate issue
-   - No → Combine with next piece
-
-2. **Could user feedback change what comes next?**
-   - Yes → Good breakpoint
-   - No → Don't break up
-
-3. **Does this deliver value the user can judge?**
-   - Yes → Separate issue
-   - No → Infrastructure, combine with user-facing piece
-
-4. **Is there a natural "stop here and validate" point?**
-   - Yes → Break up at that point
-   - No → Keep together
-
-### Real Example - Phase 1B Should Have Been
-
-**Instead of 5 issues, should have been 2:**
-
-```
-Issue #1: Panel System with CLI Integration
-  - Implement: Skills, Panels, Multi-Agent, CLI
-  - User tests: Complete panel selection workflow
-  - Checkpoint: Does the UX work? Is auto-detection good?
-  - Tokens: ~23K (everything except docs)
-
-Issue #2: Skills & Panels Documentation
-  - Implement: CREATING_SKILLS.md, CREATING_PANELS.md
-  - User tests: Are docs clear enough to create custom skills?
-  - Tokens: ~2K
-```
-
-**Why Better:**
-- User sees working feature in #1 (one validation checkpoint)
-- User validates docs in #2 (second checkpoint)
-- No wasted infrastructure issues user can't interact with
-
-### When Infrastructure Issues ARE Appropriate
-
-**Infrastructure issues make sense when:**
-- They're independent of current feature work
-- They unblock multiple future features
-- They're refactoring/cleanup that doesn't change UX
-- They're build/tooling improvements
-
-**Example (Good):**
-```
-Issue: Upgrade TypeScript 4.x → 5.x
-  - Infrastructure, no UX change
-  - Unblocks future features needing TS 5.x
-  - Can be done independently
-  - User doesn't need to test (tests verify it works)
-```
-
-### Red Flags - Don't Break Up
-
-🚩 "This is part 1 of 4, user can't test until part 4"
-🚩 "All these issues are backend, UI comes later"
-🚩 "User testing happens after all issues are complete"
-🚩 "These issues must be done in sequence with no validation points"
-
-### Key Takeaway
-
-**Breaking up work is for USER VALIDATION, not agent task tracking.**
-
-If there's no opportunity for user to validate and potentially change direction, keep it as one issue.
+**See also:** [LESSONS_LEARNED.md: Breaking Up Work Without Validation Checkpoints](LESSONS_LEARNED.md#lesson-breaking-up-work-without-validation-checkpoints)
 
 ---
 

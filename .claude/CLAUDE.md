@@ -108,6 +108,131 @@ gh issue list --limit 50 --json number,title,milestone,labels
 
 ---
 
+## Feature Conflict Detection (CRITICAL)
+
+**MANDATORY:** Before implementing or suggesting ANY new feature, check if it conflicts with planned future features.
+
+### The Problem: Feature Creep and Wasted Effort
+
+**What happened (2024-10-23, Issue #15):**
+1. Implemented per-agent model selection (global skill→model map) in Phase 1C
+2. This conflicted with planned multi-model panel feature (2-3 models per skill)
+3. Had to revert and reimplement, wasting ~10,000 tokens and significant user time
+4. User: "we had a big issue with feature creep... this cause wasted effort/tokens/user time"
+
+**Root cause:** Implemented a feature without checking if it conflicted with future planned work.
+
+### Mandatory Process: Feature Conflict Check
+
+**BEFORE implementing or suggesting a feature, you MUST:**
+
+1. **Check all open issues for conflicts:**
+```bash
+gh issue list --state open --limit 50 --json number,title,body,labels
+```
+
+2. **Search issue bodies for related keywords:**
+```bash
+gh issue list --search "model selection" --state open
+gh issue list --search "panel diversity" --state open
+gh issue list --search "[relevant keywords]" --state open
+```
+
+3. **Read Phase 2+ issue descriptions fully:**
+- Don't just skim titles
+- Read the full body text
+- Check "Scope" and "Deferred" sections
+- Look for architectural decisions
+
+4. **If you find a potential conflict:**
+
+**STOP AND ASK THE USER:**
+```
+⚠️ Feature Conflict Detected
+
+Proposed feature: [What you want to implement]
+Conflicts with: Issue #[X] - [Title]
+Conflict details: [Specific conflict explanation]
+
+Options:
+1. Defer this feature until Issue #[X] is addressed
+2. Modify this feature to align with Issue #[X]
+3. Update Issue #[X] to accommodate this feature
+
+What would you like to do?
+```
+
+### What Counts as a Conflict?
+
+**Conflicts include:**
+- ✅ **Architectural conflicts** - Different approaches to same problem
+- ✅ **API design conflicts** - Incompatible function signatures or interfaces
+- ✅ **Data structure conflicts** - Different ways of modeling the same domain
+- ✅ **Configuration conflicts** - Overlapping or contradictory config options
+- ✅ **Scope overlaps** - Implementing something already planned for later phase
+
+**Examples from this project:**
+```
+❌ Phase 1C: Implemented `createAgentsFromSkills(skillIds, modelMap)`
+   where modelMap is skill → model (1:1 mapping)
+
+✅ Issue #15 (planned): Panel should specify 2-3 models PER SKILL
+   skillModelMap: architecture → [claude, gpt-4, gemini]
+
+CONFLICT: Can't have both 1:1 mapping AND 1:many mapping
+```
+
+### When to Check
+
+**Check for conflicts when:**
+- User suggests a new feature
+- You propose a new feature during implementation
+- You're about to create a new issue
+- You're modifying core interfaces or data structures
+- User says "let's add..." or "what if we..."
+- You think "it would be better if..."
+
+**Especially check when:**
+- Working on Phase 1 but Phase 2+ issues exist
+- Implementing "quick fixes" or "small improvements"
+- Adding configuration options
+- Changing how agents/panels/skills are structured
+
+### Process Checklist
+
+```
+Before implementing a new feature:
+
+☐ Run: gh issue list --state open --limit 50
+☐ Search issues for relevant keywords
+☐ Read Phase 2+ issues completely (not just titles)
+☐ Check if feature overlaps with planned work
+☐ If conflict found → STOP and ask user
+☐ If no conflict → Proceed with implementation
+☐ Document decision in commit message
+```
+
+### User Decision Authority
+
+**The user (product owner) decides:**
+- Whether to implement the new feature now
+- Whether to defer until later phase
+- Whether to modify the planned feature
+- Whether to modify the new feature
+
+**Your job:** Detect conflicts early, present options clearly, execute the user's decision.
+
+### Token Efficiency
+
+**Detecting conflicts costs:** ~500-1,000 tokens (search + read)
+**Fixing conflicts after implementation:** ~5,000-15,000 tokens (revert + reimplement)
+
+**ROI:** 5x-15x token savings by catching conflicts early.
+
+**See also:** [LESSONS_LEARNED.md: Implementing Features That Conflict With Planned Future Work](LESSONS_LEARNED.md#lesson-implementing-features-that-conflict-with-planned-future-work)
+
+---
+
 ## GitHub Project Board Management
 
 **MANDATORY:** Keep issue status and project board status in sync at all times.

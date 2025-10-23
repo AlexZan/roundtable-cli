@@ -180,3 +180,95 @@ Do NOT break up if:
 Better approach: Single issue "Phase 1B: Panel System Implementation" with one validation point where user tests complete feature.
 
 ---
+
+## Lesson: Implementing Features That Conflict With Planned Future Work
+
+**Date:** 2024-10-23
+**Project:** Roundtable CLI (AlexZan/roundtable-cli)
+**Reference:** Issue #15 (Phase 1C Extended), commits 3ccb4c2, 8ba1bcf
+
+**What happened:**
+1. During Phase 1C implementation, agent implemented per-agent model selection with a global `modelMap: { skillId → model }` (1:1 mapping)
+2. User then asked about multi-model panels from original spec: "2-3 diverse models per panel"
+3. This revealed Issue #15 was already planned: panels should specify `skillModelMap: { skillId → [model1, model2, model3] }` (1:many mapping)
+4. The Phase 1C implementation conflicted architecturally with the planned Phase 1C Extended feature
+5. Had to revert cli.ts changes and reimplement with panel-level model diversity instead
+6. Wasted ~10,000 tokens and significant user time on implementation that had to be redone
+
+**User feedback:**
+> "we had a big issue with feature creep. Where an unplanned feature creeped in, that conflicted with a future planned feature. this cause wasted effort/tokens/user time."
+
+**Why it was wrong:**
+- Agent didn't check GitHub issues for planned multi-model panel feature before implementing model selection
+- Implemented a "quick fix" approach without considering future architecture
+- Created technical debt that immediately conflicted with next planned feature
+- User had to spend time explaining the conflict and deciding how to fix it
+- Wasted tokens on throw-away implementation
+
+**Root cause:**
+Agent implemented features **without checking if they conflict with future planned work on GitHub**.
+
+**Rule created:**
+[CLAUDE.md: Feature Conflict Detection](CLAUDE.md#feature-conflict-detection-critical)
+
+**How to prevent:**
+
+**BEFORE implementing ANY new feature, agent MUST:**
+
+1. **Check all open issues:**
+```bash
+gh issue list --state open --limit 50 --json number,title,body,labels
+```
+
+2. **Search for related features:**
+```bash
+gh issue list --search "model selection" --state open
+gh issue list --search "panel diversity" --state open
+gh issue list --search "[relevant keywords]" --state open
+```
+
+3. **Read future phase issues completely:**
+   - Don't just skim titles
+   - Read full body text, especially "Scope" sections
+   - Check for architectural decisions
+   - Look for deferred features that relate to current work
+
+4. **If conflict detected → STOP and ask user:**
+```
+⚠️ Feature Conflict Detected
+
+Proposed feature: [What you want to implement]
+Conflicts with: Issue #[X] - [Title]
+Conflict details: [Explain the conflict]
+
+Options:
+1. Defer this feature until Issue #[X]
+2. Modify this feature to align with Issue #[X]
+3. Update Issue #[X] plan
+
+What would you like to do?
+```
+
+**When to check:**
+- User suggests a new feature
+- You propose a feature improvement
+- Before creating new issues
+- When modifying core interfaces/APIs
+- When adding configuration options
+- Working on Phase 1 while Phase 2+ exists
+
+**Token efficiency:**
+- Checking for conflicts: ~500-1,000 tokens
+- Fixing conflicts after implementation: ~5,000-15,000 tokens
+- **ROI: 5x-15x token savings** by detecting conflicts early
+
+**User's role:**
+User (product owner) makes the final decision:
+- Implement new feature now or later
+- Modify new feature to align with plan
+- Update planned feature to accommodate new idea
+
+**Agent's role:**
+Detect conflicts early, present options clearly, execute user's decision.
+
+---

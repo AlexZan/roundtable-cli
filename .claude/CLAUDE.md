@@ -255,6 +255,187 @@ After summaries, after breaks, after long sessions - always verify state with Gi
 
 ---
 
+## GitHub Project Board Management (CRITICAL)
+
+**MANDATORY:** Keep GitHub issue status and project board status in sync at all times.
+
+### The Mistake (October 2024)
+
+**What Happened:**
+- Phase 1B (Issue #14) completed implementation
+- User tested and approved: "okay we need something in CLAUDE.md..."
+- User said "go ahead" to proceed with Phase 1C
+- Agent implemented Phase 1C
+- **Issue #14 was never closed or moved to "Done"**
+- Issue #14 stayed in "User Testing" even though approved
+- User noticed: "1B is still in user testing but i said it was fine to move on"
+
+**Root Cause:**
+Agent didn't close the issue or update project board status when user approved and moved on.
+
+### Mandatory Workflow: Issue Lifecycle Management
+
+**When user approves an issue, you MUST:**
+
+1. **Close the issue:**
+   ```bash
+   gh issue close [NUMBER] -c "User testing complete. Approved by user."
+   ```
+
+2. **Move to "Done" on project board:**
+   ```bash
+   # Get project and item IDs (you should already have these)
+   gh project item-edit --project-id [PROJECT_ID] \
+     --id [ITEM_ID] \
+     --field-id [STATUS_FIELD_ID] \
+     --single-select-option-id [DONE_OPTION_ID]
+   ```
+
+3. **Do both actions immediately** when user says:
+   - "Looks good"
+   - "Approved"
+   - "Let's move on"
+   - "Go ahead with [next phase]"
+   - "I'm fine with this"
+   - Any indication they've accepted the work
+
+### Issue Status Lifecycle
+
+```
+┌─────────────┐
+│   Created   │ (Issue created, in "Todo" or "In Progress")
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────┐
+│ Implementation  │ (Code written, tests pass, committed)
+└──────┬──────────┘
+       │
+       ▼
+┌──────────────────┐
+│  User Testing   │ ⚠️ Move to "User Testing" column
+└──────┬───────────┘     Update project board status
+       │
+       ▼
+┌──────────────────┐
+│ User Approval   │ User says "looks good" / "approved" / "go ahead"
+└──────┬───────────┘
+       │
+       ▼  ⚠️ CRITICAL MOMENT
+┌──────────────────┐
+│ Close & Mark    │ 1. gh issue close [NUM]
+│     Done        │ 2. Move to "Done" on project board
+└─────────────────┘
+```
+
+### When to Move Issue Status
+
+| User Signal | Action Required |
+|-------------|-----------------|
+| "Looks good" | Close issue + Move to Done |
+| "Approved" | Close issue + Move to Done |
+| "Let's move on" | Close issue + Move to Done |
+| "Go ahead with [next]" | Close issue + Move to Done |
+| "I'm fine with this" | Close issue + Move to Done |
+| "Continue to [next phase]" | Close issue + Move to Done |
+| Starts testing next phase | Previous issue should be Done |
+
+### Project Board Column Meanings
+
+**Todo:**
+- Issue created, not started yet
+- Waiting for dependencies
+
+**In Progress:**
+- Actively being implemented
+- Code is being written
+
+**User Testing:**
+- Implementation committed
+- UAT criteria added to issue
+- Waiting for user to test
+
+**Done:**
+- User has approved
+- Issue is closed
+- Work is complete
+
+### Red Flags - Project Board Out of Sync
+
+🚩 Issue is closed but still in "User Testing" or "In Progress"
+🚩 User approved work but issue not closed
+🚩 User said "move on" but previous issue not marked Done
+🚩 Working on Phase N+1 but Phase N issue not in "Done"
+
+### Examples - Correct Workflow
+
+#### ✅ CORRECT (Phase 1B Approval)
+
+```
+User: "i'm fine with this, let's move on to Phase 1C"
+
+Agent: [Immediately runs:]
+1. gh issue close 14 -c "Phase 1B approved. Moving to Phase 1C."
+2. gh project item-edit ... --single-select-option-id [DONE_ID]
+3. [Confirms to user:] "✅ Issue #14 closed and moved to Done"
+4. [Then proceeds with Phase 1C]
+```
+
+#### ❌ INCORRECT (What Actually Happened)
+
+```
+User: "i'm fine with this, let's move on to Phase 1C"
+
+Agent: [Immediately starts Phase 1C]
+Agent: [Does NOT close issue #14]
+Agent: [Does NOT move #14 to Done]
+
+[Later...]
+User: "1B is still in user testing but i said it was fine to move on"
+```
+
+### When User Is Still Testing
+
+If user is actively testing and hasn't approved yet:
+- Keep issue OPEN
+- Keep issue in "User Testing" status
+- Do NOT move to Done
+- Wait for explicit approval
+
+But once they approve:
+- **Immediately** close and move to Done
+- Don't wait until later
+- Don't forget when moving to next phase
+
+### Quick Reference Commands
+
+```bash
+# Close issue
+gh issue close [NUMBER] -c "User approved. Testing complete."
+
+# Move to Done (you'll need project/item/field IDs)
+gh project item-edit --project-id [PROJ_ID] \
+  --id [ITEM_ID] \
+  --field-id [STATUS_FIELD_ID] \
+  --single-select-option-id [DONE_OPTION_ID]
+
+# Verify status
+gh project item-list [PROJECT_NUM] --owner @me --format json | \
+  grep -A 5 "\"number\":[NUMBER]"
+```
+
+### Key Principle
+
+**Project board status MUST match issue lifecycle:**
+- Open issue → Todo/In Progress/User Testing
+- User approves → Close issue AND move to Done
+- Never have closed issues in non-Done columns
+- Never have approved work in non-Done columns
+
+**When in doubt:** If user says "move on" or "go ahead", close the current issue and mark it Done before proceeding.
+
+---
+
 ## Work Summary (MANDATORY)
 
 **MANDATORY:** At the end of every task or session, provide a clear point-form summary of what was done.
@@ -741,7 +922,7 @@ If the user agrees:
 **Convention Status:** Active and in effect
 **Applies To:** All Roundtable development work going forward
 **Updated:** 2025-10-23
-**Version:** 2.6 (Added "GitHub as Source of Truth" - always check GitHub before suggesting structural changes)
+**Version:** 2.7 (Added "GitHub Project Board Management" - keep issue status and project board in sync)
 
 ---
 

@@ -68,6 +68,110 @@ Key phrase: "User says 'looks good'" or "User says 'approved'" = NOW you can clo
 
 ---
 
+## Lesson: Committing Without User Approval Despite Clear Instructions
+
+**Date:** 2024-10-24
+**Project:** Roundtable CLI (AlexZan/roundtable-cli)
+**Reference:** Issue #31 - Dynamic expert addition (Commit 54ed0df)
+
+**What happened:**
+Agent implemented Issue #31 (dynamic expert addition with natural language control):
+1. Implementation completed successfully
+2. All unit tests passed (5/5 recommendation parsing, 25/25 selection parsing)
+3. Build verification succeeded
+4. Agent immediately committed changes
+5. Agent immediately closed issue #31 and moved to "Done"
+6. **User never got a chance to test or approve**
+
+User's response: "you just broke the rule again, committed and moved to done before i reviewed it.. why"
+
+**Critical context:**
+- CLAUDE.md **already had** explicit instructions (lines 79-88) to wait for user approval
+- CLAUDE.md **already had** workflow showing "User Testing" as mandatory step
+- This is the **SECOND time** this mistake was made (first was Issue #14, Phase 1B)
+- Agent had even added testing requirements to CLAUDE.md after the first mistake
+- **Despite clear instructions, agent bypassed user testing completely**
+
+**Why it was wrong:**
+- Violated explicit MANDATORY instruction: "Never close GitHub issues until the user has tested and explicitly approved"
+- User loses control over their codebase
+- Breaks collaborative development trust
+- Ironic: Issue #31 was literally about giving user CEO-level control, yet agent took control away
+- Pattern of not following existing instructions indicates instructions may not be prominent enough
+
+**User's diagnosis:**
+"what is the problem with the CLAUDE.md file that causes you to keep making this mistake?"
+
+The instructions existed but agent's mental workflow skipped "User Testing" state:
+
+**Agent's incorrect workflow:**
+```
+Implementation complete → Tests pass → Commit → Close → Done
+```
+
+**Correct workflow per CLAUDE.md:**
+```
+Implementation complete → Tests pass → Move to "User Testing" →
+Add UAT criteria → Ask user to test → WAIT →
+User approves → Commit → Close → Done
+```
+
+**Root cause analysis:**
+- Instructions exist but lack visual prominence
+- No clear STOP checkpoint before commit/close operations
+- "User Testing" state not treated as MANDATORY BLOCKER
+- Agent assumes "tests pass" = "ready to close"
+- Missing explicit checkpoint questions: "Has user tested? Has user approved?"
+
+**Fix applied:**
+Created prominent STOP checkpoint in CLAUDE.md (new section: "🛑 CRITICAL CHECKPOINT: Before Any Commit or Close")
+
+**New checkpoint includes:**
+- Visual ASCII box that's hard to miss
+- Explicit questions to answer BEFORE commit/close
+- Clear definition of "explicit approval"
+- Visual workflow diagram with 🛑 STOP HERE marker
+- Examples of what counts as approval vs what doesn't
+
+**The checkpoint forces agent to answer:**
+```
+❓ Has the user tested this implementation?
+   ☐ NO  → DO NOT COMMIT. DO NOT CLOSE.
+   ☐ YES → Continue to next question
+
+❓ Did the user explicitly approve?
+   ☐ NO  → DO NOT COMMIT. DO NOT CLOSE.
+   ☐ YES → OK to commit and close
+```
+
+**How to prevent:**
+1. Implementation complete, all YOUR tests pass
+2. Tell user: "Implementation complete, ready for your testing"
+3. Move issue to "User Testing" status
+4. **READ THE CHECKPOINT SECTION in CLAUDE.md**
+5. **STOP and WAIT** - do not proceed
+6. User tests the implementation
+7. User gives explicit approval ("looks good", "approved", "commit this")
+8. **ONLY THEN** commit and close
+
+**What "explicit approval" means:**
+- ✅ "looks good"
+- ✅ "approved"
+- ✅ "let's move on"
+- ✅ "commit this"
+- ✅ "ship it"
+- ❌ NOT: silence
+- ❌ NOT: "tests pass" (that's YOUR tests)
+- ❌ NOT: assuming approval
+
+**Key insight:**
+Having instructions isn't enough if they're not visually prominent. Critical checkpoints need to INTERRUPT the workflow, not just exist as text to be read. The new STOP checkpoint section uses visual formatting (boxes, emoji, diagrams) to force attention.
+
+**Rule strengthened:**
+[CLAUDE.md: 🛑 CRITICAL CHECKPOINT: Before Any Commit or Close](CLAUDE.md#-critical-checkpoint-before-any-commit-or-close)
+
+---
+
 ## Lesson: Suggesting Duplicate Issues/Phases Without Checking GitHub First
 
 **Date:** 2024-10-23

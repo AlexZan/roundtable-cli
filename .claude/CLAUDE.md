@@ -89,6 +89,67 @@ This applies to **ALL commits**, regardless of size, complexity, or perceived sa
 
 ---
 
+## 🛑 CRITICAL CHECKPOINT: Before Any Commit or Close
+
+**READ THIS EVERY TIME before running `git commit` or `gh issue close`:**
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  🛑 STOP - Answer these questions FIRST:                │
+│                                                          │
+│  ❓ Has the user tested this implementation?            │
+│     ☐ NO  → DO NOT COMMIT. DO NOT CLOSE.               │
+│     ☐ YES → Continue to next question                   │
+│                                                          │
+│  ❓ Did the user explicitly approve? ("looks good",     │
+│     "approved", "let's move on", "commit this")         │
+│     ☐ NO  → DO NOT COMMIT. DO NOT CLOSE.               │
+│     ☐ YES → OK to commit and close                      │
+│                                                          │
+│  If you answered NO to either:                          │
+│  1. Tell user: "Implementation complete, ready for      │
+│     your testing"                                       │
+│  2. Move issue to "User Testing" status                 │
+│  3. STOP and WAIT for user approval                     │
+│  4. Do NOT proceed to commit or close                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+**What "explicit approval" means:**
+- ✅ "looks good"
+- ✅ "approved"
+- ✅ "let's move on"
+- ✅ "commit this"
+- ✅ "ship it"
+- ❌ NOT: silence
+- ❌ NOT: "tests pass" (that's YOUR tests, not USER testing)
+- ❌ NOT: assuming user approval
+
+**The workflow MUST be:**
+```
+Your tests pass
+    ↓
+Tell user: "Ready for testing"
+    ↓
+Move to "User Testing"
+    ↓
+🛑 STOP HERE 🛑
+    ↓
+User tests
+    ↓
+User approves explicitly
+    ↓
+NOW you can commit
+    ↓
+NOW you can close issue
+```
+
+**See also:**
+- [LESSONS_LEARNED.md: Closing Issues Before User Testing Complete](LESSONS_LEARNED.md#lesson-closing-issues-before-user-testing-complete)
+- [LESSONS_LEARNED.md: Committing Without User Approval Despite Clear Instructions](LESSONS_LEARNED.md#lesson-committing-without-user-approval-despite-clear-instructions)
+
+---
+
 ## Linking Commits to Issues
 
 **MANDATORY:** When closing an issue via commit (ONLY after user approval), use GitHub keyword linking in the commit message.

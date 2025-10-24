@@ -9,7 +9,6 @@
  */
 
 import { getModelRegistry } from '../llm/registry.js';
-import { detectMode, containsQuestionToUser } from '../session/mode-detection.js';
 import type {
   DebateConfig,
   Session,
@@ -54,24 +53,12 @@ export class DebateEngine {
     const roundNumber = session.rounds.length + 1;
     const previousRound = session.rounds[session.rounds.length - 1];
 
-    // Detect session mode based on who is asking questions
-    const previousHadQuestions = previousRound?.hadExpertQuestions || false;
-    const userInput = additionalPrompt || session.prompt;
-    const mode = detectMode(userInput, previousHadQuestions);
-
-    // Update session mode tracking
-    session.currentMode = mode;
-    if (!session.modeHistory) {
-      session.modeHistory = [];
-    }
-    session.modeHistory.push({ round: roundNumber, mode });
-
     let round: Round;
 
     if (roundNumber === 1) {
       // Round 1: Initial responses
       console.log('   Agents analyzing prompt...');
-      round = await this.executeRound(1, session.prompt, null, mode);
+      round = await this.executeRound(1, session.prompt, null);
     } else {
       // Round 2+: Within-skill debate with optional user input
       console.log(`\n⚙️  Running Round ${roundNumber}...\n`);
@@ -85,18 +72,9 @@ export class DebateEngine {
         roundNumber,
         session.prompt,
         previousRound,
-        baseContext,
-        mode
+        baseContext
       );
     }
-
-    // Mark mode on round
-    round.mode = mode;
-
-    // Check if any expert asked questions in this round
-    round.hadExpertQuestions = round.responses.some(r =>
-      containsQuestionToUser(r.content)
-    );
 
     session.rounds.push(round);
     session.metadata.roundCount++;
@@ -153,8 +131,7 @@ export class DebateEngine {
   private async executeRound(
     roundNumber: number,
     userPrompt: string,
-    context: string | null,
-    mode?: 'discovery' | 'debate'
+    context: string | null
   ): Promise<Round> {
     const round: Round = {
       number: roundNumber,
@@ -162,25 +139,14 @@ export class DebateEngine {
       timestamp: new Date()
     };
 
-    // Build mode-specific instructions
-    const modeContext = this.buildModeContext(mode || 'debate', '');
-
     // Execute all agents in parallel
     const registry = getModelRegistry();
     const responsePromises = this.config.agentConfigs.map(async (agentConfig) => {
-      // Use VERY low token limit for discovery mode to enforce ONE brief question
-      const maxTokens = (mode === 'discovery') ? 100 : 1024;
-
-      // CRITICAL: Prepend mode instructions to system prompt to override base role
-      const modeAwareSystemPrompt = `${modeContext}\n\n${agentConfig.systemPrompt}`;
-      // Don't duplicate mode context in context parameter - it's already in systemPrompt
-      const fullContext = context ? context : undefined;
-
       const request: LLMRequest = {
         prompt: userPrompt,
-        systemPrompt: modeAwareSystemPrompt,
-        context: fullContext,
-        maxTokens
+        systemPrompt: agentConfig.systemPrompt,
+        context: context || undefined,
+        maxTokens: 1024
       };
 
       // Get the appropriate provider for this agent's model
@@ -221,14 +187,12 @@ export class DebateEngine {
    * Execute a round with skill-based context (Phase 1C Extended)
    * Each agent only sees responses from agents with the same skill
    * @param baseContext - Optional context to prepend (e.g., user feedback)
-   * @param mode - Session mode (discovery or debate)
    */
   private async executeRoundWithSkillContext(
     roundNumber: number,
     userPrompt: string,
     previousRound: Round,
-    baseContext: string = '',
-    mode?: 'discovery' | 'debate'
+    baseContext: string = ''
   ): Promise<Round> {
     const round: Round = {
       number: roundNumber,
@@ -252,24 +216,14 @@ export class DebateEngine {
       const skillId = agentConfig.metadata?.skillId || 'unknown';
       const sameSkillResponses = responsesBySkill.get(skillId) || [];
 
-      // Build mode-specific context (with user feedback if in discovery mode)
-      const modeContext = this.buildModeContext(mode || 'debate', baseContext);
-
-      // Build context from same-skill agents only (WITHOUT mode context - it goes in systemPrompt)
+      // Build context from same-skill agents only (with optional base context)
       const context = this.buildContextForSkill(sameSkillResponses, agentConfig, baseContext);
-
-      // Use VERY low token limit for discovery mode to enforce ONE brief question
-      const maxTokens = (mode === 'discovery') ? 100 : 1024;
-
-      // CRITICAL: Prepend mode instructions to system prompt to override base role
-      // Mode context now includes user feedback for discovery mode
-      const modeAwareSystemPrompt = `${modeContext}\n\n${agentConfig.systemPrompt}`;
 
       const request: LLMRequest = {
         prompt: userPrompt,
-        systemPrompt: modeAwareSystemPrompt,
+        systemPrompt: agentConfig.systemPrompt,
         context,
-        maxTokens
+        maxTokens: 1024
       };
 
       // Get the appropriate provider for this agent's model
@@ -344,69 +298,6 @@ export class DebateEngine {
       `Focus on ${skillDomain} concerns and reach the best conclusion for this domain.`;
 
     return baseContext + skillContext;
-  }
-
-  /**
-   * Build mode-specific context for agents
-   * Instructs agents how to behave based on current session mode
-   * @param mode - Session mode (discovery or debate)
-   * @param userFeedback - Optional user feedback to acknowledge in discovery mode
-   */
-  private buildModeContext(mode: 'discovery' | 'debate', userFeedback: string = ''): string {
-    if (mode === 'discovery') {
-      // In discovery mode, acknowledge user feedback FIRST, then ask the next question
-      const feedbackAcknowledgement = userFeedback
-        ? `USER FEEDBACK TO ACKNOWLEDGE:\n${userFeedback}\n\nThanking for that feedback. Now ask your next clarifying question based on what they just told you.\n\n`
-        : '';
-
-      return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 DISCOVERY MODE - SEQUENTIAL QUESTIONING
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-${feedbackAcknowledgement}MANDATORY RULES - FOLLOW EXACTLY:
-
-✓ Ask ONLY ONE question (not 2, not 3, not multiple)
-✓ Keep it conversational and brief (1-3 sentences max)
-✓ No analysis, no explanations, no recommendations
-✓ No tables, no lists, no strategic frameworks
-✓ Just your ONE question
-✓ BUILD ON what the user already told you - ask the NEXT logical question
-
-If you have no questions, say ONLY: "No questions from me."
-
-EXAMPLES OF CORRECT RESPONSES:
-- "What platforms are you targeting?"
-- "How many users do you expect initially?"
-- "What's your timeline for launch?"
-
-EXAMPLES OF WRONG (TOO LONG):
-- Asking the SAME question again ❌
-- Multiple questions in one response ❌
-- "Let me ask a few questions..." ❌
-- Analysis before the question ❌
-- Tables or frameworks ❌
-
-ONE QUESTION. BRIEF. BUILD ON PREVIOUS FEEDBACK. CONVERSATIONAL.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-    } else {
-      return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💭 DEBATE MODE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-The user asked a specific question. RESPOND DIRECTLY to it.
-
-RULES:
-✓ Answer the user's question directly
-✓ Provide your expert perspective
-✓ Give concrete recommendations
-✓ DON'T ask discovery questions
-✓ DON'T ignore what the user just said
-
-RESPOND TO WHAT THE USER JUST ASKED.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
-    }
   }
 
   private buildContextFromRound(round: Round): string {

@@ -132,6 +132,75 @@ Closes #3
 
 ---
 
+## Testing Requirements (MANDATORY)
+
+**MANDATORY:** Never mark a testing task as complete if testing failed or was skipped.
+
+### The Rule
+
+**If you can't test it, it's not done.**
+
+Testing is not optional. Testing is how you know the code works. If testing failed, the task failed.
+
+### When You Hit Testing Obstacles
+
+**If your test won't run because of:**
+- Environment variables not loading
+- Import paths broken
+- Dependencies missing
+- File path issues
+
+**DO NOT:**
+- ❌ Delete the test
+- ❌ Mark task as complete
+- ❌ Move to User Testing
+- ❌ Assume the code works
+
+**DO:**
+- ✅ Fix the test environment
+- ✅ Get the test running
+- ✅ Actually run the test
+- ✅ Fix bugs the test finds
+- ✅ Only then mark complete
+
+### Correct Testing Workflow
+
+```
+✅ CORRECT:
+1. Write code
+2. Write test
+3. Hit test error → Fix test error
+4. Run test → passes
+5. Mark task complete
+6. Move to User Testing
+
+❌ INCORRECT:
+1. Write code
+2. Write test
+3. Hit test error → Delete test
+4. Mark task complete anyway
+5. Move to User Testing
+6. User finds bug immediately
+```
+
+### User Testing ≠ First Testing
+
+**User Testing validates that:**
+- Feature works as specified
+- UX is correct
+- Edge cases are handled
+
+**User Testing should NOT discover:**
+- Code crashes on startup
+- Basic functionality doesn't work
+- Environment errors
+
+**Agent Testing catches these BEFORE User Testing.**
+
+**See also:** [LESSONS_LEARNED.md: Marking Tasks Complete Without Actually Testing](LESSONS_LEARNED.md#lesson-marking-tasks-complete-without-actually-testing)
+
+---
+
 ## GitHub as Source of Truth
 
 **MANDATORY:** Always check GitHub state before suggesting structural changes (new issues, phases, milestones).

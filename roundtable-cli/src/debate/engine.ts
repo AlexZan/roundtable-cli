@@ -63,14 +63,16 @@ export class DebateEngine {
       // Round 2+: Within-skill debate with optional user input
       console.log(`\n⚙️  Running Round ${roundNumber}...\n`);
 
-      // Build context from previous round with optional user input
+      // Build conversation history for this round
+      // Include user feedback as a proper part of the conversation, not just context
+      let roundPrompt = session.prompt;
       const baseContext = additionalPrompt
-        ? `User feedback: ${additionalPrompt}\n\n`
+        ? `User said: "${additionalPrompt}"\n\n`
         : '';
 
       round = await this.executeRoundWithSkillContext(
         roundNumber,
-        session.prompt,
+        roundPrompt,
         previousRound,
         baseContext
       );
@@ -270,7 +272,11 @@ export class DebateEngine {
     currentAgent: typeof this.config.agentConfigs[0],
     baseContext: string = ''
   ): string {
+    // If there's user feedback/context, always include it first
     if (sameSkillResponses.length === 0) {
+      if (baseContext) {
+        return `${baseContext}You are the only expert in your domain. Based on the user's input above, provide your response.`;
+      }
       return 'No other experts in your domain participated in the previous round.';
     }
 
@@ -278,6 +284,9 @@ export class DebateEngine {
     const otherResponses = sameSkillResponses.filter(r => r.agentId !== currentAgent.id);
 
     if (otherResponses.length === 0) {
+      if (baseContext) {
+        return `${baseContext}You are the only expert in your domain. Based on the user's input above, provide your response.`;
+      }
       return 'You are the only expert in your domain. Provide your analysis independently.';
     }
 

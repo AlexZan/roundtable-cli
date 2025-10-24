@@ -11,9 +11,129 @@ import inquirer from 'inquirer';
 import { DebateEngine } from './debate/engine.js';
 import { SessionManager } from './session.js';
 import { getApiKey } from './config.js';
-import { detectPanel } from './panels/selector.js';
-import { createAgentsFromPanel, createAgentsFromSkills } from './agents/factory.js';
-import type { AgentConfig } from './types.js';
+import { MeetingFacilitator } from './agents/meeting-facilitator.js';
+import { createAgentsFromSkills } from './agents/factory.js';
+import { selectModels, showModelSelectionSummary } from './config/model-selector.js';
+import {
+  containsExpertRecommendations,
+  parseExpertRecommendations,
+  formatRecommendationsForUser
+} from './agents/expert-recommendations.js';
+import { parseExpertSelection } from './agents/expert-selection.js';
+import type { AgentConfig, Round, Session } from './types.js';
+
+/**
+ * Display a single round's responses
+ */
+function displayRound(round: Round): void {
+  console.log(`\n🔄 Round ${round.number}:\n`);
+
+  for (const response of round.responses) {
+    // Format model name for display
+    const modelName = response.metadata?.model ? formatModelName(response.metadata.model) : 'Unknown Model';
+    console.log(`\n👤 ${response.agentName} (${modelName}):`);
+    console.log(`   ${response.content}`);
+    console.log(`   (Tokens: ${response.tokensUsed})`);
+  }
+}
+
+/**
+ * Check for expert recommendations and handle dynamic expert addition
+ * Returns true if experts were added, false otherwise
+ */
+async function handleExpertRecommendations(
+  round: Round,
+  session: Session,
+  debateEngine: DebateEngine
+): Promise<boolean> {
+  // Check each agent's response for expert recommendations
+  for (const response of round.responses) {
+    if (containsExpertRecommendations(response.content)) {
+      const recommendations = parseExpertRecommendations(response.content);
+
+      if (recommendations.length === 0) {
+        continue; // False positive, no actual recommendations
+      }
+
+      // Display recommendations to user
+      console.log(formatRecommendationsForUser(recommendations, response.agentName));
+
+      // Prompt user for selection
+      const { selection } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'selection',
+          message: 'Which experts would you like to add? (e.g., "first two", "all", "architecture and security", "none"):',
+          default: 'all'
+        }
+      ]);
+
+      // Parse user's selection
+      const selectionResult = parseExpertSelection(selection, recommendations);
+
+      if (selectionResult.rejectedAll || selectionResult.selectedSkillIds.length === 0) {
+        console.log('\n⏭️  Continuing without adding new experts\n');
+        return false;
+      }
+
+      // Create agents from selected skills
+      console.log(`\n🔄 Adding ${selectionResult.selectedSkillIds.length} expert(s)...\n`);
+
+      try {
+        const newAgentConfigs = await createAgentsFromSkills(
+          selectionResult.selectedSkillIds,
+          { skillsDir: '../.roundtable/skills' }
+        );
+
+        // Add agents to debate engine
+        debateEngine.addAgents(session, newAgentConfigs);
+
+        // Display added experts
+        console.log(`✅ Added ${newAgentConfigs.length} expert(s) to the panel:\n`);
+        for (const agent of newAgentConfigs) {
+          const skillDomain = agent.metadata?.skillDomain || 'general';
+          console.log(`   • ${agent.name} (${skillDomain})`);
+        }
+        console.log('');
+
+        return true;
+      } catch (error: any) {
+        console.error(`\n❌ Error adding experts: ${error.message}\n`);
+        return false;
+      }
+    }
+  }
+
+  return false; // No recommendations found
+}
+
+/**
+ * Format model identifier into a human-readable name
+ */
+function formatModelName(model: string): string {
+  // Handle Claude models
+  if (model.includes('claude')) {
+    if (model.includes('sonnet-4')) return 'Claude Sonnet 4';
+    if (model.includes('haiku-4-5')) return 'Claude Haiku 4.5';
+    if (model.includes('haiku-4')) return 'Claude Haiku 4';
+    if (model.includes('opus')) return 'Claude Opus';
+    return 'Claude';
+  }
+
+  // Handle OpenAI models
+  if (model.includes('gpt-4-turbo')) return 'GPT-4 Turbo';
+  if (model.includes('gpt-4')) return 'GPT-4';
+  if (model.includes('gpt-3.5')) return 'GPT-3.5';
+
+  // Handle Gemini models
+  if (model.includes('gemini')) {
+    if (model.includes('pro')) return 'Gemini Pro';
+    return 'Gemini';
+  }
+
+  // Fallback: return original model name
+  return model;
+}
 
 const program = new Command();
 
@@ -36,14 +156,81 @@ program
       process.exit(1);
     }
 
-    // User intake
-    const answers = await inquirer.prompt([
+    // First-run: Prompt for model selection if preferences don't exist
+    const { needsFirstTimeSetup } = await import('./config/model-selector.js');
+    if (await needsFirstTimeSetup()) {
+      console.log('👋 First time setup: Let\'s select which models you want to use\n');
+      const preferences = await selectModels();
+      showModelSelectionSummary(preferences);
+    }
+
+    // User intake - get topic first
+    const { prompt: userPrompt } = await inquirer.prompt([
       {
         type: 'input',
         name: 'prompt',
-        message: 'What would you like to build?',
-        validate: (input: string) => input.length > 0 || 'Please enter a description'
-      },
+        message: 'What would you like to discuss at the roundtable today?',
+        validate: (input: string) => input.length > 0 || 'Please enter a topic'
+      }
+    ]);
+
+    // Use Meeting Facilitator to compose panel dynamically
+    console.log('\n🤝 Meeting Facilitator is analyzing your request...\n');
+
+    const facilitator = new MeetingFacilitator();
+    const composition = await facilitator.composePanel(userPrompt, {
+      skillsDir: '../.roundtable/skills'
+    });
+
+    // Check if any skills were selected
+    if (composition.skillIds.length === 0) {
+      // No available skills matched
+      console.log('⚠️  No suitable experts available for this topic.\n');
+      console.log(`💡 ${composition.reasoning}\n`);
+
+      if (composition.missingSkills && composition.missingSkills.length > 0) {
+        console.log('📋 Suggested skills to create:\n');
+        for (const missing of composition.missingSkills) {
+          console.log(`   • ${missing.name} (${missing.id})`);
+          console.log(`     ${missing.reason}\n`);
+        }
+        console.log('Create these skill files in .roundtable/skills/ to discuss this topic.\n');
+      }
+
+      console.log('👋 Cannot proceed without relevant experts. Exiting.\n');
+      return;
+    }
+
+    // Display panel composition
+    console.log('✅ Expert panel composed:\n');
+    console.log(`   ${composition.reasoning}\n`);
+
+    // Display missing skills if any
+    if (composition.missingSkills && composition.missingSkills.length > 0) {
+      console.log('💡 Additional expertise that would be helpful:\n');
+      for (const missing of composition.missingSkills) {
+        console.log(`   • ${missing.name}: ${missing.reason}`);
+      }
+      console.log('');
+    }
+
+    // Create agents from composed skill list
+    const agentConfigs = await createAgentsFromSkills(
+      composition.skillIds,
+      { skillsDir: '../.roundtable/skills' }
+    );
+
+    // Display agent panel
+    console.log(`👥 Expert Panel (${agentConfigs.length} experts):\n`);
+    for (const agent of agentConfigs) {
+      const skillDomain = agent.metadata?.skillDomain || 'general';
+      const modelName = agent.model;
+      console.log(`   • ${agent.name} (${skillDomain}) - ${modelName}`);
+    }
+    console.log('');
+
+    // Now that panel composition is shown, ask if ready to proceed
+    const { proceed } = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'proceed',
@@ -52,125 +239,77 @@ program
       }
     ]);
 
-    if (!answers.proceed) {
+    if (!proceed) {
       console.log('\n👋 Session cancelled\n');
       return;
     }
 
-    // Detect panel from user prompt
-    console.log('\n🔍 Analyzing your request...\n');
-
-    const detectionResult = await detectPanel(
-      { prompt: answers.prompt },
-      { panelsDir: '../.roundtable/panels' }
-    );
-
-    let agentConfigs: AgentConfig[];
-    let panelInfo: { id?: string; name?: string } = {};
-
-    if (detectionResult.panel) {
-      // Panel detected
-      panelInfo = {
-        id: detectionResult.panel.id,
-        name: detectionResult.panel.name
-      };
-
-      console.log(`✅ Detected: ${detectionResult.panel.name}`);
-      console.log(`   Matched keywords: ${detectionResult.matchedKeywords.join(', ')}`);
-      console.log(`   Confidence: ${(detectionResult.confidence * 100).toFixed(0)}%\n`);
-
-      // Create agents from panel (Phase 1C Extended: supports multi-model diversity)
-      agentConfigs = await createAgentsFromPanel(
-        detectionResult.panel,
-        { skillsDir: '../.roundtable/skills' }
-      );
-
-      // Add panel ID to agent metadata
-      agentConfigs.forEach(agent => {
-        if (agent.metadata) {
-          agent.metadata.panelId = detectionResult.panel!.id;
-        }
-      });
-
-      // Display agent panel
-      if (detectionResult.panel.modelDiversity?.enabled) {
-        // Multi-model panel: Group agents by skill
-        console.log(`👥 Expert Panel (${agentConfigs.length} agents from ${detectionResult.panel.skillIds.length} skills):\n`);
-
-        const agentsBySkill = new Map<string, typeof agentConfigs>();
-        for (const agent of agentConfigs) {
-          const skillId = agent.metadata?.skillId || 'unknown';
-          if (!agentsBySkill.has(skillId)) {
-            agentsBySkill.set(skillId, []);
-          }
-          agentsBySkill.get(skillId)!.push(agent);
-        }
-
-        for (const [skillId, agents] of agentsBySkill) {
-          const skillDomain = agents[0]?.metadata?.skillDomain || 'general';
-          console.log(`   ${skillDomain} (${agents.length} agents):`);
-          for (const agent of agents) {
-            const modelName = agent.model;
-            console.log(`     • ${agent.name} - ${modelName}`);
-          }
-          console.log('');
-        }
-      } else {
-        // Single-model panel: Display flat list
-        console.log(`👥 Expert Panel (${agentConfigs.length} experts):`);
-        for (const agent of agentConfigs) {
-          const skillDomain = agent.metadata?.skillDomain || 'general';
-          const modelName = agent.model;
-          console.log(`   • ${agent.name} (${skillDomain}) - ${modelName}`);
-        }
-        console.log('');
-      }
-
-    } else {
-      // No panel detected - use fallback
-      console.log(`⚠️  No panel matched. Using default experts.\n`);
-
-      agentConfigs = await createAgentsFromSkills(
-        ['architecture', 'product'],
-        { skillsDir: '../.roundtable/skills' }
-      );
-    }
-
-    console.log(`📋 Your prompt: "${answers.prompt}"\n`);
+    console.log(`\n📋 Your prompt: "${userPrompt}"\n`);
 
     // Create debate engine and session manager
     const debateEngine = new DebateEngine({
-      maxRounds: 2,
+      maxRounds: 10, // Safety limit for interactive mode
       agentConfigs
     });
 
     const sessionManager = new SessionManager();
 
     try {
-      // Run the debate
+      // Create session for interactive debate
       console.log('⚙️  Running Round 1...\n');
-      const session = await debateEngine.runDebate(answers.prompt);
+      const session = debateEngine.createSession(userPrompt);
 
-      // Add panel metadata to session
-      if (panelInfo.id) {
-        session.metadata.panelId = panelInfo.id;
-        session.metadata.panelName = panelInfo.name;
+      // Add panel composition metadata to session
+      session.metadata.composedSkills = composition.skillIds;
+      session.metadata.facilitatorReasoning = composition.reasoning;
+
+      // Round 1: Initial responses
+      await debateEngine.executeNextRound(session);
+
+      // Display Round 1 results
+      displayRound(session.rounds[0]);
+
+      // Check for expert recommendations after Round 1
+      await handleExpertRecommendations(session.rounds[0], session, debateEngine);
+
+      // Interactive rounds loop
+      let continueDebate = true;
+      while (continueDebate && session.rounds.length < debateEngine['config'].maxRounds) {
+        console.log('\n' + '─'.repeat(60));
+
+        const { userInput } = await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'userInput',
+            message: 'Your feedback (or type /complete to finish):',
+            default: ''
+          }
+        ]);
+
+        // Check if user wants to complete
+        if (userInput.trim() === '/complete' || userInput.trim() === '') {
+          continueDebate = false;
+          break;
+        }
+
+        // Run next round with user feedback
+        console.log(`\n⚙️  Running Round ${session.rounds.length + 1}...\n`);
+        await debateEngine.executeNextRound(session, userInput);
+
+        // Display latest round
+        const latestRound = session.rounds[session.rounds.length - 1];
+        displayRound(latestRound);
+
+        // Check for expert recommendations after each round
+        await handleExpertRecommendations(latestRound, session, debateEngine);
       }
 
-      // Display results
+      // Finalize session
+      debateEngine.finalizeSession(session);
+
+      // Display completion message
       console.log('\n📊 Deliberation Complete!\n');
       console.log('═'.repeat(60));
-
-      for (const round of session.rounds) {
-        console.log(`\n🔄 Round ${round.number}:\n`);
-
-        for (const response of round.responses) {
-          console.log(`\n👤 ${response.agentName}:`);
-          console.log(`   ${response.content.substring(0, 200)}...`);
-          console.log(`   (Tokens: ${response.tokensUsed})`);
-        }
-        console.log('\n' + '─'.repeat(60));
-      }
 
       // Summary
       console.log(`\n📈 Session Summary:`);
@@ -208,6 +347,24 @@ program
       console.log(`   Created: ${new Date(session.createdAt).toLocaleString()}`);
       console.log(`   Prompt: "${session.prompt.substring(0, 60)}..."`);
       console.log('');
+    }
+  });
+
+program
+  .command('models')
+  .description('Select which LLM models to use')
+  .action(async () => {
+    console.log('\n🤖 Model Selection\n');
+
+    try {
+      // Show interactive model selector
+      const preferences = await selectModels();
+
+      // Show summary
+      showModelSelectionSummary(preferences);
+    } catch (error: any) {
+      console.error(`\n❌ Error: ${error.message}\n`);
+      process.exit(1);
     }
   });
 

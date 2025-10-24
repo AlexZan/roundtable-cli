@@ -17,6 +17,14 @@ export interface SessionMetadata {
   roundCount: number;
   panelId?: string; // Panel used (if applicable)
   panelName?: string; // Human-readable panel name
+  startTime?: number; // Internal tracking for duration calculation
+  composedSkills?: string[]; // Skills selected by Meeting Facilitator
+  facilitatorReasoning?: string; // Why these skills were chosen
+  agentAdditions?: Array<{
+    roundNumber: number; // Which round they were added before
+    agentIds: string[];
+    agentNames: string[];
+  }>; // Track dynamically added agents
 }
 
 export interface Round {
@@ -34,6 +42,7 @@ export interface AgentResponse {
   metadata?: {
     skillId?: string;
     skillDomain?: string;
+    model?: string;
   };
 }
 

@@ -89,6 +89,49 @@ This applies to **ALL commits**, regardless of size, complexity, or perceived sa
 
 ---
 
+## Linking Commits to Issues
+
+**MANDATORY:** When closing an issue via commit (ONLY after user approval), use GitHub keyword linking in the commit message.
+
+**When to link:**
+- **ONLY after user has tested and explicitly approved the implementation**
+- Never link/close issues before user testing is complete
+- Link at the same time you close the issue
+
+**How to link:**
+
+Include one of these keywords in your commit message:
+```
+Closes #5
+Fixes #10
+Resolves #15
+```
+
+**Example commit message:**
+
+```
+Implement Phase 1A debate engine with 2-agent support
+
+- Add debate/engine.ts with orchestration logic
+- Add session management with JSON storage
+- Add token tracking
+- Add friendly error handling
+- All tests pass (19 unit tests)
+
+Closes #3
+```
+
+**How it works:**
+- GitHub automatically detects the keyword
+- When commit is merged, GitHub closes the issue
+- Issue is automatically linked to the commit/PR
+- Commit appears in issue timeline
+- Issue is moved to "Done" on project board
+
+**CRITICAL:** Only use keyword linking AFTER user approval. Never close issues in commit messages before user testing.
+
+---
+
 ## GitHub as Source of Truth
 
 **MANDATORY:** Always check GitHub state before suggesting structural changes (new issues, phases, milestones).

@@ -406,6 +406,192 @@ Before implementing a new feature:
 
 ---
 
+## Spec Integrity: MD Files as Source of Truth (CRITICAL)
+
+**MANDATORY:** Maintain unified source of truth by validating all new features against the specification.
+
+**Core Principle:** The `.md` specification files in `docs/roundtable-spec/` are the authoritative source of truth. GitHub issues are the active/experimental source of truth. Any divergence must be **reasoned and intentional**, not accidental.
+
+### Why This Matters
+
+**The Problem:**
+- Spec files describe the intended architecture (EXPERT_PANELS.md, CONSENSUS_ALGORITHMS.md, etc.)
+- GitHub issues describe what's being built right now
+- When they conflict silently: feature creep accumulates, conflicting implementations happen, tokens wasted on rework
+- Users lose confidence in what the system is actually supposed to do
+
+**The Solution:**
+- Before implementing ANY new feature, check if it conflicts with the spec
+- If yes: Stop and ask the user to make an intentional decision
+- Document the decision and update the spec accordingly
+- This creates a "paper trail" of reasoned changes vs. accidental drift
+
+### Process: Detecting and Resolving Spec Conflicts
+
+**BEFORE implementing any feature or GitHub issue:**
+
+#### Step 1: Identify Spec Scope
+```bash
+# Locate relevant spec file
+# Search for keywords from the issue in spec files
+grep -r "keyword" docs/roundtable-spec/
+```
+
+**Common spec files:**
+- `EXPERT_PANELS.md` - Panel structure, agent behavior, consensus
+- `CONSENSUS_ALGORITHMS.md` - How panels reach agreement
+- `VISION_AND_PHILOSOPHY.md` - Architectural principles
+- `USER_INTERACTION_CONTROL.md` - User interface patterns
+- `SPEC.md` - Overall specification (if exists)
+- See also: `docs/roundtable-spec/00-core/` for core concepts
+
+#### Step 2: Check for Divergence
+Read the spec section **completely** (not just title). Ask:
+- ✓ Does the feature match what the spec says should happen?
+- ✓ Does it use the data structures the spec defines?
+- ✓ Does it follow the algorithms the spec describes?
+- ✓ Does it respect the principles in VISION_AND_PHILOSOPHY.md?
+
+**Examples of divergence:**
+```
+❌ Spec says: "Agents contribute naturally without role assignment"
+   Issue #15: Implement per-agent role assignment system
+   → CONFLICT: Different approach to agent expertise
+
+❌ Spec says: "One agent per skill per panel (V1 design)"
+   Issue #33: Multi-model panels with 2-3 models per skill
+   → CONFLICT: Fundamentally changes panel composition
+
+✅ Spec says: "All panels respond to direct questions"
+   Issue #20: Add special handling for security questions
+   → NO CONFLICT: Enhancing, not changing the rule
+```
+
+#### Step 3: When Conflict Is Found - STOP AND ASK USER
+
+**DO NOT implement without explicit user decision.**
+
+Present conflict clearly:
+
+```
+⚠️ SPEC CONFLICT DETECTED
+
+Proposed Issue: #[N] - [Issue Title]
+Conflicts with: EXPERT_PANELS.md section 2.1
+
+SPEC SAYS:
+"In V1, panels do **not** assign roles to specific models. Instead:
+Agents join a panel based on domain, and each agent contributes
+from their natural training perspective."
+
+ISSUE PROPOSES:
+"Per-agent role assignment: Claude = Threat Modeling, GPT-4 = Compliance"
+
+CONFLICT EXPLANATION:
+Spec defines natural differences as feature (agents discover specialties).
+Issue proposes pre-assigned roles (agents follow preset specialties).
+These approaches are incompatible.
+
+OPTIONS:
+1. Defer this issue - implement V1 as spec says, do role assignment in V2
+2. Update spec first - discuss why role assignment is better than natural differences
+3. Hybrid approach - [your suggestion of how to reconcile]
+
+WHAT WOULD YOU LIKE TO DO?
+
+If you want to proceed differently from the spec, please explain why
+so we can update the spec to match the new understanding.
+```
+
+#### Step 4: Document the Decision
+
+**If user approves proceeding differently:**
+
+1. **Understand the reasoning** - Ask user:
+   - Why is this better than what the spec says?
+   - What problem does the spec's approach have?
+   - Are there trade-offs?
+
+2. **Update the spec** - Add a new section:
+   ```markdown
+   ### [Feature Name] - Changed from Original Spec (Date)
+
+   **Original spec:** [What it said]
+   **Why it changed:** [User's reasoning]
+   **New approach:** [What we're doing instead]
+   **Tradeoffs:** [What we gain/lose]
+   **GitHub issue:** [Link to issue]
+
+   Related: Issue #[X], Commit [hash]
+   ```
+
+3. **Link in commit message:**
+   ```
+   Implement [feature]
+
+   - [details]
+
+   Updates EXPERT_PANELS.md section 2.1 (diverge from V1 spec)
+   Reasoning: [Brief why this is better]
+
+   Issue #33
+   ```
+
+4. **Update CLAUDE.md** - Add to Lessons Learned if it's a significant architectural change:
+   ```markdown
+   ## Lesson: [What we learned]
+
+   Date: YYYY-MM-DD
+   Project: Roundtable CLI
+   Reference: Issue #XX, Commit [hash]
+
+   What happened: We diverged from EXPERT_PANELS.md spec...
+   Why it made sense: [Reasoning]
+   Rule created: [Link to updated spec section]
+   ```
+
+### When NOT to Check Against Spec
+
+**You DON'T need spec conflict detection for:**
+- Bug fixes (fixing broken implementation of spec)
+- Performance optimizations (same behavior, faster)
+- Test coverage (spec -> implementation, not changing spec)
+- Documentation updates (clarifying, not changing)
+- Infrastructure improvements (internal only)
+
+**You DO need to check for:**
+- New features or capabilities
+- Changes to data structures or APIs
+- Behavioral modifications
+- Adding/removing components
+- Cross-domain integrations
+
+### Checklist Before Starting Implementation
+
+```
+☐ Read GitHub issue completely
+☐ Identify which spec section this relates to
+☐ Search for that section in docs/roundtable-spec/
+☐ Read the spec section completely (not just title)
+☐ Compare: Does issue match spec?
+   ☐ YES - proceed with implementation
+   ☐ NO - STOP, ask user about divergence
+   ☐ PARTIAL - ask user to clarify intent
+☐ If spec is updated, commit message includes spec update reference
+```
+
+### Why This Process
+
+**Cost of NOT checking:** ~5,000-15,000 tokens wasted reworking conflicts discovered late
+**Cost of checking:** ~500-1,000 tokens upfront to read spec and compare
+**ROI:** 5x-15x token savings by catching conflicts early
+
+**More importantly:** Maintains unified vision. Users understand what the system is supposed to be, agents implement consistently, future maintenance is easier.
+
+**See also:** [LESSONS_LEARNED.md: Implementing Features That Conflict With Planned Future Work](LESSONS_LEARNED.md#lesson-implementing-features-that-conflict-with-planned-future-work)
+
+---
+
 ## External Data Sources (MANDATORY)
 
 **CRITICAL:** When an issue references external sources, you MUST fetch them BEFORE implementing.
@@ -947,8 +1133,8 @@ If the user agrees:
 
 **Convention Status:** Active and in effect
 **Applies To:** All Roundtable development work going forward
-**Updated:** 2025-10-23
-**Version:** 2.7 (Added "GitHub Project Board Management" - keep issue status and project board in sync)
+**Updated:** 2025-10-25
+**Version:** 2.8 (Added "Spec Integrity: MD Files as Source of Truth" - unified spec management with intentional conflict resolution)
 
 ---
 

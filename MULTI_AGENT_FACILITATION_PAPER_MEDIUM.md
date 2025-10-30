@@ -19,9 +19,7 @@ This paper proposes a fundamental shift in how humans interact with AI systems: 
 
 ### 1.1 The Current State: Single-Model Interactions
 
-Today's AI interactions follow a simple pattern:
-
-> Human → Single AI Model → Response
+Today's AI interactions follow a simple pattern: **Human → Single AI Model → Response**
 
 While powerful, this approach has limitations:
 - **Narrow perspective:** One model's training, biases, and blindspots
@@ -31,13 +29,11 @@ While powerful, this approach has limitations:
 
 ### 1.2 The Natural Evolution: Multi-Agent Deliberation
 
-Human experts solve complex problems through collaboration:
-
-> Problem → Panel of Experts → Debate → Consensus → Solution
+Human experts solve complex problems through collaboration: **Problem → Panel of Experts → Debate → Consensus → Solution**
 
 **Why not apply this to AI?**
 
-> Human Topic → AI Facilitator → Multi-Model Panel → Deliberation → Synthesis
+The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel → Deliberation → Synthesis**
 
 **Benefits:**
 - **Diverse perspectives:** Different models, different training, different insights

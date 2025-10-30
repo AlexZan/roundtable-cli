@@ -7,7 +7,7 @@
 
 ---
 
-## Abstract
+### Abstract
 
 This paper proposes a fundamental shift in how humans interact with AI systems: from single-model conversations to **facilitator-orchestrated multi-agent deliberations**. We argue that complex problems benefit from diverse AI perspectives, and that a facilitator agent can effectively orchestrate conversations between multiple AI models—each contributing domain expertise—to produce richer, more robust solutions. This approach mirrors human expert panels and leverages the natural strengths of different AI models without requiring rigid programmatic orchestration.
 
@@ -15,9 +15,9 @@ This paper proposes a fundamental shift in how humans interact with AI systems: 
 
 ---
 
-## 1. Introduction
+### 1. Introduction
 
-## 1.1 The Current State: Single-Model Interactions
+### 1.1 The Current State: Single-Model Interactions
 
 Today's AI interactions follow a simple pattern: **Human → Single AI Model → Response**
 
@@ -27,7 +27,7 @@ While powerful, this approach has limitations:
 - **Limited expertise breadth:** No model is expert in everything
 - **No built-in verification:** Errors and hallucinations go unchallenged
 
-## 1.2 The Natural Evolution: Multi-Agent Deliberation
+### 1.2 The Natural Evolution: Multi-Agent Deliberation
 
 Human experts solve complex problems through collaboration: **Problem → Panel of Experts → Debate → Consensus → Solution**
 
@@ -43,9 +43,9 @@ The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel �
 
 ---
 
-## 2. The Facilitator Model
+### 2. The Facilitator Model
 
-## 2.1 Core Concept
+### 2.1 Core Concept
 
 **A facilitator agent orchestrates conversations between multiple AI agents.**
 
@@ -55,7 +55,7 @@ The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel �
 3. **Synthesis:** Integrate multiple perspectives into coherent insights
 4. **Quality Control:** Recognize when discussion has reached resolution or needs more depth
 
-## 2.2 Why This Works: Universal Interface Principle
+### 2.2 Why This Works: Universal Interface Principle
 
 **Key Observation:** All AI models expose some form of interface:
 - HTTP APIs (OpenAI, Anthropic, Google, xAI)
@@ -75,7 +75,7 @@ From the facilitator's perspective, each agent just needs to:
 - Receive a response
 - Manage context
 
-## 2.3 Fully Agentic Orchestration
+### 2.3 Fully Agentic Orchestration
 
 **Our Initial Approach (Programmatic Round-Based):**
 
@@ -104,7 +104,7 @@ The facilitator decides:
 - Consensus or disagreement signals
 - User satisfaction
 
-## 2.4 The Facilitator as Improvable Agent
+### 2.4 The Facilitator as Improvable Agent
 
 **Critical insight:** The facilitator itself is an agent with a skill definition, which means:
 
@@ -132,9 +132,9 @@ This makes facilitation itself a flexible, evolvable component rather than hardc
 
 ---
 
-## 3. Architecture
+### 3. Architecture
 
-## 3.1 System Components
+### 3.1 System Components
 
 The system has a hierarchical structure:
 
@@ -153,7 +153,7 @@ The system has a hierarchical structure:
 - Agent 3: Gemini with UX skill
 - Agent N: Grok with Product skill
 
-## 3.2 Agent Interfaces
+### 3.2 Agent Interfaces
 
 **For Claude-based agents:**
 
@@ -167,7 +167,7 @@ API-based invocation sends requests with system prompts and messages to external
 
 A unified interface handles both Claude subagents and API calls, making the implementation details invisible to the facilitator.
 
-## 3.3 Skills System: Reusable Domain Expertise
+### 3.3 Skills System: Reusable Domain Expertise
 
 **Skills define domain expertise as reusable components.**
 
@@ -189,7 +189,7 @@ Example: A Software Architecture Expert skill defines:
 2. Instantiate agents with domain-specific knowledge
 3. Ensure coverage of necessary perspectives
 
-## 3.4 Context Curation: The Power of Focused Expertise
+### 3.4 Context Curation: The Power of Focused Expertise
 
 **The Generic LLM Problem:**
 
@@ -247,9 +247,9 @@ Panel:
 
 ---
 
-## 4. Conversation Patterns
+### 4. Conversation Patterns
 
-## 4.1 Basic Deliberation Flow
+### 4.1 Basic Deliberation Flow
 
 **User asks:** "Design a secure authentication system for my web app"
 
@@ -275,7 +275,7 @@ Panel:
 **Synthesis**
 - Facilitator: "Here's the consensus design with tradeoffs explained"
 
-## 4.2 Dynamic Panel Expansion
+### 4.2 Dynamic Panel Expansion
 
 **Agents can recommend additional expertise:**
 
@@ -288,7 +288,7 @@ Panel:
 >
 > **Round 3 now includes Privacy perspective**
 
-## 4.3 Skill-to-Skill Deep Dives
+### 4.3 Skill-to-Skill Deep Dives
 
 **When specific cross-domain questions arise:**
 
@@ -300,7 +300,7 @@ Facilitator notices security implication:
 - Relays back to Architecture Agent: "Security recommends..."
 - Architecture adjusts design
 
-## 4.4 Completion Detection
+### 4.4 Completion Detection
 
 **Facilitator determines when discussion has reached sufficient depth.**
 
@@ -318,7 +318,7 @@ Facilitator notices security implication:
 - ✗ Insufficient detail for implementation
 - ✗ User explicitly requests more depth
 
-## 4.5 Human Participation in Panels
+### 4.5 Human Participation in Panels
 
 **Humans can participate as panel members alongside AI agents.**
 
@@ -355,7 +355,7 @@ Panel composition:
 - Engineering design (senior engineer provides constraints and requirements)
 - Academic research (domain expert guides literature interpretation)
 
-## 4.6 Conversation Branching and Iteration
+### 4.6 Conversation Branching and Iteration
 
 **Roundtable sessions support branching and replay from any point in the conversation.**
 
@@ -403,7 +403,7 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 - Sensitivity analysis: "How does conclusion change with different expert?"
 - Error correction: "Spotted mistake at Round 5, branch back to Round 3"
 
-## 4.7 Post-Mortem Analysis and Self-Learning
+### 4.7 Post-Mortem Analysis and Self-Learning
 
 **After a roundtable session, specialized agents can review what went right and wrong.**
 
@@ -444,9 +444,9 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 
 ---
 
-## 5. Why This Represents the Future
+### 5. Why This Represents the Future
 
-## 5.1 Natural Problem-Solving Pattern
+### 5.1 Natural Problem-Solving Pattern
 
 **Human experts naturally form panels for complex problems:**
 - Academic peer review
@@ -457,7 +457,7 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 
 **Why limit AI to solo performance when collaboration is demonstrably better?**
 
-## 5.2 Model Diversity as Feature
+### 5.2 Model Diversity as Feature
 
 **Different AI models have different strengths:**
 - Claude: Long context, nuanced reasoning, tool use
@@ -467,7 +467,7 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 
 **Rather than choosing one model, leverage all of them.**
 
-## 5.3 Emergent Intelligence
+### 5.3 Emergent Intelligence
 
 **Multi-agent deliberation produces emergent properties:**
 - **Error correction:** Models catch each other's mistakes
@@ -475,7 +475,7 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 - **Perspective synthesis:** Combined insights exceed individual capability
 - **Confidence calibration:** Agreement signals reliability, disagreement signals uncertainty
 
-## 5.4 Scalable Expertise
+### 5.4 Scalable Expertise
 
 **Skills as composable units enable:**
 - **Rapid panel assembly:** Mix and match for any domain
@@ -483,7 +483,7 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 - **Community contributions:** Shared skill libraries
 - **Specialization depth:** Narrow, deep expertise alongside broad knowledge
 
-## 5.5 Transparency and Trust
+### 5.5 Transparency and Trust
 
 **Users can observe the deliberation process:**
 - See different perspectives explicitly
@@ -493,9 +493,9 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 
 ---
 
-## 6. Implementation Patterns
+### 6. Implementation Patterns
 
-## 6.1 Minimal Viable Architecture
+### 6.1 Minimal Viable Architecture
 
 **Start simple, validate the concept:**
 
@@ -515,7 +515,7 @@ The basic setup includes:
 4. When complete, synthesize insights
 5. Return to user
 
-## 6.2 Progressive Enhancement
+### 6.2 Progressive Enhancement
 
 **Phase 1: Basic Multi-Agent Conversation**
 - Facilitator orchestrates predefined panel
@@ -541,7 +541,7 @@ The basic setup includes:
 - Panel composition optimization
 - User preference learning
 
-## 6.3 Integration Patterns
+### 6.3 Integration Patterns
 
 **CLI Application:**
 
@@ -568,9 +568,9 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 ---
 
-## 7. Challenges and Considerations
+### 7. Challenges and Considerations
 
-## 7.1 Cost and Latency
+### 7.1 Cost and Latency
 
 **Challenge:** Multiple models = multiple API calls = higher cost and slower responses
 
@@ -586,7 +586,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 - 3-agent panel (3 rounds): ~$0.10 per conversation
 - **Value proposition:** 10x cost for significantly higher quality and verification
 
-## 7.2 Context Management
+### 7.2 Context Management
 
 **Challenge:** Maintaining coherent context across multiple agents
 
@@ -596,7 +596,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 3. **Skill-specific context:** Architecture agents see architecture discussions, etc.
 4. **Summarization:** Facilitator summarizes previous rounds for efficiency
 
-## 7.3 Quality Control
+### 7.3 Quality Control
 
 **Challenge:** Preventing low-quality or off-topic responses
 
@@ -606,7 +606,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 3. **Confidence signals:** Agents express uncertainty explicitly
 4. **User feedback loop:** Users can redirect or request clarification
 
-## 7.4 Convergence
+### 7.4 Convergence
 
 **Challenge:** Ensuring deliberation reaches actionable conclusions
 
@@ -618,9 +618,9 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 ---
 
-## 8. Use Cases
+### 8. Use Cases
 
-## 8.1 Software Development
+### 8.1 Software Development
 
 **Scenario:** Building a new feature
 
@@ -632,7 +632,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Outcome:** Holistic feature design addressing all concerns upfront
 
-## 8.2 Business Strategy
+### 8.2 Business Strategy
 
 **Scenario:** Market entry decision
 
@@ -644,7 +644,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Outcome:** Data-driven strategy with risks and opportunities clearly identified
 
-## 8.3 Creative Work
+### 8.3 Creative Work
 
 **Scenario:** Writing a complex narrative
 
@@ -656,7 +656,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Outcome:** Rich, multi-dimensional creative work
 
-## 8.4 Research and Analysis
+### 8.4 Research and Analysis
 
 **Scenario:** Literature review on a complex topic
 
@@ -668,7 +668,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Outcome:** Comprehensive, critically-evaluated research summary
 
-## 8.5 Personal Decision Making
+### 8.5 Personal Decision Making
 
 **Scenario:** Career change decision
 
@@ -680,7 +680,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Outcome:** Well-rounded personal decision with all factors considered
 
-## 8.6 Medical Diagnosis
+### 8.6 Medical Diagnosis
 
 **Scenario:** Complex diagnostic case with unusual symptoms
 
@@ -727,7 +727,7 @@ Python library provides Facilitator and Panel classes for programmatic access to
 
 **Critical note:** Medical roundtables are **decision support**, not replacement for human physicians. Final diagnosis and treatment remain with human medical professional.
 
-## 8.7 Scribe Agents: Domain-Specific Documentation
+### 8.7 Scribe Agents: Domain-Specific Documentation
 
 **After deliberation, specialized scribe agents can generate documentation in appropriate formats.**
 
@@ -777,9 +777,9 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## 9. Comparison with Existing Approaches
+### 9. Comparison with Existing Approaches
 
-## 9.1 Single-Model Interaction
+### 9.1 Single-Model Interaction
 
 **Traditional:**
 > User → GPT-4 → Response
@@ -794,7 +794,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Cross-verification
 - Complementary strengths
 
-## 9.2 Sequential Prompting
+### 9.2 Sequential Prompting
 
 **Current pattern:**
 > User → Claude (architecture)
@@ -815,7 +815,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Direct model interaction
 - Fast and efficient
 
-## 9.3 Programmatic Multi-Agent Systems
+### 9.3 Programmatic Multi-Agent Systems
 
 **Existing frameworks (AutoGen, CrewAI, etc.):**
 > Predefined workflow:
@@ -833,7 +833,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Dynamic adaptation
 - Emergent conversation patterns
 
-## 9.4 Mixture of Experts (MoE)
+### 9.4 Mixture of Experts (MoE)
 
 **Model architecture approach:**
 - Multiple specialized sub-models within one model
@@ -852,9 +852,9 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## 10. Research Directions
+### 10. Research Directions
 
-## 10.1 Facilitator Optimization
+### 10.1 Facilitator Optimization
 
 **Questions:**
 - What makes an effective facilitator agent?
@@ -862,7 +862,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Can facilitators learn from past sessions?
 - How should facilitators handle persistent disagreements?
 
-## 10.2 Panel Composition
+### 10.2 Panel Composition
 
 **Questions:**
 - How many agents is optimal for different problem types?
@@ -870,7 +870,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Can we predict panel effectiveness before running discussion?
 - Should panels have homogeneous or heterogeneous models?
 
-## 10.3 Consensus Mechanisms
+### 10.3 Consensus Mechanisms
 
 **Questions:**
 - How do we measure consensus across different model outputs?
@@ -878,7 +878,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Can we quantify confidence in multi-agent synthesis?
 - What voting or weighting mechanisms work best?
 
-## 10.4 Skill Engineering
+### 10.4 Skill Engineering
 
 **Questions:**
 - What makes a high-quality skill definition?
@@ -886,7 +886,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Can skills be learned from conversation patterns?
 - Should skills be model-specific or model-agnostic?
 
-## 10.5 Human-in-the-Loop
+### 10.5 Human-in-the-Loop
 
 **Questions:**
 - When should humans intervene in multi-agent discussions?
@@ -896,9 +896,9 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## 11. Ethical Considerations
+### 11. Ethical Considerations
 
-## 11.1 Transparency
+### 11.1 Transparency
 
 **Obligation:** Users should understand they're interacting with multiple AI models
 
@@ -907,7 +907,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Attribution of responses to specific agents
 - Explanation of facilitator's decision-making
 
-## 11.2 Bias Amplification vs. Mitigation
+### 11.2 Bias Amplification vs. Mitigation
 
 **Risk:** Multiple models could reinforce shared biases
 
@@ -916,7 +916,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - Explicit bias-checking agents when appropriate
 - User awareness of potential bias sources
 
-## 11.3 Responsibility and Accountability
+### 11.3 Responsibility and Accountability
 
 **Question:** Who is responsible when multi-agent system gives bad advice?
 
@@ -928,7 +928,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 **Best practice:** Clear disclaimers, audit trails, human oversight for high-stakes decisions
 
-## 11.4 Cost Accessibility
+### 11.4 Cost Accessibility
 
 **Risk:** Multi-model conversations are more expensive than single-model
 
@@ -939,9 +939,9 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## 12. Conclusion
+### 12. Conclusion
 
-## 12.1 Summary
+### 12.1 Summary
 
 **Multi-agent facilitation represents a paradigm shift in human-AI interaction:**
 
@@ -953,7 +953,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 4. **From one-size-fits-all to specialized panels:** Domain expertise assembled on-demand for each problem
 
-## 12.2 Key Principles
+### 12.2 Key Principles
 
 **The Universal Interface Principle:**
 > If a human can interact with an AI through its interface (API, CLI), then an AI facilitator can interact with other AIs through those same interfaces.
@@ -967,7 +967,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 **The Emergence Principle:**
 > The quality of multi-agent deliberation exceeds the sum of individual agent capabilities through cross-verification, perspective diversity, and collaborative synthesis.
 
-## 12.3 The Future
+### 12.3 The Future
 
 **We envision a future where:**
 
@@ -981,7 +981,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 - **Continuous learning systems:** Facilitators and agents improve through experience, learning which panel compositions and conversation patterns work best
 
-## 12.4 Call to Action
+### 12.4 Call to Action
 
 **For researchers:**
 - Study facilitator optimization and panel composition strategies
@@ -1005,9 +1005,9 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## 13. Appendix: Roundtable Project
+### 13. Appendix: Roundtable Project
 
-## 13.1 Project Overview
+### 13.1 Project Overview
 
 **Roundtable** is an open-source implementation of the multi-agent facilitation model described in this paper.
 
@@ -1020,7 +1020,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - CLI and API interfaces
 - Session persistence and replay
 
-## 13.2 Technical Architecture
+### 13.2 Technical Architecture
 
 **Core Components:**
 1. **Meeting Facilitator:** Claude-based agent that orchestrates conversations
@@ -1036,7 +1036,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 - 🚧 **In progress:** Refactoring from programmatic to agentic orchestration
 - 🔜 **Planned:** Dynamic panel expansion, skill-to-skill querying, consensus detection
 
-## 13.3 Example Session
+### 13.3 Example Session
 
 > $ npm run dev
 >
@@ -1119,7 +1119,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 >
 > Session saved. Token usage: 12,450 tokens across 3 models.
 
-## 13.4 Contributing
+### 13.4 Contributing
 
 **We welcome contributions:**
 - **New skills:** Domain expertise definitions
@@ -1131,7 +1131,7 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## References
+### References
 
 1. OpenAI. (2024). GPT-4 Technical Report. OpenAI Research.
 2. Anthropic. (2024). Claude 3 Model Family. Anthropic Research.
@@ -1151,11 +1151,11 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 ---
 
-## Acknowledgments
+### Acknowledgments
 
 This paper reflects insights gained from implementing and iterating on the Roundtable project. Special thanks to the AI research community for pioneering work in multi-agent systems, and to early users who provided feedback that shaped these ideas.
 
-## Future Work
+### Future Work
 
 A companion paper on **Context Curation and Conversational Flow Management** will explore in depth:
 - How skill definitions focus LLM attention effectively

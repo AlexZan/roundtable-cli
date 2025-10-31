@@ -16,7 +16,6 @@
 <blockquote class="graf graf--pullquote">
 If a human can interact with an AI model through its interface (API or CLI), then an AI facilitator can interact with other AI agents through those same interfaces.
 </blockquote>
-
 This enables fully agentic orchestration of multi-model conversations.
 
 ---
@@ -58,7 +57,6 @@ The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel �
 <blockquote class="graf graf--pullquote">
 A facilitator agent orchestrates conversations between multiple AI agents.
 </blockquote>
-
 **Role of the Facilitator:**
 1. **Composition:** Select which agents/experts are needed for a given topic
 2. **Orchestration:** Manage conversation flow, turn-taking, context distribution
@@ -75,7 +73,6 @@ A facilitator agent orchestrates conversations between multiple AI agents.
 <blockquote class="graf graf--pullquote">
 If a human can send a message and receive a response, so can an agent.
 </blockquote>
-
 The facilitator connects to multiple models:
 - Claude (via Anthropic API or claude-cli subagents)
 - GPT-4 (via OpenAI API)
@@ -112,7 +109,6 @@ The facilitator decides:
 <blockquote class="graf graf--pullquote">
 The facilitator is an agent, not a script.
 </blockquote>
-
 It makes decisions dynamically based on:
 - Conversation quality
 - Emerging needs
@@ -474,7 +470,6 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 <blockquote class="graf graf--pullquote">
 Why limit AI to solo performance when collaboration is demonstrably better?
 </blockquote>
-
 #### 5.2 Model Diversity as Feature
 
 **Different AI models have different strengths:**

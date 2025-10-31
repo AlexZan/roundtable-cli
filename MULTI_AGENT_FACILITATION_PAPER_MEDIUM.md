@@ -207,11 +207,13 @@ Example: A Software Architecture Expert skill defines:
 
 All modern LLMs are trained on vast amounts of data covering nearly every domain. This creates a subtle problem:
 
-> General-purpose LLM asked about legal question:
-> → Knows law, medicine, engineering, cooking, sports...
-> → Attempts to answer everything
-> → No focused expertise
-> → Reliable, but not specialized
+<p name="genllm1" class="graf graf--p">General-purpose LLM asked about legal question:</p>
+<ul class="postList">
+<li name="genllm2" class="graf graf--li">Knows law, medicine, engineering, cooking, sports...</li>
+<li name="genllm3" class="graf graf--li">Attempts to answer everything</li>
+<li name="genllm4" class="graf graf--li">No focused expertise</li>
+<li name="genllm5" class="graf graf--li">Reliable, but not specialized</li>
+</ul>
 
 **The Skill-Focused Solution:**
 

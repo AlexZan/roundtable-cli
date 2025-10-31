@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Facilitation: The Future of Human-AI Interaction</title>
+</head>
+<body>
+
+<h1 name="5iyg" class="graf graf--h1">Multi-Agent Facilitation: The Future of Human-AI Interaction</h1>
+
+<p name="18lk" class="graf graf--p"><strong>Author:</strong> Alexander Zanfir</p>
+
+<p name="25pq" class="graf graf--p"><strong>Date:</strong> October 30, 2025</p>
+
+<p name="x2jr" class="graf graf--p"><strong>Project:</strong> Roundtable CLI</p>
+
+<p name="l2mx" class="graf graf--p"><strong>Version:</strong> 1.1</p>
+
+<h3 name="06nf" class="graf graf--h3">Abstract</h3>
+
+<p class="graf graf--p graf--hasDropCapModel graf--hasDropCap">
+<span class="graf-dropCap">T</span>his paper proposes a fundamental shift in how humans interact with AI systems: from single-model conversations to **facilitator-orchestrated multi-agent deliberations**. We argue that complex problems benefit from diverse AI perspectives, and that a facilitator agent can effectively orchestrate conversations between multiple AI models—each contributing domain expertise—to produce richer, more robust solutions. This approach mirrors human expert panels and leverages the natural strengths of different AI models without requiring rigid programmatic orchestration.
+</p>
+
+<blockquote class="graf graf--pullquote">
+If a human can interact with an AI model through its interface (API or CLI), then an AI facilitator can interact with other AI agents through those same interfaces.
+</blockquote>
+
+<p name="n2ie" class="graf graf--p">This enables fully agentic orchestration of multi-model conversations.</p>
+
+<h3 name="inda" class="graf graf--h3">1. Introduction</h3>
+
+<h4 name="ak14" class="graf graf--h4">1.1 The Current State: Single-Model Interactions</h4>
+
+<p class="graf graf--p graf--hasDropCapModel graf--hasDropCap">
+<span class="graf-dropCap">T</span>oday's AI interactions follow a simple pattern: **Human → Single AI Model → Response**
+</p>
+
+<p name="e9fu" class="graf graf--p">While powerful, this approach has limitations:</p>
+
+<p name="ot7o" class="graf graf--p">- <strong>Narrow perspective:</strong> One model's training, biases, and blindspots</p>
+
+<p name="3ykw" class="graf graf--p">- <strong>Single reasoning style:</strong> One approach to problem-solving</p>
+
+<p name="rh09" class="graf graf--p">- <strong>Limited expertise breadth:</strong> No model is expert in everything</p>
+
+<p name="mmlo" class="graf graf--p">- <strong>No built-in verification:</strong> Errors and hallucinations go unchallenged</p>
+
+<h4 name="m6v1" class="graf graf--h4">1.2 The Natural Evolution: Multi-Agent Deliberation</h4>
+
+<p name="dxgw" class="graf graf--p">Human experts solve complex problems through collaboration: <strong>Problem → Panel of Experts → Debate → Consensus → Solution</strong></p>
+
+<p name="gx11" class="graf graf--p"><strong>Why not apply this to AI?</strong></p>
+
+<p name="jat2" class="graf graf--p">The proposed approach: <strong>Human Topic → AI Facilitator → Multi-Model Panel → Deliberation → Synthesis</strong></p>
+
+<p name="v5h4" class="graf graf--p"><strong>Benefits:</strong></p>
+
+<p name="ga0b" class="graf graf--p">- <strong>Diverse perspectives:</strong> Different models, different training, different insights</p>
+
+<p name="0ve8" class="graf graf--p">- <strong>Cross-verification:</strong> Models challenge each other's assumptions</p>
+
+<p name="lfx1" class="graf graf--p">- <strong>Specialized expertise:</strong> Each agent brings domain-specific knowledge</p>
+
+<p name="93io" class="graf graf--p">- <strong>Emergent quality:</strong> Collaborative intelligence exceeds individual capability</p>
+
+<h3 name="wxkk" class="graf graf--h3">2. The Facilitator Model</h3>
+
+<h4 name="o05y" class="graf graf--h4">2.1 Core Concept</h4>
+
+<blockquote class="graf graf--pullquote">
+A facilitator agent orchestrates conversations between multiple AI agents.
+</blockquote>
+
+<p name="eb41" class="graf graf--p"><strong>Role of the Facilitator:</strong></p>
+
+<p name="ao4a" class="graf graf--p">1. <strong>Composition:</strong> Select which agents/experts are needed for a given topic</p>
+
+<p name="im12" class="graf graf--p">2. <strong>Orchestration:</strong> Manage conversation flow, turn-taking, context distribution</p>
+
+<p name="bipz" class="graf graf--p">3. <strong>Synthesis:</strong> Integrate multiple perspectives into coherent insights</p>
+
+<p name="gi44" class="graf graf--p">4. <strong>Quality Control:</strong> Recognize when discussion has reached resolution or needs more depth</p>
+
+<h4 name="hpit" class="graf graf--h4">2.2 Why This Works: Universal Interface Principle</h4>
+
+<p name="zydr" class="graf graf--p"><strong>Key Observation:</strong> All AI models expose some form of interface:</p>
+
+<p name="lz73" class="graf graf--p">- HTTP APIs (OpenAI, Anthropic, Google, xAI)</p>
+
+<p name="e5qn" class="graf graf--p">- Command-line interfaces (claude-cli)</p>
+
+<p name="s9e2" class="graf graf--p">- SDK bindings (Python, JavaScript libraries)</p>
+
+<blockquote class="graf graf--pullquote">
+If a human can send a message and receive a response, so can an agent.
+</blockquote>
+
+<p name="jyay" class="graf graf--p">The facilitator connects to multiple models:</p>
+
+<p name="dmmw" class="graf graf--p">- Claude (via Anthropic API or claude-cli subagents)</p>
+
+<p name="me5o" class="graf graf--p">- GPT-4 (via OpenAI API)</p>
+
+<p name="5usr" class="graf graf--p">- Gemini (via Google AI API)</p>
+
+<p name="69e6" class="graf graf--p">- Grok (via xAI API)</p>
+
+<p name="tsn0" class="graf graf--p">From the facilitator's perspective, each agent just needs to:</p>
+
+<p name="e87h" class="graf graf--p">- Send a message</p>
+
+<p name="4esc" class="graf graf--p">- Receive a response</p>
+
+<p name="6qrh" class="graf graf--p">- Manage context</p>
+
+<h4 name="5w1v" class="graf graf--h4">2.3 Fully Agentic Orchestration</h4>
+
+<p name="l3wu" class="graf graf--p"><strong>Our Initial Approach (Programmatic Round-Based):</strong></p>
+
+<p name="yyov" class="graf graf--p">In early implementations of Roundtable, we attempted a rigid programmatic approach with predefined control flow and fixed round structures.</p>
+
+<p name="5z0v" class="graf graf--p"><strong>Problems we discovered:</strong></p>
+
+<p name="80tm" class="graf graf--p">- Conversations don't follow predictable round structures</p>
+
+<p name="wpn5" class="graf graf--p">- Some topics need deep dives, others need breadth</p>
+
+<p name="4x6a" class="graf graf--p">- Expert needs emerge during discussion, not upfront</p>
+
+<p name="4bj7" class="graf graf--p">- Facilitator couldn't adapt to conversation dynamics</p>
+
+<p name="pjxe" class="graf graf--p">- Human orchestration burden (deciding when to stop, who to add)</p>
+
+<p name="kgw2" class="graf graf--p"><strong>Facilitator Approach (Agentic):</strong></p>
+
+<p name="fjnt" class="graf graf--p">The facilitator decides:</p>
+
+<p name="lysp" class="graf graf--p">- Who should speak next?</p>
+
+<p name="u6cz" class="graf graf--p">- What context do they need?</p>
+
+<p name="0u6d" class="graf graf--p">- Should I ask follow-up questions?</p>
+
+<p name="e5bd" class="graf graf--p">- Is the discussion resolved?</p>
+
+<p name="w9io" class="graf graf--p">- Should I bring in new expertise?</p>
+
+<blockquote class="graf graf--pullquote">
+The facilitator is an agent, not a script.
+</blockquote>
+
+<p name="l26y" class="graf graf--p">It makes decisions dynamically based on:</p>
+
+<p name="av8f" class="graf graf--p">- Conversation quality</p>
+
+<p name="o0q3" class="graf graf--p">- Emerging needs</p>
+
+<p name="intn" class="graf graf--p">- Depth of coverage</p>
+
+<p name="mk8p" class="graf graf--p">- Consensus or disagreement signals</p>
+
+<p name="wfv0" class="graf graf--p">- User satisfaction</p>
+
+<h4 name="ycre" class="graf graf--h4">2.4 The Facilitator as Improvable Agent</h4>
+
+<p name="l6o0" class="graf graf--p"><strong>Critical insight:</strong> The facilitator itself is an agent with a skill definition, which means:</p>
+
+<p name="6g2x" class="graf graf--p"><strong>It can be improved:</strong></p>
+
+<p name="8vgx" class="graf graf--p">- Update the facilitator skill to improve orchestration logic</p>
+
+<p name="ivse" class="graf graf--p">- A/B test different facilitation approaches</p>
+
+<p name="cmml" class="graf graf--p">- Learn from post-mortem analysis of past sessions</p>
+
+<p name="awut" class="graf graf--p"><strong>It can be modified:</strong></p>
+
+<p name="3w5q" class="graf graf--p">- Different facilitators for different contexts (academic debate vs. brainstorming)</p>
+
+<p name="noxs" class="graf graf--p">- Specialized facilitators (medical diagnosis, legal research, engineering design)</p>
+
+<p name="c6vl" class="graf graf--p">- User-customized facilitation styles</p>
+
+<p name="9lcp" class="graf graf--p"><strong>It can be shared:</strong></p>
+
+<p name="2v1c" class="graf graf--p">- Community-developed facilitator skills</p>
+
+<p name="6j3u" class="graf graf--p">- Domain-specific facilitators (e.g., "medical-panel-facilitator")</p>
+
+<p name="mivy" class="graf graf--p">- Facilitator skill marketplace</p>
+
+<p name="sq5e" class="graf graf--p"><strong>Example facilitator variations:</strong></p>
+
+<p name="y8eq" class="graf graf--p">- <strong>Socratic facilitator</strong> - asks probing questions, encourages deeper reasoning</p>
+
+<p name="frfg" class="graf graf--p">- <strong>Consensus facilitator</strong> - identifies common ground, mediates disagreements</p>
+
+<p name="3xua" class="graf graf--p">- <strong>Devil's advocate facilitator</strong> - challenges assumptions, invites contrarian views</p>
+
+<p name="kpcp" class="graf graf--p">This makes facilitation itself a flexible, evolvable component rather than hardcoded behavior.</p>
+
+<h3 name="33ry" class="graf graf--h3">3. Architecture</h3>
+
+<h4 name="sogh" class="graf graf--h4">3.1 System Components</h4>
+
+<p name="pgiw" class="graf graf--p">The system has a hierarchical structure:</p>
+
+<p name="3xu3" class="graf graf--p"><strong>At the top:</strong> The user provides a topic</p>
+
+<p name="yaf0" class="graf graf--p"><strong>In the middle:</strong> The Facilitator Agent orchestrates the conversation with these capabilities:</p>
+
+<p name="ibvl" class="graf graf--p">- Select expert panel based on topic</p>
+
+<p name="n7ts" class="graf graf--p">- Spawn/invoke agents as needed</p>
+
+<p name="x2ma" class="graf graf--p">- Manage conversation flow and context</p>
+
+<p name="ex4g" class="graf graf--p">- Synthesize multi-agent responses</p>
+
+<p name="plz7" class="graf graf--p">- Determine completion criteria</p>
+
+<p name="23pp" class="graf graf--p"><strong>At the bottom:</strong> Multiple specialized agents:</p>
+
+<p name="qkxt" class="graf graf--p">- Agent 1: Claude with Architecture skill</p>
+
+<p name="e8vz" class="graf graf--p">- Agent 2: GPT-4 with Security skill</p>
+
+<p name="cwuj" class="graf graf--p">- Agent 3: Gemini with UX skill</p>
+
+<p name="pwmg" class="graf graf--p">- Agent N: Grok with Product skill</p>
+
+<h4 name="j6ad" class="graf graf--h4">3.2 Agent Interfaces</h4>
+
+<p name="nmvs" class="graf graf--p"><strong>For Claude-based agents:</strong></p>
+
+<p name="3jwl" class="graf graf--p">Native subagent spawning via Task tool allows the facilitator to spawn specialized agents with specific prompts and context.</p>
+
+<p name="nqop" class="graf graf--p"><strong>For external model agents (GPT-4, Gemini, etc.):</strong></p>
+
+<p name="9kgv" class="graf graf--p">API-based invocation sends requests with system prompts and messages to external providers.</p>
+
+<p name="djp6" class="graf graf--p"><strong>Abstraction layer makes them equivalent:</strong></p>
+
+<p name="0oue" class="graf graf--p">A unified interface handles both Claude subagents and API calls, making the implementation details invisible to the facilitator.</p>
+
+<h4 name="b6qh" class="graf graf--h4">3.3 Skills System: Reusable Domain Expertise</h4>
+
+<p name="m394" class="graf graf--p"><strong>Skills define domain expertise as reusable components.</strong></p>
+
+<p name="a0ux" class="graf graf--p">Example: A Software Architecture Expert skill defines:</p>
+
+<p name="1eul" class="graf graf--p">- ID: architecture</p>
+
+<p name="euf8" class="graf graf--p">- Name: Software Architecture Expert</p>
+
+<p name="yn4c" class="graf graf--p">- Description: Expert in system design, scalability, distributed systems</p>
+
+<p name="gq6a" class="graf graf--p">- Domain: engineering</p>
+
+<p name="ckeq" class="graf graf--p">- System Prompt: Detailed expertise in architectural patterns, cloud systems, microservices, etc.</p>
+
+<p name="ydpz" class="graf graf--p"><strong>Why skills matter:</strong></p>
+
+<p name="dpnt" class="graf graf--p">- <strong>Portability:</strong> Same skill can be used with any model</p>
+
+<p name="ntul" class="graf graf--p">- <strong>Consistency:</strong> Standardized expertise definitions</p>
+
+<p name="hi6v" class="graf graf--p">- <strong>Composability:</strong> Mix and match skills for different panels</p>
+
+<p name="lsz6" class="graf graf--p">- <strong>Versioning:</strong> Skills evolve independently from orchestration logic</p>
+
+<p name="hja1" class="graf graf--p"><strong>Facilitator uses skills to:</strong></p>
+
+<p name="qao0" class="graf graf--p">1. Select appropriate experts for a topic</p>
+
+<p name="kcbf" class="graf graf--p">2. Instantiate agents with domain-specific knowledge</p>
+
+<p name="6hci" class="graf graf--p">3. Ensure coverage of necessary perspectives</p>
+
+<h4 name="n4df" class="graf graf--h4">3.4 Context Curation: The Power of Focused Expertise</h4>
+
+<p name="qwe1" class="graf graf--p"><strong>The Generic LLM Problem:</strong></p>
+
+<p name="omnz" class="graf graf--p">All modern LLMs are trained on vast amounts of data covering nearly every domain. This creates a subtle problem:</p>
+
+<p name="0a76" class="graf graf--p"><p name="genllm1" class="graf graf--p">General-purpose LLM asked about legal question:</p></p>
+
+<li name="genllm5" class="graf graf--li">Reliable, but not specialized</li>
+</ul>
+
+<p name="v3rr" class="graf graf--p"><strong>The Skill-Focused Solution:</strong></p>
+
+<p name="izxg" class="graf graf--p">By defining agent skills with clear boundaries and expertise rules, we <strong>curate the context</strong> the LLM operates in.</p>
+
+<p name="w6a1" class="graf graf--p">Example: A Toronto Ontario Legal Expert skill defines:</p>
+
+<p name="t18b" class="graf graf--p">- Jurisdiction: Toronto, Ontario, Canada</p>
+
+<p name="cb9q" class="graf graf--p">- Expertise: Ontario provincial legislation, Toronto municipal bylaws, Canadian federal law</p>
+
+<p name="1208" class="graf graf--p">- Critical rule: If asked about law outside Ontario jurisdiction, defer to appropriate expert</p>
+
+<p name="4ly0" class="graf graf--p"><strong>Why this matters:</strong></p>
+
+<p name="uoy7" class="graf graf--p">1. <strong>Reliability through focus:</strong> The model's vast knowledge is focused to a specific jurisdiction, making it more reliable as an expert</p>
+
+<p name="9qkm" class="graf graf--p">2. <strong>Defers appropriately:</strong> Generic LLMs try to answer everything. Skill-focused agents know when to defer:</p>
+
+<p name="lrco" class="graf graf--p">> "I can propose the architecture, but the Security expert should validate the cryptographic approach and access controls."</p>
+
+<p name="hzdq" class="graf graf--p">3. <strong>Context curation:</strong> Even though the LLM "knows" about California law, Toronto law, UK law, the skill definition <strong>curates its context</strong> to Toronto/Ontario, making it function as a true specialist</p>
+
+<p name="eu2n" class="graf graf--p">4. <strong>Panel composition works:</strong> When agents defer appropriately, the facilitator knows when to bring in additional expertise</p>
+
+<p name="q238" class="graf graf--p"><strong>Real-world example:</strong></p>
+
+<p name="7ond" class="graf graf--p">Roundtable on: "Legal compliance for Toronto tech startup"</p>
+
+<p name="lw7t" class="graf graf--p">Panel:</p>
+
+<p name="fj7m" class="graf graf--p">- Toronto Legal Expert (focused: Ontario/Toronto jurisdiction)</p>
+
+<p name="xv8p" class="graf graf--p">- Privacy Expert (focused: PIPEDA, Canadian privacy law)</p>
+
+<p name="2rz7" class="graf graf--p">- Employment Law Expert (focused: Ontario employment standards)</p>
+
+<p name="zfbr" class="graf graf--p">> <strong>Toronto Legal:</strong> "For your incorporation, you'll follow Ontario Business Corporations Act. Privacy Expert should address data handling."</p>
+
+<p name="oa98" class="graf graf--p">></p>
+
+<p name="fu0z" class="graf graf--p">> <strong>Privacy Expert:</strong> "Under PIPEDA, you need... [detailed requirements]"</p>
+
+<p name="7209" class="graf graf--p">></p>
+
+<p name="c51i" class="graf graf--p">> <strong>Employment Law:</strong> "For hiring, Ontario Employment Standards Act requires..."</p>
+
+<p name="71zc" class="graf graf--p"><strong>Each agent stays in their lane</strong> because their skill definition explicitly teaches them:</p>
+
+<p name="2x2q" class="graf graf--p">- What their expertise covers</p>
+
+<p name="3tcy" class="graf graf--p">- When to defer to other experts</p>
+
+<p name="cqy2" class="graf graf--p">- The value of depth over breadth</p>
+
+<p name="zo61" class="graf graf--p"><strong>This is counterintuitive:</strong> We're taking a model trained on everything and <strong>deliberately constraining</strong> it. But this constraint is what makes multi-agent panels work—without it, every agent tries to answer everything, and you lose the benefit of diverse expertise.</p>
+
+<p name="xoms" class="graf graf--p"><strong>Note:</strong> A future paper will explore context curation and conversational flow management in depth.</p>
+
+<h3 name="ortf" class="graf graf--h3">4. Conversation Patterns</h3>
+
+<h4 name="be4w" class="graf graf--h4">4.1 Basic Deliberation Flow</h4>
+
+<p name="qunj" class="graf graf--p"><strong>User asks:</strong> "Design a secure authentication system for my web app"</p>
+
+<p name="yzn2" class="graf graf--p"><strong>Facilitator analyzes topic</strong></p>
+
+<p name="bsua" class="graf graf--p">- Identifies needed expertise: Architecture, Security, UX</p>
+
+<p name="x6dd" class="graf graf--p">- Selects models: Claude (Architecture), GPT-4 (Security), Gemini (UX)</p>
+
+<p name="29b5" class="graf graf--p">- Spawns/prepares 3 agents</p>
+
+<p name="qk01" class="graf graf--p"><strong>Round 1: Initial Perspectives</strong></p>
+
+<p name="0zgl" class="graf graf--p">- Facilitator → Architecture: "Propose an auth system design"</p>
+
+<p name="v65p" class="graf graf--p">- Facilitator → Security: "Identify security requirements"</p>
+
+<p name="tme8" class="graf graf--p">- Facilitator → UX: "Consider user experience implications"</p>
+
+<p name="48ep" class="graf graf--p"><strong>Round 2: Cross-Examination</strong></p>
+
+<p name="hyca" class="graf graf--p">- Facilitator → Security: "Review Architecture's proposal"</p>
+
+<p name="q8e0" class="graf graf--p">- Facilitator → Architecture: "Address Security's concerns"</p>
+
+<p name="y2vq" class="graf graf--p">- Facilitator → UX: "How does this impact users?"</p>
+
+<p name="0hec" class="graf graf--p"><strong>Round 3: Convergence</strong></p>
+
+<p name="ufbs" class="graf graf--p">- Facilitator → All: "Propose integrated solution"</p>
+
+<p name="c223" class="graf graf--p">- Facilitator analyzes responses</p>
+
+<p name="nx1q" class="graf graf--p"><strong>Synthesis</strong></p>
+
+<p name="ffp4" class="graf graf--p">- Facilitator: "Here's the consensus design with tradeoffs explained"</p>
+
+<h4 name="tcqc" class="graf graf--h4">4.2 Dynamic Panel Expansion</h4>
+
+<p name="xfan" class="graf graf--p"><strong>Agents can recommend additional expertise:</strong></p>
+
+<p name="14tw" class="graf graf--p">> <strong>Round 2:</strong></p>
+
+<p name="1c18" class="graf graf--p">> <strong>Security Agent:</strong> "I recommend bringing in a Privacy expert to review GDPR compliance"</p>
+
+<p name="aqul" class="graf graf--p">></p>
+
+<p name="ydx2" class="graf graf--p">> <strong>Facilitator decides:</strong> "Good point, adding Privacy expert"</p>
+
+<p name="xdc9" class="graf graf--p">> → Spawns Privacy agent (Grok with privacy skill)</p>
+
+<p name="7kqf" class="graf graf--p">> → Asks: "Review this design for GDPR compliance"</p>
+
+<p name="0u94" class="graf graf--p">></p>
+
+<p name="eihx" class="graf graf--p">> <strong>Round 3 now includes Privacy perspective</strong></p>
+
+<h4 name="yf2e" class="graf graf--h4">4.3 Skill-to-Skill Deep Dives</h4>
+
+<p name="zhpk" class="graf graf--p"><strong>When specific cross-domain questions arise:</strong></p>
+
+<p name="v3k7" class="graf graf--p">Architecture Agent mentions: "Rate limiting at API gateway"</p>
+
+<p name="48za" class="graf graf--p">Facilitator notices security implication:</p>
+
+<p name="2y75" class="graf graf--p">- Asks Security Agent: "Evaluate the rate limiting approach for DDoS protection"</p>
+
+<p name="t8wu" class="graf graf--p">- Gets targeted response</p>
+
+<p name="sh86" class="graf graf--p">- Relays back to Architecture Agent: "Security recommends..."</p>
+
+<p name="td87" class="graf graf--p">- Architecture adjusts design</p>
+
+<h4 name="cw3y" class="graf graf--h4">4.4 Completion Detection</h4>
+
+<p name="hsa7" class="graf graf--p"><strong>Facilitator determines when discussion has reached sufficient depth.</strong></p>
+
+<p name="uuky" class="graf graf--p"><strong>Signals that discussion is complete:</strong></p>
+
+<p name="8epv" class="graf graf--p">- ✓ All agents have contributed perspectives</p>
+
+<p name="nggu" class="graf graf--p">- ✓ Major disagreements have been addressed</p>
+
+<p name="u574" class="graf graf--p">- ✓ Consensus on approach has emerged</p>
+
+<p name="yf95" class="graf graf--p">- ✓ Implementation details are sufficiently detailed</p>
+
+<p name="tzhq" class="graf graf--p">- ✓ Risks and tradeoffs are documented</p>
+
+<p name="pm60" class="graf graf--p"><strong>Signals that more rounds needed:</strong></p>
+
+<p name="lbjt" class="graf graf--p">- ✗ Unresolved disagreements between agents</p>
+
+<p name="3mun" class="graf graf--p">- ✗ New concerns raised in latest round</p>
+
+<p name="4dhk" class="graf graf--p">- ✗ Missing critical perspective identified</p>
+
+<p name="0era" class="graf graf--p">- ✗ Insufficient detail for implementation</p>
+
+<p name="l3n5" class="graf graf--p">- ✗ User explicitly requests more depth</p>
+
+<h4 name="mjfz" class="graf graf--h4">4.5 Human Participation in Panels</h4>
+
+<p name="s1n4" class="graf graf--p"><strong>Humans can participate as panel members alongside AI agents.</strong></p>
+
+<p name="j8ox" class="graf graf--p"><strong>Key principle: Agent-blind participation</strong></p>
+
+<p name="wcvi" class="graf graf--p">Panel composition:</p>
+
+<p name="y4ie" class="graf graf--p">- Architecture (Claude Sonnet 4)</p>
+
+<p name="m7vp" class="graf graf--p">- Security (GPT-4 Turbo)</p>
+
+<p name="lxjf" class="graf graf--p">- Compliance Expert (Human: Sarah Chen)</p>
+
+<p name="o53t" class="graf graf--p">- UX (Gemini 2.0)</p>
+
+<p name="cz7w" class="graf graf--p"><strong>Critical design choice:</strong> AI agents are <strong>not informed</strong> that one participant is human.</p>
+
+<p name="mhin" class="graf graf--p"><strong>Why agent-blind?</strong></p>
+
+<p name="hvgp" class="graf graf--p">1. <strong>Eliminates deference bias:</strong> If agents know a human is present, they may defer inappropriately: ❌ "As a human expert, your judgment on this is superior to mine..." vs. ✓ "I disagree with the compliance assessment because..."</p>
+
+<p name="aaiq" class="graf graf--p">2. <strong>Maintains peer dynamics:</strong> All participants are treated as equal experts contributing domain knowledge</p>
+
+<p name="0k4h" class="graf graf--p">3. <strong>Authentic deliberation:</strong> Agents engage with human contributions the same way they engage with other agents—critically, analytically, respectfully</p>
+
+<p name="f678" class="graf graf--p">4. <strong>Prevents authority anchoring:</strong> Humans don't become automatic "tie-breakers" whose opinion ends discussion</p>
+
+<p name="n5v3" class="graf graf--p"><strong>Benefits:</strong></p>
+
+<p name="anbw" class="graf graf--p">- <strong>Human expertise on tap:</strong> Bring in human judgment for high-stakes decisions</p>
+
+<p name="w08r" class="graf graf--p">- <strong>Hybrid intelligence:</strong> Combine AI breadth with human depth</p>
+
+<p name="hxai" class="graf graf--p">- <strong>Domain knowledge injection:</strong> Human can contribute specialized expertise not in any training data</p>
+
+<p name="cs55" class="graf graf--p">- <strong>Real-time correction:</strong> Human can spot and correct agent errors during deliberation</p>
+
+<p name="c79h" class="graf graf--p">- <strong>Trust building:</strong> Users see AI agents critically engaging with human contributions</p>
+
+<p name="mbyt" class="graf graf--p"><strong>Use cases:</strong></p>
+
+<p name="lv2f" class="graf graf--p">- Medical diagnosis (doctor participates in AI panel)</p>
+
+<p name="dpoo" class="graf graf--p">- Legal analysis (lawyer contributes jurisdiction-specific knowledge)</p>
+
+<p name="8ssp" class="graf graf--p">- Engineering design (senior engineer provides constraints and requirements)</p>
+
+<p name="jak9" class="graf graf--p">- Academic research (domain expert guides literature interpretation)</p>
+
+<h4 name="h19c" class="graf graf--h4">4.6 Conversation Branching and Iteration</h4>
+
+<p name="c4pl" class="graf graf--p"><strong>Roundtable sessions support branching and replay from any point in the conversation.</strong></p>
+
+<p name="lygk" class="graf graf--p"><strong>The problem:</strong> Sometimes after a discussion concludes, new information emerges or a flaw is spotted.</p>
+
+<p name="lq7d" class="graf graf--p"><strong>Traditional approach:</strong></p>
+
+<p name="7lv4" class="graf graf--p">> Discussion complete → Flaw found → Start over from scratch</p>
+
+<p name="e385" class="graf graf--p">> → Lose all previous context and good ideas</p>
+
+<p name="eri4" class="graf graf--p"><strong>Roundtable branching:</strong></p>
+
+<p name="2yqn" class="graf graf--p">> Discussion complete → Flaw found → Branch from problematic point</p>
+
+<p name="7osc" class="graf graf--p">> → Preserve earlier good work</p>
+
+<p name="gdpd" class="graf graf--p">> → Explore alternative path</p>
+
+<p name="pwpu" class="graf graf--p">> → Compare outcomes</p>
+
+<p name="hu95" class="graf graf--p"><strong>How it works:</strong></p>
+
+<p name="se3e" class="graf graf--p">Every roundtable session is a <strong>conversation tree</strong>, not a linear sequence:</p>
+
+<p name="d53d" class="graf graf--p">> Session Start</p>
+
+<p name="erva" class="graf graf--p">> ↓</p>
+
+<p name="s8mu" class="graf graf--p">> Round 1: Initial proposals</p>
+
+<p name="q447" class="graf graf--p">> ↓</p>
+
+<p name="4z4y" class="graf graf--p">> Round 2: Security review</p>
+
+<p name="p48l" class="graf graf--p">> ↓</p>
+
+<p name="g01r" class="graf graf--p">> Round 3: Integration discussion</p>
+
+<p name="2z0e" class="graf graf--p">> ├─→ Branch A (original): Consensus reached ✓</p>
+
+<p name="oudw" class="graf graf--p">> │</p>
+
+<p name="th41" class="graf graf--p">> └─→ Branch B (new info): "Wait, we forgot GDPR requirements"</p>
+
+<p name="9smg" class="graf graf--p">>       ↓</p>
+
+<p name="todn" class="graf graf--p">>     Round 3B: Privacy expert added</p>
+
+<p name="1qav" class="graf graf--p">>       ↓</p>
+
+<p name="jp94" class="graf graf--p">>     Round 4B: Revised design with GDPR compliance</p>
+
+<p name="wdlj" class="graf graf--p"><strong>Benefits:</strong></p>
+
+<p name="ndik" class="graf graf--p">- <strong>Iterative refinement:</strong> Improve decisions without starting over</p>
+
+<p name="sejx" class="graf graf--p">- <strong>Exploration:</strong> Try different approaches, compare outcomes</p>
+
+<p name="i7jr" class="graf graf--p">- <strong>Learning:</strong> See how different expertise changes conclusions</p>
+
+<p name="bpel" class="graf graf--p">- <strong>Auditability:</strong> Full tree of explored alternatives preserved</p>
+
+<p name="avob" class="graf graf--p">- <strong>Efficiency:</strong> Reuse earlier good work, only redo flawed reasoning</p>
+
+<p name="uy7j" class="graf graf--p"><strong>Use cases:</strong></p>
+
+<p name="7d9n" class="graf graf--p">- Post-launch retrospective: "What if we'd considered X earlier?"</p>
+
+<p name="9y2w" class="graf graf--p">- Risk exploration: "What if requirements change in this way?"</p>
+
+<p name="wnfu" class="graf graf--p">- Sensitivity analysis: "How does conclusion change with different expert?"</p>
+
+<p name="5pe2" class="graf graf--p">- Error correction: "Spotted mistake at Round 5, branch back to Round 3"</p>
+
+<h4 name="9vb0" class="graf graf--h4">4.7 Post-Mortem Analysis and Self-Learning</h4>
+
+<p name="ndyk" class="graf graf--p"><strong>After a roundtable session, specialized agents can review what went right and wrong.</strong></p>
+
+<p name="cs9p" class="graf graf--p"><strong>Post-mortem agent evaluates:</strong></p>
+
+<p name="6e2u" class="graf graf--p">- Did the panel have appropriate expertise?</p>
+
+<p name="ekd8" class="graf graf--p">- Were there gaps in knowledge or perspective?</p>
+
+<p name="rv3x" class="graf graf--p">- Did agents defer appropriately to other experts?</p>
+
+<p name="fon1" class="graf graf--p">- Was the facilitator effective in orchestration?</p>
+
+<p name="kzba" class="graf graf--p">- Did discussion reach sufficient depth?</p>
+
+<p name="se9d" class="graf graf--p">- Were there missed opportunities or blind spots?</p>
+
+<p name="k9mv" class="graf graf--p"><strong>Self-learning workflow:</strong></p>
+
+<p name="8sbh" class="graf graf--p">1. Roundtable session completes</p>
+
+<p name="6tbt" class="graf graf--p">2. Post-mortem agent reviews transcript</p>
+
+<p name="qdgp" class="graf graf--p">3. Generates analysis (what worked, what failed, missing expertise)</p>
+
+<p name="8gfn" class="graf graf--p">4. Produces recommendations (skill improvements, panel changes, facilitator updates)</p>
+
+<p name="mgsn" class="graf graf--p">5. Human or agent applies improvements</p>
+
+<p name="nrw4" class="graf graf--p">6. Future sessions benefit from learnings</p>
+
+<p name="s946" class="graf graf--p"><strong>Continuous improvement cycle:</strong></p>
+
+<p name="0njh" class="graf graf--p">> Run Roundtable Session</p>
+
+<p name="ukiu" class="graf graf--p">> ↓</p>
+
+<p name="jetu" class="graf graf--p">> Post-Mortem Analysis</p>
+
+<p name="hl92" class="graf graf--p">> ↓</p>
+
+<p name="oayz" class="graf graf--p">> Generate Recommendations</p>
+
+<p name="p0l6" class="graf graf--p">> ↓</p>
+
+<p name="akxj" class="graf graf--p">> Human or Agent Applies Changes</p>
+
+<p name="5s3r" class="graf graf--p">> ↓</p>
+
+<p name="v2lt" class="graf graf--p">> (Improved for next session)</p>
+
+<p name="j6y9" class="graf graf--p"><strong>Benefits:</strong></p>
+
+<p name="h8op" class="graf graf--p">- <strong>Self-improving system:</strong> Gets better with every session</p>
+
+<p name="cz1p" class="graf graf--p">- <strong>Knowledge capture:</strong> Learnings from one session benefit all future sessions</p>
+
+<p name="00bo" class="graf graf--p">- <strong>Quality assurance:</strong> Systematic review catches patterns humans might miss</p>
+
+<p name="bkdh" class="graf graf--p">- <strong>Skill evolution:</strong> Skills improve based on real-world performance</p>
+
+<h3 name="v6fd" class="graf graf--h3">5. Why This Represents the Future</h3>
+
+<h4 name="3efp" class="graf graf--h4">5.1 Natural Problem-Solving Pattern</h4>
+
+<p name="g3sk" class="graf graf--p"><strong>Human experts naturally form panels for complex problems:</strong></p>
+
+<p name="zrdk" class="graf graf--p">- Academic peer review</p>
+
+<p name="y17f" class="graf graf--p">- Medical second opinions</p>
+
+<p name="mry0" class="graf graf--p">- Architecture review boards</p>
+
+<p name="uh9m" class="graf graf--p">- Security audits</p>
+
+<p name="9047" class="graf graf--p">- Product design critiques</p>
+
+<blockquote class="graf graf--pullquote">
+Why limit AI to solo performance when collaboration is demonstrably better?
+</blockquote>
+
+<h4 name="mh2c" class="graf graf--h4">5.2 Model Diversity as Feature</h4>
+
+<p name="iwdb" class="graf graf--p"><strong>Different AI models have different strengths:</strong></p>
+
+<p name="ihh7" class="graf graf--p">- Claude: Long context, nuanced reasoning, tool use</p>
+
+<p name="1ulf" class="graf graf--p">- GPT-4: Broad knowledge, creative problem-solving</p>
+
+<p name="3ql0" class="graf graf--p">- Gemini: Multimodal understanding, fast inference</p>
+
+<p name="bnxm" class="graf graf--p">- Grok: Real-time information, Twitter/X integration</p>
+
+<p name="q1zs" class="graf graf--p"><strong>Rather than choosing one model, leverage all of them.</strong></p>
+
+<h4 name="vc92" class="graf graf--h4">5.3 Emergent Intelligence</h4>
+
+<p name="inbn" class="graf graf--p"><strong>Multi-agent deliberation produces emergent properties:</strong></p>
+
+<p name="uox0" class="graf graf--p">- <strong>Error correction:</strong> Models catch each other's mistakes</p>
+
+<p name="uo6i" class="graf graf--p">- <strong>Bias mitigation:</strong> Diverse training reduces individual biases</p>
+
+<p name="gu6x" class="graf graf--p">- <strong>Perspective synthesis:</strong> Combined insights exceed individual capability</p>
+
+<p name="9ob2" class="graf graf--p">- <strong>Confidence calibration:</strong> Agreement signals reliability, disagreement signals uncertainty</p>
+
+<h4 name="0wcc" class="graf graf--h4">5.4 Scalable Expertise</h4>
+
+<p name="zj3c" class="graf graf--p"><strong>Skills as composable units enable:</strong></p>
+
+<p name="71ca" class="graf graf--p">- <strong>Rapid panel assembly:</strong> Mix and match for any domain</p>
+
+<p name="tifq" class="graf graf--p">- <strong>Expertise evolution:</strong> Update skills independently</p>
+
+<p name="jgyn" class="graf graf--p">- <strong>Community contributions:</strong> Shared skill libraries</p>
+
+<p name="lug4" class="graf graf--p">- <strong>Specialization depth:</strong> Narrow, deep expertise alongside broad knowledge</p>
+
+<h4 name="llmb" class="graf graf--h4">5.5 Transparency and Trust</h4>
+
+<p name="j59q" class="graf graf--p"><strong>Users can observe the deliberation process:</strong></p>
+
+<p name="7v87" class="graf graf--p">- See different perspectives explicitly</p>
+
+<p name="56bb" class="graf graf--p">- Understand reasoning from multiple angles</p>
+
+<p name="5isq" class="graf graf--p">- Identify when consensus exists vs. legitimate disagreement</p>
+
+<p name="hk2g" class="graf graf--p">- Trust multi-model agreement more than single-model output</p>
+
+<h3 name="w669" class="graf graf--h3">6. Implementation Patterns</h3>
+
+<h4 name="ly0v" class="graf graf--h4">6.1 Minimal Viable Architecture</h4>
+
+<p name="ezoq" class="graf graf--p"><strong>Start simple, validate the concept:</strong></p>
+
+<p name="sz2t" class="graf graf--p">The basic setup includes:</p>
+
+<p name="ygw7" class="graf graf--p">1. A facilitator skill (Claude agent with orchestration capabilities)</p>
+
+<p name="v3gt" class="graf graf--p">2. An agent roster (multiple models with specific skills)</p>
+
+<p name="5bly" class="graf graf--p">3. Orchestration logic (facilitator manages the conversation)</p>
+
+<p name="f0zf" class="graf graf--p"><strong>Facilitator's internal logic (agentic, not programmatic):</strong></p>
+
+<p name="pjqn" class="graf graf--p">1. Analyze topic</p>
+
+<p name="bob5" class="graf graf--p">2. Select agents (or validate provided agents)</p>
+
+<p name="3gds" class="graf graf--p">3. For each round:</p>
+
+<p name="6bis" class="graf graf--p">- Decide who speaks next</p>
+
+<p name="hvv0" class="graf graf--p">- Provide appropriate context</p>
+
+<p name="hots" class="graf graf--p">- Collect response</p>
+
+<p name="mvny" class="graf graf--p">- Assess conversation state</p>
+
+<p name="n98d" class="graf graf--p">4. When complete, synthesize insights</p>
+
+<p name="5f0t" class="graf graf--p">5. Return to user</p>
+
+<h4 name="wnte" class="graf graf--h4">6.2 Progressive Enhancement</h4>
+
+<p name="8jdx" class="graf graf--p"><strong>Phase 1: Basic Multi-Agent Conversation</strong></p>
+
+<p name="ths0" class="graf graf--p">- Facilitator orchestrates predefined panel</p>
+
+<p name="yez3" class="graf graf--p">- Sequential turn-taking</p>
+
+<p name="gcji" class="graf graf--p">- Fixed number of rounds</p>
+
+<p name="m48p" class="graf graf--p">- Manual synthesis</p>
+
+<p name="ms2x" class="graf graf--p"><strong>Phase 2: Dynamic Orchestration</strong></p>
+
+<p name="fq4u" class="graf graf--p">- Facilitator dynamically selects panel from topic analysis</p>
+
+<p name="thjr" class="graf graf--p">- Adaptive turn-taking (facilitator decides who speaks)</p>
+
+<p name="zzxt" class="graf graf--p">- Dynamic completion (facilitator decides when done)</p>
+
+<p name="ar5o" class="graf graf--p">- Automated synthesis</p>
+
+<p name="tvpz" class="graf graf--p"><strong>Phase 3: Emergent Collaboration</strong></p>
+
+<p name="6lmz" class="graf graf--p">- Agents recommend additional expertise</p>
+
+<p name="75gx" class="graf graf--p">- Skill-to-skill direct questioning</p>
+
+<p name="63h1" class="graf graf--p">- Sub-panel formation for deep dives</p>
+
+<p name="y5tf" class="graf graf--p">- Confidence scoring and consensus detection</p>
+
+<p name="uidr" class="graf graf--p"><strong>Phase 4: Learning and Optimization</strong></p>
+
+<p name="7lbt" class="graf graf--p">- Facilitator learns from past sessions</p>
+
+<p name="a1c6" class="graf graf--p">- Skill effectiveness tracking</p>
+
+<p name="9vjo" class="graf graf--p">- Panel composition optimization</p>
+
+<p name="wy7o" class="graf graf--p">- User preference learning</p>
+
+<h4 name="j40g" class="graf graf--h4">6.3 Integration Patterns</h4>
+
+<p name="i829" class="graf graf--p"><strong>CLI Application:</strong></p>
+
+<p name="lw4u" class="graf graf--p">> $ roundtable "Design a secure auth system"</p>
+
+<p name="hqh6" class="graf graf--p">> Facilitator: Assembling panel...</p>
+
+<p name="ivmb" class="graf graf--p">>   - Architecture (Claude Sonnet 4)</p>
+
+<p name="fh4g" class="graf graf--p">>   - Security (GPT-4 Turbo)</p>
+
+<p name="s3z3" class="graf graf--p">>   - UX (Gemini 2.0)</p>
+
+<p name="vdq0" class="graf graf--p">></p>
+
+<p name="r5ap" class="graf graf--p">> Round 1: Initial perspectives...</p>
+
+<p name="2oly" class="graf graf--p">> [Architecture]: I propose a JWT-based approach...</p>
+
+<p name="b9rc" class="graf graf--p">> [Security]: We need to consider token storage...</p>
+
+<p name="afa7" class="graf graf--p">> [UX]: Users should have passwordless options...</p>
+
+<p name="cheh" class="graf graf--p">></p>
+
+<p name="6l7g" class="graf graf--p">> Round 2: Integration...</p>
+
+<p name="sy8l" class="graf graf--p"><strong>API Service:</strong></p>
+
+<p name="nzsy" class="graf graf--p">POST request to /api/v1/deliberate with topic, facilitator model, and agent specifications. Returns session ID, conversation rounds, synthesis, and consensus level.</p>
+
+<p name="llfs" class="graf graf--p"><strong>Library/SDK:</strong></p>
+
+<p name="k977" class="graf graf--p">Python library provides Facilitator and Panel classes for programmatic access to multi-agent deliberation.</p>
+
+<h3 name="q7j3" class="graf graf--h3">7. Challenges and Considerations</h3>
+
+<h4 name="c5xr" class="graf graf--h4">7.1 Cost and Latency</h4>
+
+<p name="ol6p" class="graf graf--p"><strong>Challenge:</strong> Multiple models = multiple API calls = higher cost and slower responses</p>
+
+<p name="onw8" class="graf graf--p"><strong>Mitigation strategies:</strong></p>
+
+<p name="hc71" class="graf graf--p">1. <strong>Smart agent selection:</strong> Only invoke necessary experts</p>
+
+<p name="pr3n" class="graf graf--p">2. <strong>Parallel execution:</strong> When agents don't need each other's context</p>
+
+<p name="ypl4" class="graf graf--p">3. <strong>Model tier selection:</strong> Use cheaper models (Haiku, GPT-4-mini) when appropriate</p>
+
+<p name="yskm" class="graf graf--p">4. <strong>Caching:</strong> Reuse context and system prompts</p>
+
+<p name="wxn5" class="graf graf--p">5. <strong>Progressive disclosure:</strong> Start with small panel, expand only if needed</p>
+
+<p name="fx24" class="graf graf--p"><strong>Cost example:</strong></p>
+
+<p name="yml1" class="graf graf--p">- Single GPT-4 call: $0.01 per conversation</p>
+
+<p name="qjey" class="graf graf--p">- 3-agent panel (3 rounds): ~$0.10 per conversation</p>
+
+<p name="1qvn" class="graf graf--p">- <strong>Value proposition:</strong> 10x cost for significantly higher quality and verification</p>
+
+<h4 name="fj0n" class="graf graf--h4">7.2 Context Management</h4>
+
+<p name="wgnh" class="graf graf--p"><strong>Challenge:</strong> Maintaining coherent context across multiple agents</p>
+
+<p name="qqkb" class="graf graf--p"><strong>Solutions:</strong></p>
+
+<p name="01zh" class="graf graf--p">1. <strong>Facilitator as context hub:</strong> Central point manages conversation history</p>
+
+<p name="qf8b" class="graf graf--p">2. <strong>Selective context:</strong> Agents receive only relevant portions</p>
+
+<p name="j27v" class="graf graf--p">3. <strong>Skill-specific context:</strong> Architecture agents see architecture discussions, etc.</p>
+
+<p name="n75l" class="graf graf--p">4. <strong>Summarization:</strong> Facilitator summarizes previous rounds for efficiency</p>
+
+<h4 name="snrv" class="graf graf--h4">7.3 Quality Control</h4>
+
+<p name="0q4e" class="graf graf--p"><strong>Challenge:</strong> Preventing low-quality or off-topic responses</p>
+
+<p name="ftp1" class="graf graf--p"><strong>Solutions:</strong></p>
+
+<p name="x23p" class="graf graf--p">1. <strong>Facilitator screening:</strong> Reviews responses before sharing with panel</p>
+
+<p name="5anx" class="graf graf--p">2. <strong>Relevance scoring:</strong> Agents must stay on topic</p>
+
+<p name="7oy1" class="graf graf--p">3. <strong>Confidence signals:</strong> Agents express uncertainty explicitly</p>
+
+<p name="lksp" class="graf graf--p">4. <strong>User feedback loop:</strong> Users can redirect or request clarification</p>
+
+<h4 name="dfaj" class="graf graf--h4">7.4 Convergence</h4>
+
+<p name="xi5n" class="graf graf--p"><strong>Challenge:</strong> Ensuring deliberation reaches actionable conclusions</p>
+
+<p name="71d5" class="graf graf--p"><strong>Solutions:</strong></p>
+
+<p name="eias" class="graf graf--p">1. <strong>Explicit completion criteria:</strong> Facilitator checks for resolution signals</p>
+
+<p name="0wqi" class="graf graf--p">2. <strong>Maximum rounds:</strong> Prevent infinite discussions</p>
+
+<p name="swas" class="graf graf--p">3. <strong>Synthesis forcing:</strong> Facilitator must produce synthesis regardless of consensus</p>
+
+<p name="d0n0" class="graf graf--p">4. <strong>Disagreement documentation:</strong> When consensus fails, document the tradeoffs</p>
+
+<h3 name="cx5q" class="graf graf--h3">8. Use Cases</h3>
+
+<h4 name="ddf9" class="graf graf--h4">8.1 Software Development</h4>
+
+<p name="tgq3" class="graf graf--p"><strong>Scenario:</strong> Building a new feature</p>
+
+<p name="ezeq" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="tom1" class="graf graf--p">- Architecture (Claude): System design</p>
+
+<p name="w1my" class="graf graf--p">- Security (GPT-4): Threat modeling</p>
+
+<p name="pebn" class="graf graf--p">- Performance (Gemini): Optimization</p>
+
+<p name="acsh" class="graf graf--p">- Product (Grok): User value assessment</p>
+
+<p name="q2wc" class="graf graf--p"><strong>Outcome:</strong> Holistic feature design addressing all concerns upfront</p>
+
+<h4 name="sy0x" class="graf graf--h4">8.2 Business Strategy</h4>
+
+<p name="sb3a" class="graf graf--p"><strong>Scenario:</strong> Market entry decision</p>
+
+<p name="18uw" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="aeyj" class="graf graf--p">- Market Analysis (GPT-4): Competition and trends</p>
+
+<p name="1dd2" class="graf graf--p">- Financial Modeling (Claude): Cost and revenue projections</p>
+
+<p name="7cu7" class="graf graf--p">- Risk Assessment (Gemini): Regulatory and operational risks</p>
+
+<p name="4fa1" class="graf graf--p">- Customer Insights (Grok): User research and social signals</p>
+
+<p name="t1gn" class="graf graf--p"><strong>Outcome:</strong> Data-driven strategy with risks and opportunities clearly identified</p>
+
+<h4 name="4qd3" class="graf graf--h4">8.3 Creative Work</h4>
+
+<p name="7l36" class="graf graf--p"><strong>Scenario:</strong> Writing a complex narrative</p>
+
+<p name="xwyz" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="d2ny" class="graf graf--p">- Plot Structure (Claude): Story arc and pacing</p>
+
+<p name="xdbz" class="graf graf--p">- Character Development (GPT-4): Personality and motivation</p>
+
+<p name="5w1s" class="graf graf--p">- Dialogue (Gemini): Authentic conversations</p>
+
+<p name="rn33" class="graf graf--p">- World-Building (Grok): Consistent setting details</p>
+
+<p name="odt7" class="graf graf--p"><strong>Outcome:</strong> Rich, multi-dimensional creative work</p>
+
+<h4 name="kpqa" class="graf graf--h4">8.4 Research and Analysis</h4>
+
+<p name="0zy9" class="graf graf--p"><strong>Scenario:</strong> Literature review on a complex topic</p>
+
+<p name="zsae" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="gheq" class="graf graf--p">- Domain Expert (Claude): Deep subject knowledge</p>
+
+<p name="01h6" class="graf graf--p">- Methodology Critic (GPT-4): Research design evaluation</p>
+
+<p name="zhtl" class="graf graf--p">- Synthesis (Gemini): Cross-study pattern identification</p>
+
+<p name="hzr1" class="graf graf--p">- Publication Trends (Grok): Recent developments and emerging areas</p>
+
+<p name="10cy" class="graf graf--p"><strong>Outcome:</strong> Comprehensive, critically-evaluated research summary</p>
+
+<h4 name="u4go" class="graf graf--h4">8.5 Personal Decision Making</h4>
+
+<p name="6wha" class="graf graf--p"><strong>Scenario:</strong> Career change decision</p>
+
+<p name="ej9c" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="q88v" class="graf graf--p">- Career Coach (Claude): Skills assessment and growth paths</p>
+
+<p name="alb6" class="graf graf--p">- Financial Advisor (GPT-4): Compensation and financial implications</p>
+
+<p name="5mzu" class="graf graf--p">- Work-Life Balance (Gemini): Lifestyle and satisfaction factors</p>
+
+<p name="j24u" class="graf graf--p">- Industry Insider (Grok): Market trends and opportunities</p>
+
+<p name="yg8v" class="graf graf--p"><strong>Outcome:</strong> Well-rounded personal decision with all factors considered</p>
+
+<h4 name="euls" class="graf graf--h4">8.6 Medical Diagnosis</h4>
+
+<p name="vl0o" class="graf graf--p"><strong>Scenario:</strong> Complex diagnostic case with unusual symptoms</p>
+
+<p name="vmcs" class="graf graf--p"><strong>Panel:</strong></p>
+
+<p name="fkgx" class="graf graf--p">- Primary Care (Claude): General medical assessment and triage</p>
+
+<p name="ydjp" class="graf graf--p">- Specialist 1 (GPT-4): Cardiology expertise</p>
+
+<p name="xtp5" class="graf graf--p">- Specialist 2 (Gemini): Neurology expertise</p>
+
+<p name="37on" class="graf graf--p">- Radiologist (Grok): Imaging interpretation</p>
+
+<p name="f3qh" class="graf graf--p">- Pharmacologist (Human: Dr. Martinez): Drug interaction analysis</p>
+
+<p name="ahd0" class="graf graf--p"><strong>Deliberation example:</strong></p>
+
+<p name="ol97" class="graf graf--p">> Patient presents: Chest pain, dizziness, cognitive fog</p>
+
+<p name="aya1" class="graf graf--p">></p>
+
+<p name="jr20" class="graf graf--p">> <strong>Round 1: Initial assessment</strong></p>
+
+<p name="k1zx" class="graf graf--p">> <strong>Primary Care:</strong> "Symptoms suggest cardiovascular, but neurological component concerning. Need cardiology and neurology consult."</p>
+
+<p name="mo0f" class="graf graf--p">></p>
+
+<p name="01ny" class="graf graf--p">> <strong>Cardiology:</strong> "EKG shows mild arrhythmia, but doesn't fully explain symptoms. Need to rule out neurological causes."</p>
+
+<p name="l8bo" class="graf graf--p">></p>
+
+<p name="4wyf" class="graf graf--p">> <strong>Neurology:</strong> "Cognitive symptoms + dizziness could indicate TIA or vestibular issue. MRI recommended."</p>
+
+<p name="g3ag" class="graf graf--p">></p>
+
+<p name="1d1d" class="graf graf--p">> <strong>Round 2: Imaging review</strong></p>
+
+<p name="omid" class="graf graf--p">> <strong>Radiologist:</strong> "MRI shows no acute stroke, but small vessel disease noted. Could explain cognitive symptoms."</p>
+
+<p name="9pie" class="graf graf--p">></p>
+
+<p name="gwha" class="graf graf--p">> <strong>Cardiology:</strong> "In context of small vessel disease, arrhythmia more significant. May be causing microemboli."</p>
+
+<p name="4hvm" class="graf graf--p">></p>
+
+<p name="uh7a" class="graf graf--p">> <strong>Round 3: Treatment planning</strong></p>
+
+<p name="f5uh" class="graf graf--p">> <strong>Pharmacologist (Human):</strong> "Patient's current medications include [X, Y]. Anticoagulation proposed, but contraindicated with X. Suggest alternative approach..."</p>
+
+<p name="7a07" class="graf graf--p">></p>
+
+<p name="4ak3" class="graf graf--p">> <strong>Synthesis:</strong> Multi-factorial diagnosis with coordinated treatment plan</p>
+
+<p name="ar47" class="graf graf--p"><strong>Outcome:</strong></p>
+
+<p name="ywha" class="graf graf--p">- Comprehensive diagnosis considering all specialties</p>
+
+<p name="krxv" class="graf graf--p">- Drug interactions caught that single specialist might miss</p>
+
+<p name="v38j" class="graf graf--p">- Treatment plan addressing cardiovascular + neurological components</p>
+
+<p name="wn7o" class="graf graf--p">- Human pharmacologist provides critical medication interaction knowledge</p>
+
+<p name="8vq2" class="graf graf--p"><strong>Benefits for medical use:</strong></p>
+
+<p name="ty97" class="graf graf--p">- <strong>Multi-specialty consultation</strong> without scheduling constraints</p>
+
+<p name="q7g3" class="graf graf--p">- <strong>Cross-specialty insights</strong> reveal connections single specialist might miss</p>
+
+<p name="ja8i" class="graf graf--p">- <strong>Differential diagnosis</strong> explored systematically</p>
+
+<p name="rk35" class="graf graf--p">- <strong>Human expert integration</strong> for high-stakes medication decisions</p>
+
+<p name="fktz" class="graf graf--p">- <strong>Second opinions</strong> built into process</p>
+
+<p name="i81e" class="graf graf--p"><strong>Critical note:</strong> Medical roundtables are <strong>decision support</strong>, not replacement for human physicians. Final diagnosis and treatment remain with human medical professional.</p>
+
+<h4 name="jve7" class="graf graf--h4">8.7 Scribe Agents: Domain-Specific Documentation</h4>
+
+<p name="y381" class="graf graf--p"><strong>After deliberation, specialized scribe agents can generate documentation in appropriate formats.</strong></p>
+
+<p name="s70s" class="graf graf--p"><strong>The problem:</strong> Different contexts require different documentation styles:</p>
+
+<p name="g8fn" class="graf graf--p">- Scientific papers need rigorous methodology and citations</p>
+
+<p name="g61u" class="graf graf--p">- Legal briefs require specific formatting and precedent references</p>
+
+<p name="5yy3" class="graf graf--p">- Business proposals need executive summaries and financial projections</p>
+
+<p name="xvta" class="graf graf--p">- Technical specs need precise terminology and diagrams</p>
+
+<p name="33fo" class="graf graf--p"><strong>Solution: Scribe agents with format-specific skills</strong></p>
+
+<p name="mubw" class="graf graf--p">Example scribe specializations:</p>
+
+<p name="ultu" class="graf graf--p">- <strong>Scientific paper scribe</strong> - Academic writing conventions, citation management, methodology documentation</p>
+
+<p name="5nam" class="graf graf--p">- <strong>Legal brief scribe</strong> - Legal citation, precedent integration, argument structure</p>
+
+<p name="0uwx" class="graf graf--p">- <strong>Technical specification scribe</strong> - API documentation, architecture diagrams, code examples</p>
+
+<p name="qvck" class="graf graf--p"><strong>How it works:</strong></p>
+
+<p name="124f" class="graf graf--p">1. Roundtable session completes</p>
+
+<p name="tkcu" class="graf graf--p">2. User requests documentation: "Generate a technical spec from this discussion"</p>
+
+<p name="g9w0" class="graf graf--p">3. Facilitator selects appropriate scribe (Technical Spec Scribe)</p>
+
+<p name="kzdw" class="graf graf--p">4. Scribe reviews full transcript</p>
+
+<p name="a0yo" class="graf graf--p">5. Generates formatted documentation with proper structure, citations, diagrams</p>
+
+<p name="nh8r" class="graf graf--p">6. Output delivered in target format</p>
+
+<p name="nfk7" class="graf graf--p"><strong>Example: Multiple output formats from same roundtable</strong></p>
+
+<p name="59yn" class="graf graf--p">Roundtable topic: "Design authentication system for web app"</p>
+
+<p name="hy9u" class="graf graf--p"><strong>Documentation requests:</strong></p>
+
+<p name="zrlm" class="graf graf--p"><strong>1. "Technical spec for engineering team"</strong></p>
+
+<p name="u277" class="graf graf--p">Technical Scribe produces: Architecture diagrams, API endpoint definitions, security requirements, implementation guide, testing checklist</p>
+
+<p name="mdh7" class="graf graf--p"><strong>2. "Executive summary for leadership"</strong></p>
+
+<p name="il77" class="graf graf--p">Business Scribe produces: 1-page overview, cost/timeline estimates, risk assessment, business impact, resource requirements</p>
+
+<p name="ddts" class="graf graf--p"><strong>3. "Security assessment for compliance"</strong></p>
+
+<p name="6lo0" class="graf graf--p">Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation documentation, audit trail, policy recommendations, regulatory references</p>
+
+<p name="00f1" class="graf graf--p"><strong>Benefits:</strong></p>
+
+<p name="dy2p" class="graf graf--p">- <strong>Format expertise:</strong> Each scribe knows domain conventions</p>
+
+<p name="kctn" class="graf graf--p">- <strong>Reusable insights:</strong> Same deliberation → multiple document types</p>
+
+<p name="kh1v" class="graf graf--p">- <strong>Audience-appropriate:</strong> Automatically tailored to reader expertise</p>
+
+<p name="s92m" class="graf graf--p">- <strong>Quality assurance:</strong> Scribes ensure documentation meets standards</p>
+
+<p name="tlb0" class="graf graf--p">- <strong>Efficiency:</strong> No manual transcription or reformatting</p>
+
+<h3 name="il6f" class="graf graf--h3">9. Comparison with Existing Approaches</h3>
+
+<h4 name="pskm" class="graf graf--h4">9.1 Single-Model Interaction</h4>
+
+<p name="fipx" class="graf graf--p"><strong>Traditional:</strong></p>
+
+<p name="ofvw" class="graf graf--p">> User → GPT-4 → Response</p>
+
+<p name="idcz" class="graf graf--p"><strong>Limitations:</strong></p>
+
+<p name="1m2x" class="graf graf--p">- Single perspective</p>
+
+<p name="dnwa" class="graf graf--p">- No verification</p>
+
+<p name="rha5" class="graf graf--p">- Model-specific blindspots</p>
+
+<p name="abic" class="graf graf--p"><strong>Roundtable Advantage:</strong></p>
+
+<p name="xwnf" class="graf graf--p">- Multiple perspectives</p>
+
+<p name="1g0m" class="graf graf--p">- Cross-verification</p>
+
+<p name="drzi" class="graf graf--p">- Complementary strengths</p>
+
+<h4 name="3a4l" class="graf graf--h4">9.2 Sequential Prompting</h4>
+
+<p name="pob1" class="graf graf--p"><strong>Current pattern:</strong></p>
+
+<p name="eyh6" class="graf graf--p">> User → Claude (architecture)</p>
+
+<p name="x30q" class="graf graf--p">> User reads response</p>
+
+<p name="9kox" class="graf graf--p">> User → GPT-4 (security review)</p>
+
+<p name="syyu" class="graf graf--p">> User reads response</p>
+
+<p name="zqxc" class="graf graf--p">> User → Manual synthesis</p>
+
+<p name="b4oe" class="graf graf--p"><strong>Limitations:</strong></p>
+
+<p name="cknv" class="graf graf--p">- Human bottleneck</p>
+
+<p name="latk" class="graf graf--p">- Context loss between models</p>
+
+<p name="e6xr" class="graf graf--p">- No model-to-model interaction</p>
+
+<p name="phfl" class="graf graf--p">- Time-consuming</p>
+
+<p name="ncz9" class="graf graf--p"><strong>Roundtable Advantage:</strong></p>
+
+<p name="niji" class="graf graf--p">- Automated orchestration</p>
+
+<p name="tf0t" class="graf graf--p">- Preserved context</p>
+
+<p name="uvib" class="graf graf--p">- Direct model interaction</p>
+
+<p name="77hf" class="graf graf--p">- Fast and efficient</p>
+
+<h4 name="zz3u" class="graf graf--h4">9.3 Programmatic Multi-Agent Systems</h4>
+
+<p name="ety4" class="graf graf--p"><strong>Existing frameworks (AutoGen, CrewAI, etc.):</strong></p>
+
+<p name="ejjw" class="graf graf--p">> Predefined workflow:</p>
+
+<p name="opbw" class="graf graf--p">> 1. Agent A performs task 1</p>
+
+<p name="4yww" class="graf graf--p">> 2. Agent B performs task 2</p>
+
+<p name="ze2n" class="graf graf--p">> 3. Agent C synthesizes</p>
+
+<p name="d8i5" class="graf graf--p"><strong>Limitations:</strong></p>
+
+<p name="uzwg" class="graf graf--p">- Rigid workflows</p>
+
+<p name="1mmb" class="graf graf--p">- No dynamic adaptation</p>
+
+<p name="vnt7" class="graf graf--p">- Orchestration is code, not intelligence</p>
+
+<p name="lm2t" class="graf graf--p"><strong>Roundtable Advantage:</strong></p>
+
+<p name="fnlf" class="graf graf--p">- Agentic orchestration (facilitator decides)</p>
+
+<p name="mfde" class="graf graf--p">- Dynamic adaptation</p>
+
+<p name="ibwa" class="graf graf--p">- Emergent conversation patterns</p>
+
+<h4 name="m8g4" class="graf graf--h4">9.4 Mixture of Experts (MoE)</h4>
+
+<p name="dgx9" class="graf graf--p"><strong>Model architecture approach:</strong></p>
+
+<p name="ru32" class="graf graf--p">- Multiple specialized sub-models within one model</p>
+
+<p name="fa1o" class="graf graf--p">- Router selects which sub-model handles request</p>
+
+<p name="thpn" class="graf graf--p">- Happens at inference time internally</p>
+
+<p name="0igr" class="graf graf--p"><strong>Limitations:</strong></p>
+
+<p name="023m" class="graf graf--p">- Single model family</p>
+
+<p name="3ahu" class="graf graf--p">- Fixed expert specializations</p>
+
+<p name="9nwk" class="graf graf--p">- No explicit deliberation</p>
+
+<p name="76nt" class="graf graf--p"><strong>Roundtable Advantage:</strong></p>
+
+<p name="zuh0" class="graf graf--p">- Different model families (Claude, GPT-4, Gemini)</p>
+
+<p name="frei" class="graf graf--p">- User-defined skills/expertise</p>
+
+<p name="y5ln" class="graf graf--p">- Explicit, observable deliberation</p>
+
+<h3 name="on05" class="graf graf--h3">10. Research Directions</h3>
+
+<h4 name="wzer" class="graf graf--h4">10.1 Facilitator Optimization</h4>
+
+<p name="6z9l" class="graf graf--p"><strong>Questions:</strong></p>
+
+<p name="yle9" class="graf graf--p">- What makes an effective facilitator agent?</p>
+
+<p name="clp0" class="graf graf--p">- Which models excel at orchestration vs. domain expertise?</p>
+
+<p name="alq2" class="graf graf--p">- Can facilitators learn from past sessions?</p>
+
+<p name="x1f9" class="graf graf--p">- How should facilitators handle persistent disagreements?</p>
+
+<h4 name="zxrw" class="graf graf--h4">10.2 Panel Composition</h4>
+
+<p name="d2z7" class="graf graf--p"><strong>Questions:</strong></p>
+
+<p name="a90y" class="graf graf--p">- How many agents is optimal for different problem types?</p>
+
+<p name="1e8h" class="graf graf--p">- When does adding more agents provide diminishing returns?</p>
+
+<p name="7729" class="graf graf--p">- Can we predict panel effectiveness before running discussion?</p>
+
+<p name="gt75" class="graf graf--p">- Should panels have homogeneous or heterogeneous models?</p>
+
+<h4 name="zztm" class="graf graf--h4">10.3 Consensus Mechanisms</h4>
+
+<p name="am80" class="graf graf--p"><strong>Questions:</strong></p>
+
+<p name="pqas" class="graf graf--p">- How do we measure consensus across different model outputs?</p>
+
+<p name="ki1b" class="graf graf--p">- When is disagreement valuable vs. problematic?</p>
+
+<p name="aze5" class="graf graf--p">- Can we quantify confidence in multi-agent synthesis?</p>
+
+<p name="ahd7" class="graf graf--p">- What voting or weighting mechanisms work best?</p>
+
+<h4 name="2jni" class="graf graf--h4">10.4 Skill Engineering</h4>
+
+<p name="p5ba" class="graf graf--p"><strong>Questions:</strong></p>
+
+<p name="z7e5" class="graf graf--p">- What makes a high-quality skill definition?</p>
+
+<p name="682j" class="graf graf--p">- How do we measure skill effectiveness?</p>
+
+<p name="e77j" class="graf graf--p">- Can skills be learned from conversation patterns?</p>
+
+<p name="0jz3" class="graf graf--p">- Should skills be model-specific or model-agnostic?</p>
+
+<h4 name="m8k8" class="graf graf--h4">10.5 Human-in-the-Loop</h4>
+
+<p name="ewwf" class="graf graf--p"><strong>Questions:</strong></p>
+
+<p name="3t3b" class="graf graf--p">- When should humans intervene in multi-agent discussions?</p>
+
+<p name="1zoc" class="graf graf--p">- How do we present complex deliberations to users?</p>
+
+<p name="zl51" class="graf graf--p">- Can users contribute expertise mid-conversation?</p>
+
+<p name="tune" class="graf graf--p">- What feedback mechanisms improve future deliberations?</p>
+
+<h3 name="5s8n" class="graf graf--h3">11. Ethical Considerations</h3>
+
+<h4 name="0ijq" class="graf graf--h4">11.1 Transparency</h4>
+
+<p name="in58" class="graf graf--p"><strong>Obligation:</strong> Users should understand they're interacting with multiple AI models</p>
+
+<p name="eesc" class="graf graf--p"><strong>Implementation:</strong></p>
+
+<p name="zur5" class="graf graf--p">- Clear disclosure of panel composition</p>
+
+<p name="4hcf" class="graf graf--p">- Attribution of responses to specific agents</p>
+
+<p name="b4j8" class="graf graf--p">- Explanation of facilitator's decision-making</p>
+
+<h4 name="r1h1" class="graf graf--h4">11.2 Bias Amplification vs. Mitigation</h4>
+
+<p name="m8iz" class="graf graf--p"><strong>Risk:</strong> Multiple models could reinforce shared biases</p>
+
+<p name="p1qk" class="graf graf--p"><strong>Mitigation:</strong></p>
+
+<p name="v59p" class="graf graf--p">- Diverse model selection (different training data, organizations)</p>
+
+<p name="5qj4" class="graf graf--p">- Explicit bias-checking agents when appropriate</p>
+
+<p name="jfsj" class="graf graf--p">- User awareness of potential bias sources</p>
+
+<h4 name="nx90" class="graf graf--h4">11.3 Responsibility and Accountability</h4>
+
+<p name="rcry" class="graf graf--p"><strong>Question:</strong> Who is responsible when multi-agent system gives bad advice?</p>
+
+<p name="lovh" class="graf graf--p"><strong>Considerations:</strong></p>
+
+<p name="gi60" class="graf graf--p">- Facilitator model provider?</p>
+
+<p name="h0aq" class="graf graf--p">- Individual agent model providers?</p>
+
+<p name="wvj5" class="graf graf--p">- Application developer?</p>
+
+<p name="qwti" class="graf graf--p">- User for following advice?</p>
+
+<p name="8ywp" class="graf graf--p"><strong>Best practice:</strong> Clear disclaimers, audit trails, human oversight for high-stakes decisions</p>
+
+<h4 name="d2nm" class="graf graf--h4">11.4 Cost Accessibility</h4>
+
+<p name="j2t6" class="graf graf--p"><strong>Risk:</strong> Multi-model conversations are more expensive than single-model</p>
+
+<p name="h5sg" class="graf graf--p"><strong>Mitigation:</strong></p>
+
+<p name="62xc" class="graf graf--p">- Tiered service levels (1-agent, 3-agent, 5-agent options)</p>
+
+<p name="80gt" class="graf graf--p">- Open-source facilitator implementations</p>
+
+<p name="mft3" class="graf graf--p">- Local model support for cost-sensitive use cases</p>
+
+<h3 name="lcc3" class="graf graf--h3">12. Conclusion</h3>
+
+<h4 name="6amb" class="graf graf--h4">12.1 Summary</h4>
+
+<p name="1dre" class="graf graf--p"><strong>Multi-agent facilitation represents a paradigm shift in human-AI interaction:</strong></p>
+
+<p name="hhtc" class="graf graf--p">1. <strong>From solo to collaborative AI:</strong> Multiple models working together produce better outcomes than any single model alone</p>
+
+<p name="7gw5" class="graf graf--p">2. <strong>From programmatic to agentic orchestration:</strong> A facilitator agent dynamically manages conversations rather than rigid scripts</p>
+
+<p name="aviu" class="graf graf--p">3. <strong>From black-box to transparent deliberation:</strong> Users observe the reasoning process from multiple perspectives</p>
+
+<p name="8t7n" class="graf graf--p">4. <strong>From one-size-fits-all to specialized panels:</strong> Domain expertise assembled on-demand for each problem</p>
+
+<h4 name="qiut" class="graf graf--h4">12.2 Key Principles</h4>
+
+<p name="yzkg" class="graf graf--p"><strong>The Universal Interface Principle:</strong></p>
+
+<p name="i1bo" class="graf graf--p">> If a human can interact with an AI through its interface (API, CLI), then an AI facilitator can interact with other AIs through those same interfaces.</p>
+
+<p name="6wn1" class="graf graf--p"><strong>The Facilitator Principle:</strong></p>
+
+<p name="x6bu" class="graf graf--p">> Complex conversations need orchestration. A dedicated facilitator agent can manage multi-model deliberations more effectively than programmatic control flow.</p>
+
+<p name="ep4v" class="graf graf--p"><strong>The Skills Principle:</strong></p>
+
+<p name="4wc5" class="graf graf--p">> Domain expertise should be defined as reusable, model-agnostic components that can be applied to any AI model.</p>
+
+<p name="mqw2" class="graf graf--p"><strong>The Emergence Principle:</strong></p>
+
+<p name="3tqe" class="graf graf--p">> The quality of multi-agent deliberation exceeds the sum of individual agent capabilities through cross-verification, perspective diversity, and collaborative synthesis.</p>
+
+<h4 name="eoe2" class="graf graf--h4">12.3 The Future</h4>
+
+<p name="8g32" class="graf graf--p"><strong>We envision a future where:</strong></p>
+
+<p name="z1zr" class="graf graf--p">- <strong>Default AI interaction is multi-model:</strong> Just as we consult multiple human experts for important decisions, we'll consult multiple AI models for complex problems</p>
+
+<p name="pbhv" class="graf graf--p">- <strong>Facilitator agents are ubiquitous:</strong> Specialized in orchestration, these agents become essential infrastructure for AI-powered applications</p>
+
+<p name="p3cw" class="graf graf--p">- <strong>Skills marketplaces emerge:</strong> Communities develop and share expertise definitions, creating rich ecosystems of reusable AI capabilities</p>
+
+<p name="rb64" class="graf graf--p">- <strong>Hybrid human-AI panels:</strong> Seamless integration of human experts into AI panels, combining human judgment with AI analysis</p>
+
+<p name="2r7s" class="graf graf--p">- <strong>Continuous learning systems:</strong> Facilitators and agents improve through experience, learning which panel compositions and conversation patterns work best</p>
+
+<h4 name="i68x" class="graf graf--h4">12.4 Call to Action</h4>
+
+<p name="6kie" class="graf graf--p"><strong>For researchers:</strong></p>
+
+<p name="o0au" class="graf graf--p">- Study facilitator optimization and panel composition strategies</p>
+
+<p name="ezec" class="graf graf--p">- Develop metrics for multi-agent conversation quality</p>
+
+<p name="h8j2" class="graf graf--p">- Investigate consensus mechanisms and disagreement handling</p>
+
+<p name="lgh5" class="graf graf--p"><strong>For developers:</strong></p>
+
+<p name="zfbt" class="graf graf--p">- Build facilitator agent implementations</p>
+
+<p name="zf7s" class="graf graf--p">- Create skill libraries for different domains</p>
+
+<p name="0uyl" class="graf graf--p">- Develop user interfaces for multi-agent interactions</p>
+
+<p name="p8up" class="graf graf--p"><strong>For AI providers:</strong></p>
+
+<p name="we9w" class="graf graf--p">- Support multi-agent use cases in APIs and pricing</p>
+
+<p name="vgtz" class="graf graf--p">- Enable inter-model communication standards</p>
+
+<p name="8mk6" class="graf graf--p">- Provide facilitator-friendly model features</p>
+
+<p name="icjg" class="graf graf--p"><strong>For users:</strong></p>
+
+<p name="lru0" class="graf graf--p">- Experiment with multi-agent conversations</p>
+
+<p name="skye" class="graf graf--p">- Share feedback on panel effectiveness</p>
+
+<p name="n659" class="graf graf--p">- Contribute domain expertise as skills</p>
+
+<h3 name="wo4t" class="graf graf--h3">13. Appendix: Roundtable Project</h3>
+
+<h4 name="ixn8" class="graf graf--h4">13.1 Project Overview</h4>
+
+<p name="p8ie" class="graf graf--p"><strong>Roundtable</strong> is an open-source implementation of the multi-agent facilitation model described in this paper.</p>
+
+<p name="qmjs" class="graf graf--p"><strong>Repository:</strong> https://github.com/AlexZan/roundtable-cli</p>
+
+<p name="3t1f" class="graf graf--p"><strong>Key Features:</strong></p>
+
+<p name="3l98" class="graf graf--p">- Facilitator-orchestrated multi-model conversations</p>
+
+<p name="ywx9" class="graf graf--p">- Skills-based expertise system</p>
+
+<p name="6tur" class="graf graf--p">- Support for Claude, GPT-4, Gemini, and Grok</p>
+
+<p name="mjbj" class="graf graf--p">- CLI and API interfaces</p>
+
+<p name="kelx" class="graf graf--p">- Session persistence and replay</p>
+
+<h4 name="o9gg" class="graf graf--h4">13.2 Technical Architecture</h4>
+
+<p name="f9sl" class="graf graf--p"><strong>Core Components:</strong></p>
+
+<p name="az1e" class="graf graf--p">1. <strong>Meeting Facilitator:</strong> Claude-based agent that orchestrates conversations</p>
+
+<p name="2aeu" class="graf graf--p">2. <strong>Skills Library:</strong> YAML-defined domain expertise (architecture, security, UX, product, etc.)</p>
+
+<p name="hcwi" class="graf graf--p">3. <strong>Agent Factory:</strong> Creates agents from skills and model selections</p>
+
+<p name="ue9o" class="graf graf--p">4. <strong>Model Registry:</strong> Unified interface to multiple AI providers</p>
+
+<p name="vv5e" class="graf graf--p">5. <strong>Session Manager:</strong> Persists and manages conversation state</p>
+
+<p name="xotj" class="graf graf--p"><strong>Current Status:</strong></p>
+
+<p name="0vav" class="graf graf--p">- ✅ Skills system implemented</p>
+
+<p name="1m5r" class="graf graf--p">- ✅ Multi-model support (4 providers)</p>
+
+<p name="9a7k" class="graf graf--p">- ✅ Panel composition logic</p>
+
+<p name="q4d2" class="graf graf--p">- 🚧 <strong>In progress:</strong> Refactoring from programmatic to agentic orchestration</p>
+
+<p name="thvu" class="graf graf--p">- 🔜 <strong>Planned:</strong> Dynamic panel expansion, skill-to-skill querying, consensus detection</p>
+
+<h4 name="i8bx" class="graf graf--h4">13.3 Example Session</h4>
+
+<p name="q6ko" class="graf graf--p"><strong>CLI Transcript:</strong></p>
+
+<p name="q0wt" class="graf graf--p">$ npm run dev</p>
+
+<p name="k104" class="graf graf--p">Welcome to Roundtable CLI</p>
+
+<h1 name="k2t5" class="graf graf--h1">Topic: Design a secure authentication system for a web application</h1>
+
+<p name="9kct" class="graf graf--p">Facilitator: Analyzing topic and composing panel...</p>
+
+<h1 name="6g84" class="graf graf--h1">Panel Composition:</h1>
+
+<p name="x0m7" class="graf graf--p">- Architecture (Claude Sonnet 4)</p>
+
+<p name="n910" class="graf graf--p">- Security (GPT-4 Turbo)</p>
+
+<p name="bo1u" class="graf graf--p">- UX (Gemini 2.0)</p>
+
+<p name="veno" class="graf graf--p">Starting deliberation...</p>
+
+<h1 name="p8hx" class="graf graf--h1">[Round 1]</h1>
+
+<p name="8hcz" class="graf graf--p">Facilitator → Architecture: Please propose an authentication system design</p>
+
+<p name="xx4q" class="graf graf--p">Architecture (Claude Sonnet 4):</p>
+
+<p name="joy3" class="graf graf--p">I recommend a layered approach:</p>
+
+<p name="ra15" class="graf graf--p">1. JWT-based token authentication for API access</p>
+
+<p name="3p73" class="graf graf--p">2. Refresh token rotation for extended sessions</p>
+
+<p name="mpo9" class="graf graf--p">3. OAuth 2.0 integration for social login</p>
+
+<p name="uy6u" class="graf graf--p">...</p>
+
+<p name="40r0" class="graf graf--p">Facilitator → Security: Review the architecture proposal and identify concerns</p>
+
+<p name="sy8z" class="graf graf--p">Security (GPT-4 Turbo):</p>
+
+<p name="zr49" class="graf graf--p">The JWT approach is solid, but I have concerns:</p>
+
+<p name="mw51" class="graf graf--p">1. Token storage: Where are tokens stored on client?</p>
+
+<p name="zcfn" class="graf graf--p">2. XSS protection: How do we prevent token theft?</p>
+
+<p name="a59u" class="graf graf--p">3. CSRF: Need explicit protection mechanisms</p>
+
+<p name="f5cm" class="graf graf--p">...</p>
+
+<p name="3o1t" class="graf graf--p">Facilitator → UX: Consider the user experience implications</p>
+
+<p name="kgd2" class="graf graf--p">UX (Gemini 2.0):</p>
+
+<p name="2edf" class="graf graf--p">From a UX perspective:</p>
+
+<p name="1hvj" class="graf graf--p">1. Offer passwordless options (magic links, passkeys)</p>
+
+<p name="xtvf" class="graf graf--p">2. Clear session management UI</p>
+
+<p name="r6tu" class="graf graf--p">3. Biometric options for mobile</p>
+
+<p name="aika" class="graf graf--p">...</p>
+
+<h1 name="fmw0" class="graf graf--h1">[Round 2]</h1>
+
+<p name="qnvh" class="graf graf--p">Facilitator → Architecture: Address Security's concerns</p>
+
+<p name="wpl8" class="graf graf--p">Architecture:</p>
+
+<p name="d9gv" class="graf graf--p">Incorporating security feedback:</p>
+
+<p name="l0o7" class="graf graf--p">1. HttpOnly cookies for token storage (prevents XSS)</p>
+
+<p name="nrlb" class="graf graf--p">2. SameSite=Strict for CSRF protection</p>
+
+<p name="0672" class="graf graf--p">3. Short-lived access tokens (15 min), secure refresh</p>
+
+<p name="vkh4" class="graf graf--p">...</p>
+
+<h1 name="qpai" class="graf graf--h1">[Round 3 - Synthesis]</h1>
+
+<p name="vpwa" class="graf graf--p">Facilitator: Consensus reached. Synthesizing recommendations...</p>
+
+<p name="fh28" class="graf graf--p">Final Design:</p>
+
+<p name="sxpt" class="graf graf--p">- Authentication: JWT with refresh token rotation</p>
+
+<p name="eeyp" class="graf graf--p">- Storage: HttpOnly, Secure, SameSite=Strict cookies</p>
+
+<p name="m76u" class="graf graf--p">- Session: 15-minute access tokens, 7-day refresh tokens</p>
+
+<p name="qrwj" class="graf graf--p">- Social login: OAuth 2.0 (Google, GitHub)</p>
+
+<p name="q1wb" class="graf graf--p">- Passwordless: Magic links + Passkey support</p>
+
+<p name="d0k7" class="graf graf--p">- Mobile: Biometric authentication</p>
+
+<p name="otbx" class="graf graf--p">- Security: Rate limiting, CAPTCHA, audit logging</p>
+
+<p name="smr3" class="graf graf--p">Trade-offs:</p>
+
+<p name="5vaq" class="graf graf--p">- Cookie-based approach limits cross-domain usage</p>
+
+<p name="1qnh" class="graf graf--p">- Short token lifetime may impact offline functionality</p>
+
+<p name="2q7t" class="graf graf--p">- Passwordless options require email reliability</p>
+
+<p name="hb7z" class="graf graf--p">Implementation priority:</p>
+
+<p name="ldji" class="graf graf--p">1. Core JWT + refresh token system</p>
+
+<p name="vhit" class="graf graf--p">2. Social OAuth integration</p>
+
+<p name="i2af" class="graf graf--p">3. Passwordless options</p>
+
+<p name="whi5" class="graf graf--p">4. Biometric support</p>
+
+<p name="mwew" class="graf graf--p">Session saved. Token usage: 12,450 tokens across 3 models.</p>
+
+<h4 name="jwcb" class="graf graf--h4">13.4 Contributing</h4>
+
+<p name="ycgn" class="graf graf--p"><strong>We welcome contributions:</strong></p>
+
+<p name="r4fa" class="graf graf--p">- <strong>New skills:</strong> Domain expertise definitions</p>
+
+<p name="rf9j" class="graf graf--p">- <strong>Facilitator improvements:</strong> Better orchestration logic</p>
+
+<p name="fqn9" class="graf graf--p">- <strong>Model integrations:</strong> Additional AI providers</p>
+
+<p name="itv2" class="graf graf--p">- <strong>Use case examples:</strong> Demonstrate value in different domains</p>
+
+<p name="kvhx" class="graf graf--p"><strong>Join the conversation:</strong> [GitHub Discussions](https://github.com/AlexZan/roundtable-cli/discussions)</p>
+
+<h3 name="pfhj" class="graf graf--h3">References</h3>
+
+<p name="snmc" class="graf graf--p">1. OpenAI. (2024). GPT-4 Technical Report. OpenAI Research.</p>
+
+<p name="roda" class="graf graf--p">2. Anthropic. (2024). Claude 3 Model Family. Anthropic Research.</p>
+
+<p name="ubja" class="graf graf--p">3. Google. (2024). Gemini: A Family of Highly Capable Multimodal Models. Google DeepMind.</p>
+
+<p name="zr4t" class="graf graf--p">4. Wu, Q., et al. (2023). AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation. Microsoft Research.</p>
+
+<p name="z7db" class="graf graf--p">5. Hong, S., et al. (2023). MetaGPT: Meta Programming for Multi-Agent Collaborative Framework. arXiv preprint.</p>
+
+<p name="zq8a" class="graf graf--p">6. Park, J. S., et al. (2023). Generative Agents: Interactive Simulacra of Human Behavior. Stanford University.</p>
+
+<p name="w2mk" class="graf graf--p">7. Shinn, N., et al. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. MIT & Northeastern University.</p>
+
+<p name="0j8h" class="graf graf--p">8. Wang, L., et al. (2024). A Survey on Large Language Model based Autonomous Agents. arXiv preprint.</p>
+
+<p name="c9u3" class="graf graf--p"><strong>Document Version:</strong> 1.1</p>
+
+<p name="fmif" class="graf graf--p"><strong>Last Updated:</strong> October 30, 2025</p>
+
+<p name="ezvy" class="graf graf--p"><strong>License:</strong> CC BY 4.0 (Attribution)</p>
+
+<p name="y1xg" class="graf graf--p"><strong>Contact:</strong> Alexander Zanfir | GitHub: @AlexZan</p>
+
+<h3 name="l2ey" class="graf graf--h3">Acknowledgments</h3>
+
+<p name="3v07" class="graf graf--p">This paper reflects insights gained from implementing and iterating on the Roundtable project. Special thanks to the AI research community for pioneering work in multi-agent systems, and to early users who provided feedback that shaped these ideas.</p>
+
+<h3 name="eyms" class="graf graf--h3">Future Work</h3>
+
+<p name="r59w" class="graf graf--p">A companion paper on <strong>Context Curation and Conversational Flow Management</strong> will explore in depth:</p>
+
+<p name="lvx6" class="graf graf--p">- How skill definitions focus LLM attention effectively</p>
+
+<p name="d4fh" class="graf graf--p">- Techniques for managing context across multi-agent conversations</p>
+
+<p name="zf9i" class="graf graf--p">- Facilitator strategies for information routing and synthesis</p>
+
+<p name="92qp" class="graf graf--p">- The role of explicit expertise boundaries in panel effectiveness</p>
+
+</body>
+</html>

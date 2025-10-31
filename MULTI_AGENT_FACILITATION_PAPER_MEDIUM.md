@@ -1056,86 +1056,66 @@ Legal Scribe produces: Compliance checklist (GDPR, SOC2), risk mitigation docume
 
 #### 13.3 Example Session
 
-> $ npm run dev
->
-> Welcome to Roundtable CLI
->
-> **Topic:** Design a secure authentication system for a web application
->
-> **Facilitator:** Analyzing topic and composing panel...
->
-> **Panel Composition:**
->   - Architecture (Claude Sonnet 4)
->   - Security (GPT-4 Turbo)
->   - UX (Gemini 2.0)
->
-> Starting deliberation...
->
-> **[Round 1]**
->
-> **Facilitator → Architecture:** Please propose an authentication system design
->
-> **Architecture (Claude Sonnet 4):**
-> I recommend a layered approach:
-> 1. JWT-based token authentication for API access
-> 2. Refresh token rotation for extended sessions
-> 3. OAuth 2.0 integration for social login
-> ...
->
-> **Facilitator → Security:** Review the architecture proposal and identify concerns
->
-> **Security (GPT-4 Turbo):**
-> The JWT approach is solid, but I have concerns:
-> 1. Token storage: Where are tokens stored on client?
-> 2. XSS protection: How do we prevent token theft?
-> 3. CSRF: Need explicit protection mechanisms
-> ...
->
-> **Facilitator → UX:** Consider the user experience implications
->
-> **UX (Gemini 2.0):**
-> From a UX perspective:
-> 1. Offer passwordless options (magic links, passkeys)
-> 2. Clear session management UI
-> 3. Biometric options for mobile
-> ...
->
-> **[Round 2]**
->
-> **Facilitator → Architecture:** Address Security's concerns
->
-> **Architecture:**
-> Incorporating security feedback:
-> 1. HttpOnly cookies for token storage (prevents XSS)
-> 2. SameSite=Strict for CSRF protection
-> 3. Short-lived access tokens (15 min), secure refresh
-> ...
->
-> **[Round 3 - Synthesis]**
->
-> **Facilitator:** Consensus reached. Synthesizing recommendations...
->
-> **Final Design:**
-> - Authentication: JWT with refresh token rotation
-> - Storage: HttpOnly, Secure, SameSite=Strict cookies
-> - Session: 15-minute access tokens, 7-day refresh tokens
-> - Social login: OAuth 2.0 (Google, GitHub)
-> - Passwordless: Magic links + Passkey support
-> - Mobile: Biometric authentication
-> - Security: Rate limiting, CAPTCHA, audit logging
->
-> **Trade-offs:**
-> - Cookie-based approach limits cross-domain usage
-> - Short token lifetime may impact offline functionality
-> - Passwordless options require email reliability
->
-> **Implementation priority:**
-> 1. Core JWT + refresh token system
-> 2. Social OAuth integration
-> 3. Passwordless options
-> 4. Biometric support
->
-> Session saved. Token usage: 12,450 tokens across 3 models.
+**CLI Transcript:**
+$ npm run dev
+Welcome to Roundtable CLI
+# Topic: Design a secure authentication system for a web application
+Facilitator: Analyzing topic and composing panel...
+# Panel Composition:
+  - Architecture (Claude Sonnet 4)
+  - Security (GPT-4 Turbo)
+  - UX (Gemini 2.0)
+Starting deliberation...
+# [Round 1]
+Facilitator → Architecture: Please propose an authentication system design
+Architecture (Claude Sonnet 4):
+I recommend a layered approach:
+1. JWT-based token authentication for API access
+2. Refresh token rotation for extended sessions
+3. OAuth 2.0 integration for social login
+...
+Facilitator → Security: Review the architecture proposal and identify concerns
+Security (GPT-4 Turbo):
+The JWT approach is solid, but I have concerns:
+1. Token storage: Where are tokens stored on client?
+2. XSS protection: How do we prevent token theft?
+3. CSRF: Need explicit protection mechanisms
+...
+Facilitator → UX: Consider the user experience implications
+UX (Gemini 2.0):
+From a UX perspective:
+1. Offer passwordless options (magic links, passkeys)
+2. Clear session management UI
+3. Biometric options for mobile
+...
+# [Round 2]
+Facilitator → Architecture: Address Security's concerns
+Architecture:
+Incorporating security feedback:
+1. HttpOnly cookies for token storage (prevents XSS)
+2. SameSite=Strict for CSRF protection
+3. Short-lived access tokens (15 min), secure refresh
+...
+# [Round 3 - Synthesis]
+Facilitator: Consensus reached. Synthesizing recommendations...
+Final Design:
+- Authentication: JWT with refresh token rotation
+- Storage: HttpOnly, Secure, SameSite=Strict cookies
+- Session: 15-minute access tokens, 7-day refresh tokens
+- Social login: OAuth 2.0 (Google, GitHub)
+- Passwordless: Magic links + Passkey support
+- Mobile: Biometric authentication
+- Security: Rate limiting, CAPTCHA, audit logging
+Trade-offs:
+- Cookie-based approach limits cross-domain usage
+- Short token lifetime may impact offline functionality
+- Passwordless options require email reliability
+Implementation priority:
+1. Core JWT + refresh token system
+2. Social OAuth integration
+3. Passwordless options
+4. Biometric support
+Session saved. Token usage: 12,450 tokens across 3 models.
 
 #### 13.4 Contributing
 

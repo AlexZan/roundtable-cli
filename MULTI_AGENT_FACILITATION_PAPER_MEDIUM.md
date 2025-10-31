@@ -9,9 +9,15 @@
 
 ### Abstract
 
-This paper proposes a fundamental shift in how humans interact with AI systems: from single-model conversations to **facilitator-orchestrated multi-agent deliberations**. We argue that complex problems benefit from diverse AI perspectives, and that a facilitator agent can effectively orchestrate conversations between multiple AI models—each contributing domain expertise—to produce richer, more robust solutions. This approach mirrors human expert panels and leverages the natural strengths of different AI models without requiring rigid programmatic orchestration.
+<p class="graf graf--p graf--hasDropCapModel graf--hasDropCap">
+<span class="graf-dropCap">T</span>his paper proposes a fundamental shift in how humans interact with AI systems: from single-model conversations to **facilitator-orchestrated multi-agent deliberations**. We argue that complex problems benefit from diverse AI perspectives, and that a facilitator agent can effectively orchestrate conversations between multiple AI models—each contributing domain expertise—to produce richer, more robust solutions. This approach mirrors human expert panels and leverages the natural strengths of different AI models without requiring rigid programmatic orchestration.
+</p>
 
-**Key Insight:** If a human can interact with an AI model through its interface (API or CLI), then an AI facilitator can interact with other AI agents through those same interfaces. This enables fully agentic orchestration of multi-model conversations.
+<blockquote class="graf graf--pullquote">
+If a human can interact with an AI model through its interface (API or CLI), then an AI facilitator can interact with other AI agents through those same interfaces.
+</blockquote>
+
+This enables fully agentic orchestration of multi-model conversations.
 
 ---
 
@@ -19,7 +25,9 @@ This paper proposes a fundamental shift in how humans interact with AI systems: 
 
 #### 1.1 The Current State: Single-Model Interactions
 
-Today's AI interactions follow a simple pattern: **Human → Single AI Model → Response**
+<p class="graf graf--p graf--hasDropCapModel graf--hasDropCap">
+<span class="graf-dropCap">T</span>oday's AI interactions follow a simple pattern: **Human → Single AI Model → Response**
+</p>
 
 While powerful, this approach has limitations:
 - **Narrow perspective:** One model's training, biases, and blindspots
@@ -47,7 +55,9 @@ The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel �
 
 #### 2.1 Core Concept
 
-**A facilitator agent orchestrates conversations between multiple AI agents.**
+<blockquote class="graf graf--pullquote">
+A facilitator agent orchestrates conversations between multiple AI agents.
+</blockquote>
 
 **Role of the Facilitator:**
 1. **Composition:** Select which agents/experts are needed for a given topic
@@ -62,7 +72,9 @@ The proposed approach: **Human Topic → AI Facilitator → Multi-Model Panel �
 - Command-line interfaces (claude-cli)
 - SDK bindings (Python, JavaScript libraries)
 
-**Critical Insight:** If a human can send a message and receive a response, so can an agent.
+<blockquote class="graf graf--pullquote">
+If a human can send a message and receive a response, so can an agent.
+</blockquote>
 
 The facilitator connects to multiple models:
 - Claude (via Anthropic API or claude-cli subagents)
@@ -97,7 +109,11 @@ The facilitator decides:
 - Is the discussion resolved?
 - Should I bring in new expertise?
 
-**The facilitator is an agent, not a script.** It makes decisions dynamically based on:
+<blockquote class="graf graf--pullquote">
+The facilitator is an agent, not a script.
+</blockquote>
+
+It makes decisions dynamically based on:
 - Conversation quality
 - Emerging needs
 - Depth of coverage
@@ -455,7 +471,9 @@ Every roundtable session is a **conversation tree**, not a linear sequence:
 - Security audits
 - Product design critiques
 
-**Why limit AI to solo performance when collaboration is demonstrably better?**
+<blockquote class="graf graf--pullquote">
+Why limit AI to solo performance when collaboration is demonstrably better?
+</blockquote>
 
 #### 5.2 Model Diversity as Feature
 
